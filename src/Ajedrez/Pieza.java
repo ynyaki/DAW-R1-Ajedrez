@@ -1,5 +1,23 @@
 public class Pieza {
 
+    /*
+     *   ♙  Peón
+     *   ♖  Torre
+     *   ♘  Caballo
+     *   ♗  Alfil
+     *   ♕  Reina
+     *   ♔  Rey
+     *
+     *   -----------
+     *
+     *   ♟  Peón
+     *   ♜  Torre
+     *   ♞  Caballo
+     *   ♝  Alfil
+     *   ♛  Reina
+     *   ♚  Rey
+     */
+
     public enum TIPO {
         PEON,
         CABALLO,
