@@ -1,6 +1,6 @@
 public class Pieza {
 
-    public enum TIPO {
+    public enum Tipo {
         PEON,
         CABALLO,
         TORRE,
@@ -9,16 +9,20 @@ public class Pieza {
         REY
     }
 
-    public enum COLOR {
-        BLANCA,
-        NEGRA
+    public enum Color {
+        BLANCO,
+        NEGRO
     }
 
-    private final TIPO tipo;
-    private final COLOR color;
+    private final Tipo tipo;
+    private final Color color;
     private Posicion pos;
 
-    public Pieza(TIPO tipo, COLOR color, Posicion pos) {
+    public Pieza(Tipo tipo, Color color, int col, int fila) {
+        this(tipo, color, new Posicion(col, fila));
+    }
+
+    public Pieza(Tipo tipo, Color color, Posicion pos) {
         if(tipo == null || color == null)
             throw new NullPointerException();
         this.tipo = tipo;
@@ -26,15 +30,11 @@ public class Pieza {
         this.pos = pos;
     }
 
-    public Pieza(TIPO tipo, COLOR color, int col, int fila) {
-        this(tipo, color, new Posicion(col, fila));
-    }
-
-    public TIPO getTipo() {
+    public Tipo getTipo() {
         return tipo;
     }
 
-    public COLOR getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -42,7 +42,49 @@ public class Pieza {
         return pos;
     }
 
+    public int getCol() {
+        return pos.getCol();
+    }
+
+    public int getFila() {
+        return pos.getFila();
+    }
+
     public void setPos(Posicion pos) {
         this.pos = pos;
+    }
+
+    public void setPos(int col, int fila) {
+        this.pos = new Posicion(col, fila);
+    }
+
+    @Override
+    public String toString() {
+        if(this.tipo == Tipo.REY && this.color == Color.BLANCO)
+            return "♔";
+        else if(this.tipo == Tipo.DAMA && this.color == Color.BLANCO)
+            return "♕";
+        else if(this.tipo == Tipo.TORRE && this.color == Color.BLANCO)
+            return "♖";
+        else if(this.tipo == Tipo.ALFIL && this.color == Color.BLANCO)
+            return "♗";
+        else if(this.tipo == Tipo.CABALLO && this.color == Color.BLANCO)
+            return "♘";
+        else if(this.tipo == Tipo.PEON && this.color == Color.BLANCO)
+            return "♙";
+        else if(this.tipo == Tipo.REY && this.color == Color.NEGRO)
+            return "♚";
+        else if(this.tipo == Tipo.DAMA && this.color == Color.NEGRO)
+            return "♛";
+        else if(this.tipo == Tipo.TORRE && this.color == Color.NEGRO)
+            return "♜";
+        else if(this.tipo == Tipo.ALFIL && this.color == Color.NEGRO)
+            return "♝";
+        else if(this.tipo == Tipo.CABALLO && this.color == Color.NEGRO)
+            return "♞";
+        else if(this.tipo == Tipo.PEON && this.color == Color.NEGRO)
+            return "♟";
+        else
+            return "?";
     }
 }
