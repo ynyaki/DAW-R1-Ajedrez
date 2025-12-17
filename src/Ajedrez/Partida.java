@@ -16,6 +16,19 @@ public class Partida {
     public boolean esColocacionValida(Pieza p) {
         boolean esValida = true;
         // TODO Añadir validaciones
+
+        if (p.getColor() == Pieza.Color.NEGRO) {
+            this.cantPiezasNegras++;
+        } else {
+            this.cantPiezasBlancas++;
+        }
+
+        if (this.cantPiezasBlancas > 16 || this.cantPiezasNegras > 16) {
+            esValida = false;
+        }
+
+        if (p.getPos().getFila() == 0 || p.getPos().getFila() == 7) {esValida = false;}
+
         return esValida;
     }
 
