@@ -2,6 +2,10 @@ import java.util.InputMismatchException;
 
 public class Tablero {
 
+    public static final String NEGRO = "\u001B[40m";
+    public static final String BLANCO = "\u001B[47m";
+    public static final String RESET = "\u001B[0m";
+
     private final Pieza[][] tablero;
     private final int nCols;
     private final int nFilas;
@@ -22,6 +26,10 @@ public class Tablero {
         return nFilas;
     }
 
+    public Pieza getPieza(Posicion pos) {
+        return getFromTablero(pos);
+    }
+
     public void colocar(Pieza p) {
         colocar(p, p.getPos());
     }
@@ -29,48 +37,19 @@ public class Tablero {
     public void colocar(Pieza p, Posicion nPos) {
         setInTablero(p, nPos);
     }
-//    private final Pieza[][] tablero;
-//
-//    public Tablero(Pieza[][] tablero) {
-//        this.tablero = tablero;
-//    }
-//
-//    public Pieza[][] getTablero() {
-//        return tablero;
-//    }
-
-    private Pieza[][] tablero = new Pieza[8][8];
 
     public void borrar(Posicion pos) {
         setInTablero(null, pos);
     }
-    // Colores
-    public static final String NEGRO = "\u001B[40m";
-    public static final String BLANCO = "\u001B[47m";
-    public static final String RESET = "\u001B[0m";
-
-    public void print() {
-        // TODO Recoger el simbolo de la pieza.
-        String simbolo = "   ";
-        for (int i = tablero.length - 1; i >= 0; i--) {
-            System.out.print(i + 1 + "┃ "); // Para la parte de los números
-
-            if (i % 2 == 0) {   // Las que deberían empezar por negro.
-                colorearFila(tablero, i, NEGRO, BLANCO, simbolo);
-            } else {    // Las que deberían empezar por blanco.
-                colorearFila(tablero, i, BLANCO, NEGRO, simbolo);
-            }
-            System.out.print("\n");
-        }
 
     @Override
     public String toString() {
         String sTablero = "";
-        for(int i = 0; i < tablero.length; i++) {
-            for(int j = 0; j < tablero[i].length; j++) {
+        for (Pieza[] filaPiezas : tablero) {
+            for (Pieza pieza : filaPiezas) {
                 System.out.print("[");
-                if(tablero[i][j] != null)
-                    System.out.print(tablero[i][j].toString());
+                if (pieza != null)
+                    System.out.print(pieza.toString());
                 else
                     System.out.print("　");
                 System.out.print("]");
@@ -78,6 +57,32 @@ public class Tablero {
             System.out.println();
         }
         return sTablero;
+    }
+
+    public void print() {
+        // TODO Recoger el símbolo de la pieza.
+        String simbolo = "   ";
+        for (int i = tablero.length - 1; i >= 0; i--) {
+            System.out.print(i + 1 + "┃ "); // Para la parte de los números
+            if (i % 2 == 0) {   // Las que deberían empezar por negro.
+                colorearFila(tablero, i, NEGRO, BLANCO, simbolo);
+            } else {    // Las que deberían empezar por blanco.
+                colorearFila(tablero, i, BLANCO, NEGRO, simbolo);
+            }
+            System.out.print("\n");
+        }
+        // Para las letras
+        System.out.print(" ┗━");
+        for (int i = 0; i < tablero[0].length * 3; i++) {
+            System.out.print("━");
+        }
+        System.out.println();
+        System.out.print("   ");
+        char letra = 'A';
+        for (int i = 0; i < tablero[0].length; i++) {
+            System.out.print(" " + letra + " ");
+            letra = (char) (letra + 1);
+        }
     }
 
     private Pieza getFromTablero(Posicion pos) {
@@ -94,20 +99,6 @@ public class Tablero {
         int col = pos.getCol();
         int fila = nFilas - pos.getFila() + 1;
         return new Posicion(col, fila);
-    }
-}
-        // Para las letras
-        System.out.print(" ┗━");
-        for (int i = 0; i < tablero[0].length * 3; i++) {
-            System.out.print("━");
-        }
-        System.out.print("\n");
-        System.out.print("   ");
-        char letra = 'A';
-        for (int i = 0; i < tablero[0].length; i++) {
-            System.out.print(" " + letra + " ");
-            letra = (char) (letra + 1);
-        }
     }
 
     private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simbolo){
