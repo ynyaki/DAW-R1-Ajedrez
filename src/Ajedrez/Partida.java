@@ -1,5 +1,12 @@
 public class Partida {
 
+    private int cantPiezasBlancas = 0;
+    private int cantPiezasNegras = 0;
+
+    private final int maxPeonesPosibles = 8;
+    private int maxPiezasEspecialesBlanca = 7;
+    private int maxPiezasEspecialesNegras = 7;
+
     //  DELETE Pruebas de creación y muestra de tablero
     public void empezar() {
         Tablero t = crearTableroClasico();
