@@ -46,13 +46,38 @@ public class Partida {
         return (nW <= 16 && nB <= 16);
     }
 
+    public boolean noPeonesUltimasFilas() {
+        boolean correcto = true;
+
+        for (int i = 1; i <= t.getNCols() ; i++) {
+
+            if (t.getPieza(new Posicion(i, 1)) == null) {continue;}
+
+            if (t.getPieza(new Posicion(i, 1)).getTipo() == PEON){
+                correcto = false;
+            }
+        }
+
+        int ultimaFila = t.getNFilas();
+        for (int i = 1; i <= t.getNCols(); i++) {
+
+            if (t.getPieza(new Posicion(i, ultimaFila)) == null) {continue;}
+
+            if (t.getPieza(new Posicion(i, ultimaFila)).getTipo() == PEON){
+                correcto = false;
+            }
+        }
+
+        return correcto;
+    }
+
     private Tablero crearTableroClasico() {
-        Tablero t = new Tablero(8, 8);
+        this.t = new Tablero(8, 8);
 
         t.colocar(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
         t.colocar(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
         t.colocar(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
-        t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
+        // t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
 
         t.colocar(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
         t.colocar(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
@@ -75,6 +100,8 @@ public class Partida {
 
         for(int i = 1; i <= 8; i++)
             t.colocar(new Pieza(PEON, NEGRO, new Posicion(i, 7)));
+
+        t.colocar(new Pieza(PEON, NEGRO, new Posicion(8, 8)));
 
         return t;
     }
