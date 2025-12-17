@@ -30,6 +30,33 @@ public class Tablero {
         return getFromTablero(pos);
     }
 
+    public int getNumPiezas(Pieza.Tipo tipo) {
+        int nPiezas = 0;
+        for (Pieza[] filaPiezas : tablero)
+            for (Pieza pieza : filaPiezas)
+                if(pieza.getTipo() == tipo)
+                    nPiezas++;
+        return nPiezas;
+    }
+
+    public int getNumPiezas(Pieza.Color color) {
+        int nPiezas = 0;
+        for (Pieza[] filaPiezas : tablero)
+            for (Pieza pieza : filaPiezas)
+                if(pieza.getColor() == color)
+                    nPiezas++;
+        return nPiezas;
+    }
+
+    public int getNumPiezas(Pieza.Tipo tipo, Pieza.Color color) {
+        int nPiezas = 0;
+        for (Pieza[] filaPiezas : tablero)
+            for (Pieza pieza : filaPiezas)
+                if((pieza.getTipo() == tipo) && (pieza.getColor() == color))
+                    nPiezas++;
+        return nPiezas;
+    }
+
     public void colocar(Pieza p) {
         colocar(p, p.getPos());
     }

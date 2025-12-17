@@ -1,66 +1,80 @@
 public class Partida {
 
-    private int cantPiezasBlancas = 0;
-    private int cantPiezasNegras = 0;
+    private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
+    private static final Pieza.Tipo CABALLO = Pieza.Tipo.CABALLO;
+    private static final Pieza.Tipo TORRE = Pieza.Tipo.TORRE;
+    private static final Pieza.Tipo ALFIL = Pieza.Tipo.ALFIL;
+    private static final Pieza.Tipo DAMA = Pieza.Tipo.DAMA;
+    private static final Pieza.Tipo REY = Pieza.Tipo.REY;
 
-    private final int maxPeonesPosibles = 8;
-    private int maxPiezasEspecialesBlanca = 7;
-    private int maxPiezasEspecialesNegras = 7;
+    private static final Pieza.Color BLANCO = Pieza.Color.BLANCO;
+    private static final Pieza.Color NEGRO = Pieza.Color.NEGRO;
+
+    private Tablero t;
 
     //  DELETE Pruebas de creación y muestra de tablero
     public void empezar() {
         Tablero t = crearTableroClasico();
-        System.out.println(t);
+        System.out.print(t);
+    }
+
+    public void colocar(Pieza p) {
+        if(esColocacionValida(p))
+            return;
     }
 
     public boolean esColocacionValida(Pieza p) {
-        boolean esValida = true;
-        // TODO Añadir validaciones
-
-        if (p.getColor() == Pieza.Color.NEGRO) {
-            this.cantPiezasNegras++;
-        } else {
-            this.cantPiezasBlancas++;
-        }
-
-        if (this.cantPiezasBlancas > 16 || this.cantPiezasNegras > 16) {
-            esValida = false;
-        }
-
-        if (p.getPos().getFila() == 0 || p.getPos().getFila() == 7) {esValida = false;}
-
-        return esValida;
+        return piezaDentroDeLimites()
+                && noSuperaNumReyes()
+                && noSuperaNumPiezas();
     }
 
-    private static Tablero crearTableroClasico() {
+    private boolean piezaDentroDeLimites() {
+        // TODO
+        return false;
+    }
+
+    private boolean noSuperaNumReyes() {
+        int nWK = t.getNumPiezas(REY, BLANCO);
+        int nBK = t.getNumPiezas(REY, NEGRO);
+        return (nWK <= 1 && nBK <= 1);
+    }
+
+    private boolean noSuperaNumPiezas() {
+        int nW = t.getNumPiezas(BLANCO);
+        int nB = t.getNumPiezas(NEGRO);
+        return (nW <= 16 && nB <= 16);
+    }
+
+    private Tablero crearTableroClasico() {
         Tablero t = new Tablero(8, 8);
 
-        t.colocar(new Pieza(Pieza.Tipo.TORRE, Pieza.Color.BLANCO, new Posicion(1, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.TORRE, Pieza.Color.BLANCO, new Posicion(8, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.TORRE, Pieza.Color.NEGRO, new Posicion(1, 8)));
-        t.colocar(new Pieza(Pieza.Tipo.TORRE, Pieza.Color.NEGRO, new Posicion(8, 8)));
+        t.colocar(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
+        t.colocar(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
+        t.colocar(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
+        t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
 
-        t.colocar(new Pieza(Pieza.Tipo.CABALLO, Pieza.Color.BLANCO, new Posicion(2, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.CABALLO, Pieza.Color.BLANCO, new Posicion(7, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.CABALLO, Pieza.Color.NEGRO, new Posicion(2, 8)));
-        t.colocar(new Pieza(Pieza.Tipo.CABALLO, Pieza.Color.NEGRO, new Posicion(7, 8)));
+        t.colocar(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
+        t.colocar(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
+        t.colocar(new Pieza(CABALLO, NEGRO, new Posicion(2, 8)));
+        t.colocar(new Pieza(CABALLO, NEGRO, new Posicion(7, 8)));
 
-        t.colocar(new Pieza(Pieza.Tipo.ALFIL, Pieza.Color.BLANCO, new Posicion(3, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.ALFIL, Pieza.Color.BLANCO, new Posicion(6, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.ALFIL, Pieza.Color.NEGRO, new Posicion(3, 8)));
-        t.colocar(new Pieza(Pieza.Tipo.ALFIL, Pieza.Color.NEGRO, new Posicion(6, 8)));
+        t.colocar(new Pieza(ALFIL, BLANCO, new Posicion(3, 1)));
+        t.colocar(new Pieza(ALFIL, BLANCO, new Posicion(6, 1)));
+        t.colocar(new Pieza(ALFIL, NEGRO, new Posicion(3, 8)));
+        t.colocar(new Pieza(ALFIL, NEGRO, new Posicion(6, 8)));
 
-        t.colocar(new Pieza(Pieza.Tipo.DAMA, Pieza.Color.BLANCO, new Posicion(4, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.DAMA, Pieza.Color.NEGRO, new Posicion(4, 8)));
+        t.colocar(new Pieza(DAMA, BLANCO, new Posicion(4, 1)));
+        t.colocar(new Pieza(DAMA, NEGRO, new Posicion(4, 8)));
 
-        t.colocar(new Pieza(Pieza.Tipo.REY, Pieza.Color.BLANCO, new Posicion(5, 1)));
-        t.colocar(new Pieza(Pieza.Tipo.REY, Pieza.Color.NEGRO, new Posicion(5, 8)));
-
-        for(int i = 1; i <= 8; i++)
-            t.colocar(new Pieza(Pieza.Tipo.PEON, Pieza.Color.BLANCO, new Posicion(i, 2)));
+        t.colocar(new Pieza(REY, BLANCO, new Posicion(5, 1)));
+        t.colocar(new Pieza(REY, NEGRO, new Posicion(5, 8)));
 
         for(int i = 1; i <= 8; i++)
-            t.colocar(new Pieza(Pieza.Tipo.PEON, Pieza.Color.NEGRO, new Posicion(i, 7)));
+            t.colocar(new Pieza(PEON, BLANCO, new Posicion(i, 2)));
+
+        for(int i = 1; i <= 8; i++)
+            t.colocar(new Pieza(PEON, NEGRO, new Posicion(i, 7)));
 
         return t;
     }
