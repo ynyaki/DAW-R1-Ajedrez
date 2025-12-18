@@ -103,34 +103,34 @@ public class Partida {
     private Tablero crearTableroClasico() {
         this.t = new Tablero(8, 8);
 
-        t.colocar(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
-        t.colocar(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
-        t.colocar(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
+        t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
+        t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
+        t.setPieza(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
         // t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
 
-        t.colocar(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
-        t.colocar(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
-        t.colocar(new Pieza(CABALLO, NEGRO, new Posicion(2, 8)));
-        t.colocar(new Pieza(CABALLO, NEGRO, new Posicion(7, 8)));
+        t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
+        t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
+        t.setPieza(new Pieza(CABALLO, NEGRO, new Posicion(2, 8)));
+        t.setPieza(new Pieza(CABALLO, NEGRO, new Posicion(7, 8)));
 
-        t.colocar(new Pieza(ALFIL, BLANCO, new Posicion(3, 1)));
-        t.colocar(new Pieza(ALFIL, BLANCO, new Posicion(6, 1)));
-        t.colocar(new Pieza(ALFIL, NEGRO, new Posicion(3, 8)));
-        t.colocar(new Pieza(ALFIL, NEGRO, new Posicion(6, 8)));
+        t.setPieza(new Pieza(ALFIL, BLANCO, new Posicion(3, 1)));
+        t.setPieza(new Pieza(ALFIL, BLANCO, new Posicion(6, 1)));
+        t.setPieza(new Pieza(ALFIL, NEGRO, new Posicion(3, 8)));
+        t.setPieza(new Pieza(ALFIL, NEGRO, new Posicion(6, 8)));
 
-        t.colocar(new Pieza(DAMA, BLANCO, new Posicion(4, 1)));
-        t.colocar(new Pieza(DAMA, NEGRO, new Posicion(4, 8)));
+        t.setPieza(new Pieza(DAMA, BLANCO, new Posicion(4, 1)));
+        t.setPieza(new Pieza(DAMA, NEGRO, new Posicion(4, 8)));
 
-        t.colocar(new Pieza(REY, BLANCO, new Posicion(5, 1)));
-        t.colocar(new Pieza(REY, NEGRO, new Posicion(5, 8)));
-
-        for(int i = 1; i <= 8; i++)
-            t.colocar(new Pieza(PEON, BLANCO, new Posicion(i, 2)));
+        t.setPieza(new Pieza(REY, BLANCO, new Posicion(5, 1)));
+        t.setPieza(new Pieza(REY, NEGRO, new Posicion(5, 8)));
 
         for(int i = 1; i <= 8; i++)
-            t.colocar(new Pieza(PEON, NEGRO, new Posicion(i, 7)));
+            t.setPieza(new Pieza(PEON, BLANCO, new Posicion(i, 2)));
 
-        t.colocar(new Pieza(PEON, NEGRO, new Posicion(8, 8)));
+        for(int i = 1; i <= 8; i++)
+            t.setPieza(new Pieza(PEON, NEGRO, new Posicion(i, 7)));
+
+        t.setPieza(new Pieza(PEON, NEGRO, new Posicion(8, 8)));
 
         return t;
     }
