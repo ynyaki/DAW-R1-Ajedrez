@@ -82,8 +82,8 @@ public class Partida {
     }
 
     /**
-     * Método que devuelve True cuando se le pasa una pieza con una posición que todavía no ha sido ocupada.
-     * @param Pieza
+     * Método que devuelve <code>True</code> cuando se le pasa una pieza con una posición no ocupada.
+     * @param p Representa un objeto de tipo <code>Pieza</code>.
      * @return boolean
      */
     public boolean posicionNoOcupada(Pieza p) {
