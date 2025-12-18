@@ -18,6 +18,10 @@ public class Pieza {
     private final Color color;
     private Posicion pos;
 
+    public Pieza(Tipo tipo, Color color, int col, int fila) {
+        this(tipo, color, new Posicion(col, fila));
+    }
+
     public Pieza(Tipo tipo, Color color, Posicion pos) {
         if(tipo == null || color == null)
             throw new NullPointerException();
@@ -44,6 +48,10 @@ public class Pieza {
 
     public int getFila() {
         return pos.getFila();
+    }
+
+    public void setPos(int col, int fila) {
+        this.pos = new Posicion(col, fila);
     }
 
     public void setPos(Posicion pos) {

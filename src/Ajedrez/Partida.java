@@ -15,23 +15,25 @@ public class Partida {
     //  DELETE Pruebas de creación y muestra de tablero
     public void empezar() {
         Tablero t = crearTableroClasico();
+        Pieza p1 = new Pieza(TORRE, BLANCO, 1, 8);
+        colocar(p1);
         System.out.print(t);
     }
 
     public void colocar(Pieza p) {
         if(esColocacionValida(p))
-            return;
+            t.setPieza(p);
     }
 
     public boolean esColocacionValida(Pieza p) {
-        return piezaDentroDeLimites()
+        return piezaDentroDeLimites(p)
                 && noSuperaNumReyes()
                 && noSuperaNumPiezas();
     }
 
-    private boolean piezaDentroDeLimites() {
-        // TODO
-        return false;
+    private boolean piezaDentroDeLimites(Pieza p) {
+        return (p.getPos().estaEntreCols(1, 8)
+                && p.getPos().estaEntreFilas(1, 8));
     }
 
     private boolean noSuperaNumReyes() {
@@ -96,7 +98,7 @@ public class Partida {
         t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
         t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
         t.setPieza(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
-        t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
+        t.setPieza(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
         t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
         t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
         t.setPieza(new Pieza(CABALLO, NEGRO, new Posicion(2, 8)));

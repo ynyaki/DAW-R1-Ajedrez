@@ -18,7 +18,8 @@ public class Tablero {
      */
     public Tablero(int nCols, int nFilas) {
         if(nCols < 8 || nFilas < 8)
-            throw new InputMismatchException("El tablero debe ser al menos de 8x8.");
+            throw new InputMismatchException(
+                    "El tablero debe ser al menos de 8x8.");
         this.tablero = new Pieza[nFilas][nCols];
         this.nCols = nCols;
         this.nFilas = nFilas;
