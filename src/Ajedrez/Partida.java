@@ -86,7 +86,7 @@ public class Partida {
      * @param Pieza
      * @return boolean
      */
-    public boolean posicionOcupada(Pieza p) {
+    public boolean posicionNoOcupada(Pieza p) {
         boolean posicionValida = false;
 
         if (t.getPieza(p.getPos()) == null) {
