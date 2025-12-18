@@ -32,8 +32,12 @@ public class Partida {
     }
 
     private boolean piezaDentroDeLimites(Pieza p) {
-        return (p.getPos().estaEntreCols(1, 8)
-                && p.getPos().estaEntreFilas(1, 8));
+        int col = p.getCol();
+        int fil = p.getFila();
+        int colMax = t.getNCols();
+        int filMax = t.getNFilas();
+
+        return col <= colMax && fil <= filMax;
     }
 
     private boolean noSuperaNumReyes() {
