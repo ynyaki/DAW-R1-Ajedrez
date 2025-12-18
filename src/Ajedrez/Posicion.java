@@ -12,7 +12,20 @@ public class Posicion {
         this.fila = fila;
     }
 
-    // TODO Constructor con parámetro String ("A1", "H8")
+    // TODO Posición horizontal entre dos valores [x1, x2]
+    // TODO Posición vertical entre dos valores [x1, x2]
+    // TODO Posición horizontal mayor que x
+    // TODO Posición horizontal menor que x
+    // TODO Posición vertical mayor que x
+    // TODO Posición vertical menor que x
+    // TODO Diferencia de posición horizontal
+    // TODO Diferencia de posición vertical
+    // TODO Posición comparte fila
+    // TODO Posición comparte columna
+    // TODO Posición comparte diagonal descendente
+    // TODO Posición comparte diagonal ascendente
+    // TODO Posición a una casilla de distancia
+    // TODO Comprobar diferencia de posiciones dibuja una L
 
     public int getCol() {
         return col;

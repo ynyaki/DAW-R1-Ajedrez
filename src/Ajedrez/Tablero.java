@@ -10,6 +10,12 @@ public class Tablero {
     private final int nCols;
     private final int nFilas;
 
+    /**
+     * Crea un tablero de piezas (<code>Pieza[][]</code>), de al menos 8x8
+     * casillas.
+     * @param nCols N.º de columnas del tablero.
+     * @param nFilas N.º de filas del tablero.
+     */
     public Tablero(int nCols, int nFilas) {
         if(nCols < 8 || nFilas < 8)
             throw new InputMismatchException("El tablero debe ser al menos de 8x8.");
@@ -18,18 +24,57 @@ public class Tablero {
         this.nFilas = nFilas;
     }
 
+    /**
+     * Obtiene el n.º de columnas del tablero.
+     * @return N.º de columnas del tablero.
+     */
     public int getNCols() {
         return nCols;
     }
 
+    /**
+     * Obtiene el n.º de filas del tablero.
+     * @return N.º de filas del tablero.
+     */
     public int getNFilas() {
         return nFilas;
     }
 
+    /**
+     * Obtiene el objeto <code>Pieza</code> en una posición del tablero
+     * (si no hay ninguna pieza devuelve <code>null</code>).
+     * @param pos Posición donde buscar la pieza.
+     * @return Pieza en la posición dada por parámetro.
+     */
     public Pieza getPieza(Posicion pos) {
         return getFromTablero(pos);
     }
 
+    /**
+     * Coloca una pieza en el tablero en la posición que tiene guardada.
+     * @param p Pieza a colocar.
+     */
+     public void setPieza(Pieza p) {
+        setPieza(p, p.getPos());
+    }
+
+    /**
+     * Coloca una pieza en el tablero en la posición que tiene guardada.
+     * @param p Pieza a colocar.
+     */
+    public void setPieza(Pieza p, Posicion nPos) {
+        setInTablero(p, nPos);
+    }
+
+    public void borrarPieza(Posicion pos) {
+        setInTablero(null, pos);
+    }
+
+    /**
+     * Devuelve el n.º de piezas que hay en el tablero del tipo especificado.
+     * @param tipo Tipo de pieza a buscar.
+     * @return N.º de piezas del tipo pasado por parámetro.
+     */
     public int getNumPiezas(Pieza.Tipo tipo) {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : tablero)
@@ -39,6 +84,11 @@ public class Tablero {
         return nPiezas;
     }
 
+    /**
+     * Devuelve el n.º de piezas que hay en el tablero del color especificado.
+     * @param color Color de pieza a buscar.
+     * @return N.º de piezas del color pasado por parámetro.
+     */
     public int getNumPiezas(Pieza.Color color) {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : tablero)
@@ -48,6 +98,13 @@ public class Tablero {
         return nPiezas;
     }
 
+    /**
+     * Devuelve el n.º de piezas que hay en el tablero del tipo y color
+     * especificados.
+     * @param tipo Tipo de pieza a buscar.
+     * @param color Color de pieza a buscar.
+     * @return N.º de piezas del tipo y color pasados por parámetro.
+     */
     public int getNumPiezas(Pieza.Tipo tipo, Pieza.Color color) {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : tablero)
@@ -57,31 +114,26 @@ public class Tablero {
         return nPiezas;
     }
 
-    public void colocar(Pieza p) {
-        colocar(p, p.getPos());
-    }
-
-    public void colocar(Pieza p, Posicion nPos) {
-        setInTablero(p, nPos);
-    }
-
-    public void borrar(Posicion pos) {
-        setInTablero(null, pos);
-    }
-
+    /**
+     * Devuelve una representación del tablero en formato <code>String</code>
+     * con todas las casillas, y las piezas en su posición correspondiente.
+     * Las casillas se representan con <code>[　]</code> (ejemplo de casilla
+     * vacía) y las piezas con su caracter Unicode correspondiente.
+     * @return Tablero en formato <code>String</code>
+     */
     @Override
     public String toString() {
         String sTablero = "";
         for (Pieza[] filaPiezas : tablero) {
             for (Pieza pieza : filaPiezas) {
-                System.out.print("[");
+                sTablero = sTablero.concat("[");
                 if (pieza != null)
-                    System.out.print(pieza.toString());
+                    sTablero = sTablero.concat(pieza.toString());
                 else
-                    System.out.print("　");
-                System.out.print("]");
+                    sTablero = sTablero.concat("　");
+                sTablero = sTablero.concat("]");
             }
-            System.out.println();
+            sTablero = sTablero.concat("\n");
         }
         return sTablero;
     }
