@@ -75,6 +75,31 @@ public class Partida {
         return t.getNumPiezas(PEON, BLANCO) > 8 && t.getNumPiezas(PEON, NEGRO) > 8;
     }
 
+    /**
+     * Método que devuelve True cuando se le pasa una pieza con una posición que todavía no ha sido ocupada.
+     * @param Pieza
+     * @return boolean
+     */
+    public boolean posicionOcupada(Pieza p) {
+        boolean posicionValida = true;
+
+        for (Posicion posicion : posicionesOcupadas) {
+            if (posicion != null) {
+                if (p.getPos().getFila() == posicion.getFila() && p.getCol() == posicion.getCol()) {
+                    posicionValida = false;
+                    break;
+                }
+            }
+        }
+
+        if (posicionValida) {
+            posicionesOcupadas[indicePosicionesOcupadas] = p.getPos();
+            indicePosicionesOcupadas++;
+        }
+
+        return posicionValida;
+    }
+
     private Tablero crearTableroClasico() {
         this.t = new Tablero(8, 8);
 
