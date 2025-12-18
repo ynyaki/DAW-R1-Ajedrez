@@ -81,20 +81,10 @@ public class Partida {
      * @return boolean
      */
     public boolean posicionOcupada(Pieza p) {
-        boolean posicionValida = true;
+        boolean posicionValida = false;
 
-        for (Posicion posicion : posicionesOcupadas) {
-            if (posicion != null) {
-                if (p.getPos().getFila() == posicion.getFila() && p.getCol() == posicion.getCol()) {
-                    posicionValida = false;
-                    break;
-                }
-            }
-        }
-
-        if (posicionValida) {
-            posicionesOcupadas[indicePosicionesOcupadas] = p.getPos();
-            indicePosicionesOcupadas++;
+        if (t.getPieza(p.getPos()) == null) {
+            posicionValida = true;
         }
 
         return posicionValida;
@@ -106,8 +96,7 @@ public class Partida {
         t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
         t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
         t.setPieza(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
-        // t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
-
+        t.colocar(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
         t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
         t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
         t.setPieza(new Pieza(CABALLO, NEGRO, new Posicion(2, 8)));
