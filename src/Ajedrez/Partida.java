@@ -46,7 +46,7 @@ public class Partida {
         return (nW <= 16 && nB <= 16);
     }
 
-    public boolean noPeonesUltimasFilas() {
+    private boolean noPeonesUltimasFilas() {
         boolean correcto = true;
 
         for (int i = 1; i <= t.getNCols() ; i++) {
