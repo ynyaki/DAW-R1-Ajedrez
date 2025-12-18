@@ -71,6 +71,10 @@ public class Partida {
         return correcto;
     }
 
+    private boolean numPeonesMax() {
+        return t.getNumPiezas(PEON, BLANCO) > 8 && t.getNumPiezas(PEON, NEGRO) > 8;
+    }
+
     private Tablero crearTableroClasico() {
         this.t = new Tablero(8, 8);
 
