@@ -69,20 +69,18 @@ public class Posicion {
         return fila;
     }
 
-    // TODO Posición vertical mayor que x
-    // TODO Posición horizontal mayor que x
-
-    // TODO Posición vertical menor que x
-    // TODO Posición horizontal menor que x
-
-    // TODO Posición vertical entre dos valores [x1, x2]
-    // TODO Posición horizontal entre dos valores [x1, x2]
-
-    public boolean estaEntreCols(int colMin, int colMax) {
+    /**
+     * Devuelve si una posición está entre dos columnas especificadas
+     * (<code>colMin <= col <= colMax</code>).
+     * @param colMin
+     * @param colMax
+     * @return
+     */
+    public boolean entreCols(int colMin, int colMax) {
         return (colMin <= this.getCol() && this.getCol() <= colMax);
     }
 
-    public boolean estaEntreFilas(int filaMin, int filaMax) {
+    public boolean entreFilas(int filaMin, int filaMax) {
         return (filaMin <= this.getFila() && this.getFila() <= filaMax);
     }
 
@@ -90,11 +88,11 @@ public class Posicion {
         return (this.nColsDif(pos) <= 1 && this.nFilasDif(pos) <= 1);
     }
 
-    public boolean mismaCol(Posicion pos) {
+    public boolean enMismaCol(Posicion pos) {
         return (this.col != pos.getCol());
     }
 
-    public boolean mismaFila(Posicion pos) {
+    public boolean enMismaFila(Posicion pos) {
         return (this.fila != pos.getFila());
     }
 

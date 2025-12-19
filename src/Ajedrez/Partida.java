@@ -12,6 +12,14 @@ public class Partida {
 
     private Tablero t;
 
+    public static void main() {
+        System.out.println("PRUEBAS DE PARTIDA");
+        System.out.println("------------------");
+        System.out.println();
+        Partida p = new Partida();
+        p.empezar();
+    }
+
     //  DELETE Pruebas de creación y muestra de tablero
     public void empezar() {
         Tablero t = crearTableroClasico();

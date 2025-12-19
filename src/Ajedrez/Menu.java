@@ -7,10 +7,6 @@ public abstract class Menu {
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
         bienvenida();
-
-        // DELETE Pruebas de Partida
-        Partida p = new Partida();
-        p.empezar();
     }
 
     public static void bienvenida() {
