@@ -68,6 +68,11 @@ public class Partida {
      * @return <code>True</code> validación valida <code>False</code> validación invalida.
      */
     public boolean valPostColocar(){
+        boolean a = existeRey();
+        boolean b = noSuperaNumPiezas();
+        boolean c = noPeonesUltimasFilas();
+        boolean d = numPeonesMax();
+
         return existeRey()
                 && noSuperaNumPiezas()
                 && noPeonesUltimasFilas()
@@ -142,7 +147,7 @@ public class Partida {
      * @return <code>True</code> número de peones posible <code>False</code> número <strong>NO</strong> posible de peones.
      */
     private boolean numPeonesMax() {
-        return t.getNumPiezas(PEON, BLANCO) < 8 && t.getNumPiezas(PEON, NEGRO) < 8;
+        return t.getNumPiezas(PEON, BLANCO) <= 8 && t.getNumPiezas(PEON, NEGRO) <= 8;
     }
 
     /**
