@@ -93,9 +93,10 @@ public class Tablero {
     public int getNumPiezas(Pieza.Color color) {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
-                if(pieza.getColor() == color)
-                    nPiezas++;
+            for (Pieza pieza : filaPiezas) {
+                if (pieza == null) continue;
+                if (pieza.getColor() == color) nPiezas++;
+            }
         return nPiezas;
     }
 
@@ -109,9 +110,10 @@ public class Tablero {
     public int getNumPiezas(Pieza.Tipo tipo, Pieza.Color color) {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
-                if((pieza.getTipo() == tipo) && (pieza.getColor() == color))
-                    nPiezas++;
+            for (Pieza pieza : filaPiezas) {
+                if (pieza == null) continue;
+                if ((pieza.getTipo() == tipo) && (pieza.getColor() == color)) nPiezas++;
+            }
         return nPiezas;
     }
 
@@ -140,23 +142,28 @@ public class Tablero {
     }
 
     public void print() {
-        // TODO Recoger el símbolo de la pieza.
-        String simbolo = "   ";
+        String simboloVacio = " 　 ";
         for (int i = tablero.length - 1; i >= 0; i--) {
             System.out.print(i + 1 + "┃ "); // Para la parte de los números
             if (i % 2 == 0) {   // Las que deberían empezar por negro.
-                colorearFila(tablero, i, NEGRO, BLANCO, simbolo);
+                colorearFila(tablero, i, NEGRO, BLANCO, simboloVacio);
             } else {    // Las que deberían empezar por blanco.
-                colorearFila(tablero, i, BLANCO, NEGRO, simbolo);
+                colorearFila(tablero, i, BLANCO, NEGRO, simboloVacio);
             }
+
+            leyenda(i);
+
             System.out.print("\n");
         }
+
         // Para las letras
         System.out.print(" ┗━");
         for (int i = 0; i < tablero[0].length * 3; i++) {
             System.out.print("━");
         }
-        System.out.println();
+
+        System.out.print("\n");
+
         System.out.print("   ");
         char letra = 'A';
         for (int i = 0; i < tablero[0].length; i++) {
@@ -181,13 +188,36 @@ public class Tablero {
         return new Posicion(col, fila);
     }
 
-    private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simbolo){
+    private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
+        String simbolo;
+        Pieza p;
+
         for (int i = 0; i < tablero[filaIterar].length; i++) {
+            if (getFromTablero(new Posicion(i + 1, filaIterar + 1)) == null) {
+                simbolo = simboloVacio;
+            } else {
+                p = getFromTablero(new Posicion(i + 1, filaIterar + 1));
+
+                simbolo = " " + p.toString() + " ";
+            }
+
             if (i % 2 == 0) {
                 System.out.print(colorInicio + simbolo + RESET);
             } else {
                 System.out.print(colorSiguiente + simbolo + RESET);
             }
+        }
+    }
+
+    private void leyenda(int n) {
+        switch (n) {
+            case 7 -> System.out.print("\t\tLeyenda:");
+            case 6 -> System.out.print("\t\t♔ Rey Blanco     ┃ ♚ Rey Negro");
+            case 5 -> System.out.print("\t\t♕ Dama Blanca    ┃ ♛ Dama Negra");
+            case 4 -> System.out.print("\t\t♖ Torre Blanca   ┃ ♜ Torre Negra");
+            case 3 -> System.out.print("\t\t♗ Alfil Blanco   ┃ ♝ Alfil Negro");
+            case 2 -> System.out.print("\t\t♘ Caballo Blanco ┃ ♞ Caballo Negro");
+            case 1 -> System.out.print("\t\t♙ Peón Blanco    ┃ ♟ Peón Negro");
         }
     }
 }

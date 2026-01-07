@@ -10,35 +10,58 @@ public class Partida {
     private static final Pieza.Color BLANCO = Pieza.Color.BLANCO;
     private static final Pieza.Color NEGRO = Pieza.Color.NEGRO;
 
-    private Tablero t;
+    private static Tablero t;
 
-    public static void main() {
+    public Partida(int colsT, int filT) {
+        t = new Tablero(colsT, filT);
+    }
+
+    // DELETE
+    public void imprimirTablero() {
+        t.print();
+    }
+
+    public void main() {
         System.out.println("PRUEBAS DE PARTIDA");
         System.out.println("------------------");
         System.out.println();
-        Partida p = new Partida();
+        Partida p = new Partida(8, 8);
         p.empezar();
     }
 
     //  DELETE Pruebas de creación y muestra de tablero
     public void empezar() {
         Tablero t = crearTableroClasico();
-        Pieza p1 = new Pieza(TORRE, BLANCO, 1, 8);
-        colocar(p1);
         System.out.print(t);
     }
 
-    public void colocar(Pieza p) {
-        if(esColocacionValida(p))
+    public boolean colocar(Pieza p) {
+        if (esColocacionValida(p)){
             t.setPieza(p);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public boolean esColocacionValida(Pieza p) {
+    public boolean existeRey(){
+        return t.getNumPiezas(REY, BLANCO) == 1 && t.getNumPiezas(REY, NEGRO) == 1;
+    }
+
+    private boolean esColocacionValida(Pieza p) {
         return piezaDentroDeLimites(p)
                 && noSuperaNumReyes()
-                && noSuperaNumPiezas();
+                && noSuperaNumPiezas()
+                && noPeonesUltimasFilas()
+                && numPeonesMax()
+                && posicionNoOcupada(p);
     }
 
+    /**
+     * eeee 
+     * @param p
+     * @return
+     */
     private boolean piezaDentroDeLimites(Pieza p) {
         int col = p.getCol();
         int fil = p.getFila();
@@ -86,7 +109,7 @@ public class Partida {
     }
 
     private boolean numPeonesMax() {
-        return t.getNumPiezas(PEON, BLANCO) > 8 && t.getNumPiezas(PEON, NEGRO) > 8;
+        return t.getNumPiezas(PEON, BLANCO) < 8 && t.getNumPiezas(PEON, NEGRO) < 8;
     }
 
     /**
@@ -94,7 +117,7 @@ public class Partida {
      * @param p Representa un objeto de tipo <code>Pieza</code>.
      * @return boolean
      */
-    public boolean posicionNoOcupada(Pieza p) {
+    private boolean posicionNoOcupada(Pieza p) {
         boolean posicionValida = false;
 
         if (t.getPieza(p.getPos()) == null) {
