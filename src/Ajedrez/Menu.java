@@ -17,6 +17,10 @@ public abstract class Menu {
         // juego();
     }
 
+    /**
+     * Metodo para mostrar el mensaje de Bienvenida.
+     * Solo <strong>imprime</strong> por terminal.
+     */
     public static void bienvenida() {
         System.out.println("¡Bienvenido a nuestro programa de ajedrez!");
         System.out.println("Desarrollado por Iñaki, Iván, Juan y Manuel.");
@@ -47,6 +51,10 @@ public abstract class Menu {
         System.out.println("Rg1 Tf1 h2 g2 f2 d4 e4 Ce5 a4 b3 c2 Ab2 Ta1");
     }
 
+    /**
+     * Metodo para la lógica de añadir las piezas de una partida.
+     * <strong>Valida</strong> y <strong>coloca</strong> las piezas en el tablero.
+     */
     public static void importar() {
         boolean importacionCorrecta;
         String piezasBlancas;
@@ -66,19 +74,21 @@ public abstract class Menu {
 
             listaPiezasBlancas = listarPiezas(piezasBlancas);
             listaPiezasNegras = listarPiezas(piezasNegras);
+            importacionCorrecta = true;
 
             // Valida la sintaxis
-            if (!validarSintaxis(listaPiezasBlancas) || !validarSintaxis(listaPiezasNegras)) {
+            if (!esValidarSintaxis(listaPiezasBlancas) || !esValidarSintaxis(listaPiezasNegras)) {
                 importacionCorrecta = false;
                 System.out.println("Se ha encontrado un problema en la importación.");
-            } else {
-                importacionCorrecta = true;
             }
 
             // Crea las piezas y se valida.
             if (importacionCorrecta) {
                 listaPiezas = crearPiezas(listaPiezasBlancas, listaPiezasNegras);
 
+                p.limpiar();    // Porque en caso de haberse ejecutado, las piezas se mantienen en el tablero.
+
+                // Validación dínamica mientras se añaden las piezas.
                 for (Pieza pieza:listaPiezas) {
                     if (!p.colocar(pieza)) {
                         importacionCorrecta = false;
@@ -87,7 +97,8 @@ public abstract class Menu {
                     }
                 }
 
-                if (p.existeRey()) {
+                // Validación posterior a colocar las piezas.
+                if (!p.valPostColocar() && importacionCorrecta) {
                     importacionCorrecta = false;
                     System.out.println("Se ha encontrado un problema en la importación.");
                 }
@@ -95,12 +106,17 @@ public abstract class Menu {
         } while(!importacionCorrecta);
     }
 
+    /**
+     * Recorta las ordenes pasadas por parametro y las almacena en un array.
+     * @param conjuntoPiezas Un conjunto de piezas destro de un string en formato "Rg1 Ta2 a2"
+     * @return Una array con las posiciones pasadas separadas.
+     */
     private static String[] listarPiezas(String conjuntoPiezas) {
         conjuntoPiezas = conjuntoPiezas.trim();
         StringBuilder piezasIterables = new StringBuilder(conjuntoPiezas);
         String[] piezas;
 
-        // Sacar el número de piezas
+        // Sacar el número de ordenes en el string.
         int cantidadEspacios = 1;
         for (int i = 0; i < conjuntoPiezas.length(); i++) {
             if (conjuntoPiezas.charAt(i) == ' ') cantidadEspacios++;
@@ -108,6 +124,7 @@ public abstract class Menu {
 
         piezas = new String[cantidadEspacios];
 
+        // Añadir las ordenes al array.
         for (int i = 0; i < piezas.length; i++) {
             String pieza = (piezasIterables.indexOf(" ") == -1 ) ?
                     piezasIterables.toString() :
@@ -120,7 +137,13 @@ public abstract class Menu {
         return piezas;
     }
 
-    private static boolean validarSintaxis(String[] listaPiezas) {
+    /**
+     * Valida que la sistexis de la orden sea correcta.
+     * @param listaPiezas Array con las ordenes a validar.
+     * @return <code>True</code> si la sintaxis es correcta
+     * <code>False</code> si la sintaxis <strong>NO</strong> es correcta.
+     */
+    private static boolean esValidarSintaxis(String[] listaPiezas) {
         char[] inicialesValidas = {'R', 'D', 'T', 'A', 'C'};
 
         for (String pieza:listaPiezas){
@@ -157,8 +180,14 @@ public abstract class Menu {
         return true;
     }
 
+    /**
+     * Crea un array con las piezas que se ordenan en los arrays pasador por parametro.
+     * @param blancas Array con las ordenes de colocación de la piezas blancas.
+     * @param negras Array con las ordenes de colocación de las piezas negras.
+     * @return Array de tipo <code>Pieza</code> con las todas las piezas de las dos listas.
+     */
     private static Pieza[] crearPiezas(String[] blancas, String[] negras) {
-        Pieza[] listaPiezas = new Pieza[blancas.length + negras.length];
+        Pieza[] listaPiezas = new Pieza[blancas.length + negras.length]; // Crea un array con la longitud de los dos arrays.
         Pieza.Tipo tipoPieza;
         char col;
         int fila;
@@ -166,12 +195,12 @@ public abstract class Menu {
         // Crear BLANCAS.
         for (int i = 0; i < blancas.length; i++) {
             tipoPieza = Pieza.obtenerTipoPieza(blancas[i]);
-            col = (blancas[i].length() == 3) ? blancas[i].charAt(1) : blancas[i].charAt(0);
-            fila = Integer.parseInt(
-                    String.valueOf(blancas[i].charAt(blancas[i].length() - 1))
+            col = (blancas[i].length() == 3) ? blancas[i].charAt(1) : blancas[i].charAt(0); // Recoge la columna especificada en la orden.
+            fila = Integer.parseInt(        // Recoge la fila especificada en la orden.
+                    String.valueOf(blancas[i].charAt(blancas[i].length() - 1))  // Si no se pasa a String trataría el char como su número de UNICODE.
             );
 
-            listaPiezas[i] = new Pieza(tipoPieza, Pieza.Color.BLANCO, new Posicion(col, fila));
+            listaPiezas[i] = new Pieza(tipoPieza, Pieza.Color.BLANCO, new Posicion(col, fila)); // Crea y añade la pieza al Array.
         }
 
         // Crear NEGRAS.

@@ -158,8 +158,8 @@ public class Tablero {
 
         // Para las letras
         System.out.print(" ┗━");
-        for (int i = 0; i < tablero[0].length * 3; i++) {
-            System.out.print("━");
+        for (int i = 0; i < tablero[0].length; i++) {
+            System.out.print("━－━");
         }
 
         System.out.print("\n");
@@ -167,7 +167,7 @@ public class Tablero {
         System.out.print("   ");
         char letra = 'A';
         for (int i = 0; i < tablero[0].length; i++) {
-            System.out.print(" " + letra + " ");
+            System.out.print("　" + letra + " ");
             letra = (char) (letra + 1);
         }
     }
