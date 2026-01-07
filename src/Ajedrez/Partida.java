@@ -86,7 +86,7 @@ public class Partida {
 
     /**
      * Comprueba que la posición del objeto pasado de tipo <code>Pieza</code> este dentro de los límetes del tablero.
-     * @param Objeto de tipo <code>Pieza</code> a evaluar.
+     * @param p Objeto de tipo <code>Pieza</code> a evaluar.
      * @return <code>True</code> posición valida <code>False</code> posición <strong>NO</strong> valida.
      */
     private boolean piezaDentroDeLimites(Pieza p) {
