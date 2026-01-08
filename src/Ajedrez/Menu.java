@@ -4,9 +4,7 @@ public abstract class Menu {
 
     private static Scanner sc;
     private static Partida partida;
-
-    private static Pieza.Color turnoActual;
-    private static boolean partidaActiva;
+    private static Pieza.Color turno;
 
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
@@ -14,7 +12,7 @@ public abstract class Menu {
         bienvenida();
         importar();
 
-        p.imprimirTablero();
+        partida.imprTablero();
 
         // TODO
         // ordenJuego();
@@ -90,20 +88,11 @@ public abstract class Menu {
             if (importacionCorrecta) {
                 listaPiezas = crearPiezas(listaPiezasBlancas, listaPiezasNegras);
 
-                p.limpiar();    // Porque en caso de haberse ejecutado, las piezas se mantienen en el tablero.
-        System.out.println("¿Cómo jugar?: ");
-        // TODO Especificar más
-        System.out.println("Para jugar introduzca una línea con la inicial de las piezas + la posiciónes en el tablero.");
-        System.out.println("Debería de verse tal que así > Cb1 o Cg1, Ta1 o Th1, Ac1 o Af1...");
-        System.out.println("La partida se detendrá si se detecta algún movimiento no permitido" +
-                " o si desea salir introduciendo ( ).");
-        System.out.println();
-        System.out.println("¡Esperamos que disfrutes la partida!");
-        comenzarPartida();
+                partida.crearNuevoTablero();    // Porque en caso de haberse ejecutado, las piezas se mantienen en el tablero.
 
                 // Validación dínamica mientras se añaden las piezas.
                 for (Pieza pieza:listaPiezas) {
-                    if (!p.colocar(pieza)) {
+                    if (!partida.colocar(pieza)) {
                         importacionCorrecta = false;
                         System.out.println("Se ha encontrado un problema en la importación.");
                         break;
@@ -111,7 +100,7 @@ public abstract class Menu {
                 }
 
                 // Validación posterior a colocar las piezas.
-                if (!p.valPostColocar() && importacionCorrecta) {
+                if (!partida.validarPartida() && importacionCorrecta) {
                     importacionCorrecta = false;
                     System.out.println("Se ha encontrado un problema en la importación.");
                 }
@@ -146,14 +135,6 @@ public abstract class Menu {
             piezas[i] = pieza.trim();
             piezasIterables.delete(0, piezasIterables.indexOf(" ") + 1);
         }
-            boolean turnoBlancas = true; // empiezan blancas
-            boolean jugando = true;
-            System.out.print("Introduce la posición de las piezas de las figuras blancas y negras: ");
-            sc.nextLine();
-            // TODO Añadir coso de Ivan cuando pushee su .java :,)
-            // Formato.colocarP();
-            // - metodo de Ivan
-
         return piezas;
     }
 

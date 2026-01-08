@@ -5,7 +5,7 @@ public class Posicion {
     private final int col;
     private final int fila;
 
-    // TODO Método de pruebas de la clase
+    // DELETE Método de pruebas de la clase
     public static void main(String[] args) {
         Posicion p1;
         Posicion p2;
@@ -75,14 +75,17 @@ public class Posicion {
         return fila;
     }
 
-    public boolean esIgual(Posicion pos) {
+    // TODO Documentar
+    public boolean esMismaPos(Posicion pos) {
         return (this.col == pos.getCol() && this.fila == pos.getFila());
     }
 
+    // TODO Documentar
     public boolean enMismaCol(Posicion pos) {
         return (this.col == pos.getCol());
     }
 
+    // TODO Documentar
     public boolean enMismaFila(Posicion pos) {
         return (this.fila == pos.getFila());
     }
@@ -111,23 +114,28 @@ public class Posicion {
         return (filaMin <= this.getFila() && this.getFila() <= filaMax);
     }
 
+    // TODO Documentar
     public boolean esMov1Casilla(Posicion pos) {
         return (this.nColsDif(pos) <= 1 && this.nFilasDif(pos) <= 1);
     }
 
+    // TODO Documentar
     public boolean esMovDiagonal(Posicion pos) {
         return (this.nColsDif(pos) == this.nFilasDif(pos));
     }
 
+    // TODO Documentar
     public boolean esMovEnL(Posicion pos) {
         return ((this.nColsDif(pos) == 2) && (this.nFilasDif(pos) == 1)
                 || (this.nColsDif(pos) == 1) && (this.nFilasDif(pos) == 2));
     }
 
+    // TODO Documentar
     public int nFilasDif(Posicion pos) {
         return Math.abs(this.fila - pos.getFila());
     }
 
+    // TODO Documentar
     public int nColsDif(Posicion pos) {
         return Math.abs(this.col - pos.getCol());
     }

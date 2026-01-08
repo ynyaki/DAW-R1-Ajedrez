@@ -6,7 +6,7 @@ public class Tablero {
     public static final String BLANCO = "\u001B[47m";
     public static final String RESET = "\u001B[0m";
 
-    private final Pieza[][] tablero;
+    private final Pieza[][] t;
     private final int nCols;
     private final int nFilas;
 
@@ -20,13 +20,13 @@ public class Tablero {
         if(nCols < 8 || nFilas < 8)
             throw new InputMismatchException(
                     "El tablero debe ser al menos de 8x8.");
-        this.tablero = new Pieza[nFilas][nCols];
+        this.t = new Pieza[nFilas][nCols];
         this.nCols = nCols;
         this.nFilas = nFilas;
     }
 
     public Pieza[][] get() {
-        return this.tablero;
+        return this.t;
     }
 
     /**
@@ -71,10 +71,6 @@ public class Tablero {
         setInTablero(p, nPos);
     }
 
-    public void borrarPieza(Posicion pos) {
-        setInTablero(null, pos);
-    }
-
     /**
      * Devuelve el n.º de piezas que hay en el tablero del tipo especificado.
      * @param tipo Tipo de pieza a buscar.
@@ -82,7 +78,7 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Tipo tipo) {
         int nPiezas = 0;
-        for(Pieza[] fila : tablero)
+        for(Pieza[] fila : t)
             for(Pieza pieza : fila)
                 if(pieza.getTipo() == tipo)
                     nPiezas++;
@@ -96,7 +92,7 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Color color) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
+        for (Pieza[] filaPiezas : t)
             for (Pieza pieza : filaPiezas) {
                 if (pieza == null) continue;
                 if (pieza.getColor() == color) nPiezas++;
@@ -113,7 +109,7 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Tipo tipo, Pieza.Color color) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
+        for (Pieza[] filaPiezas : t)
             for (Pieza pieza : filaPiezas) {
                 if (pieza == null) continue;
                 if ((pieza.getTipo() == tipo) && (pieza.getColor() == color)) nPiezas++;
@@ -121,38 +117,15 @@ public class Tablero {
         return nPiezas;
     }
 
-    /**
-     * Devuelve una representación del tablero en formato <code>String</code>
-     * con todas las casillas, y las piezas en su posición correspondiente.
-     * Las casillas se representan con <code>[　]</code> (ejemplo de casilla
-     * vacía) y las piezas con su caracter Unicode correspondiente.
-     * @return Tablero en formato <code>String</code>
-     */
-    @Override
-    public String toString() {
-        String sTablero = "";
-        for (Pieza[] filaPiezas : tablero) {
-            for (Pieza pieza : filaPiezas) {
-                sTablero = sTablero.concat("[");
-                if (pieza != null)
-                    sTablero = sTablero.concat(pieza.toString());
-                else
-                    sTablero = sTablero.concat("　");
-                sTablero = sTablero.concat("]");
-            }
-            sTablero = sTablero.concat("\n");
-        }
-        return sTablero;
-    }
-
-    public void print() {
+    // FIXME Podría formar parte de Formato.imprTablero(t)
+    public void impr() {
         String simboloVacio = " 　 ";
-        for (int i = tablero.length - 1; i >= 0; i--) {
+        for (int i = t.length - 1; i >= 0; i--) {
             System.out.print(i + 1 + "┃ "); // Para la parte de los números
             if (i % 2 == 0) {   // Las que deberían empezar por negro.
-                colorearFila(tablero, i, NEGRO, BLANCO, simboloVacio);
+                colorearFila(t, i, NEGRO, BLANCO, simboloVacio);
             } else {    // Las que deberían empezar por blanco.
-                colorearFila(tablero, i, BLANCO, NEGRO, simboloVacio);
+                colorearFila(t, i, BLANCO, NEGRO, simboloVacio);
             }
 
             leyenda(i);
@@ -162,7 +135,7 @@ public class Tablero {
 
         // Para las letras
         System.out.print(" ┗━");
-        for (int i = 0; i < tablero[0].length; i++) {
+        for (int i = 0; i < t[0].length; i++) {
             System.out.print("━－━");
         }
 
@@ -170,28 +143,13 @@ public class Tablero {
 
         System.out.print("   ");
         char letra = 'A';
-        for (int i = 0; i < tablero[0].length; i++) {
+        for (int i = 0; i < t[0].length; i++) {
             System.out.print("　" + letra + " ");
             letra = (char) (letra + 1);
         }
     }
 
-    private Pieza getFromTablero(Posicion pos) {
-        pos = transPos(pos);
-        return tablero[pos.getFila() - 1][pos.getCol() - 1];
-    }
-
-    private void setInTablero(Pieza p, Posicion pos) {
-        pos = transPos(pos);
-        tablero[pos.getFila() - 1][pos.getCol() - 1] = p;
-    }
-
-    private Posicion transPos(Posicion pos) {
-        int col = pos.getCol();
-        int fila = nFilas - pos.getFila() + 1;
-        return new Posicion(col, fila);
-    }
-
+    // FIXME Podría formar parte de Formato.imprTablero(t)
     private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
         String simbolo;
         Pieza p;
@@ -213,6 +171,7 @@ public class Tablero {
         }
     }
 
+    // FIXME Podría formar parte de Formato.imprTablero(t)
     private void leyenda(int n) {
         switch (n) {
             case 7 -> System.out.print("\t\tLeyenda:");
@@ -223,5 +182,21 @@ public class Tablero {
             case 2 -> System.out.print("\t\t♘ Caballo Blanco ┃ ♞ Caballo Negro");
             case 1 -> System.out.print("\t\t♙ Peón Blanco    ┃ ♟ Peón Negro");
         }
+    }
+
+    private Pieza getFromTablero(Posicion pos) {
+        pos = transPos(pos);
+        return t[pos.getFila() - 1][pos.getCol() - 1];
+    }
+
+    private void setInTablero(Pieza p, Posicion pos) {
+        pos = transPos(pos);
+        t[pos.getFila() - 1][pos.getCol() - 1] = p;
+    }
+
+    private Posicion transPos(Posicion pos) {
+        int col = pos.getCol();
+        int fila = nFilas - pos.getFila() + 1;
+        return new Posicion(col, fila);
     }
 }
