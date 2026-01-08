@@ -17,14 +17,14 @@ public class Partida {
     // DELETE Pruebas de la clase
     public static void main() {
         Partida p = new Partida();
-        p.empezar();
+        p.crearTableroClasico();
+        Pieza p1 = new Pieza(TORRE, BLANCO, 1, 8);
+        p.colocar(p1);
+        System.out.print(p.t);
     }
 
-    public void empezar() {
-        t = crearTableroClasico();
-        Pieza p1 = new Pieza(TORRE, BLANCO, 1, 8);
-        colocar(p1);
-        System.out.print(t);
+    public Partida() {
+        this.t = new Tablero(8, 8);
     }
 
     public void colocar(Pieza p) {
@@ -38,18 +38,18 @@ public class Partida {
     // Métodos de validación
 
     public boolean esColocacionValida(Pieza p) {
-        return piezaDentroDeLimites(p)
+        return (noSuperaMargenes(p)
+                && esCasillaVacia(p)
+                && noSuperaNumPiezas()
+                && noSuperaNumPeones()
                 && noSuperaNumReyes()
-                && noSuperaNumPiezas();
+                && noHayPeonesEnMargenes());
     }
 
-    private boolean piezaDentroDeLimites(Pieza p) {
-        int col = p.getCol();
-        int fil = p.getFila();
-        int colMax = t.getNCols();
-        int filMax = t.getNFilas();
-
-        return col <= colMax && fil <= filMax;
+    private boolean noSuperaMargenes(Pieza p) {
+        Posicion pos = p.getPos();
+        return (pos.entreFilas(1, t.getNFilas())
+                && pos.entreCols(1, t.getNCols()));
     }
 
     private boolean noSuperaNumReyes() {
@@ -64,33 +64,19 @@ public class Partida {
         return (nW <= 16 && nB <= 16);
     }
 
-    private boolean noPeonesUltimasFilas() {
-        boolean correcto = true;
-
-        for (int i = 1; i <= t.getNCols() ; i++) {
-
-            if (t.getPieza(new Posicion(i, 1)) == null) {continue;}
-
-            if (t.getPieza(new Posicion(i, 1)).getTipo() == PEON){
-                correcto = false;
-            }
+    private boolean noHayPeonesEnMargenes() {
+        boolean noHayPeonEnMargenes = true;
+        for(int i = 1; i <= t.getNCols() && noHayPeonEnMargenes; i++) {
+            if(t.getPieza(new Posicion(i, 1)).getTipo() == PEON
+                    || t.getPieza(new Posicion(i,t.getNFilas())).getTipo() == PEON)
+                noHayPeonEnMargenes = false;
         }
-
-        int ultimaFila = t.getNFilas();
-        for (int i = 1; i <= t.getNCols(); i++) {
-
-            if (t.getPieza(new Posicion(i, ultimaFila)) == null) {continue;}
-
-            if (t.getPieza(new Posicion(i, ultimaFila)).getTipo() == PEON){
-                correcto = false;
-            }
-        }
-
-        return correcto;
+        return noHayPeonEnMargenes;
     }
 
-    private boolean numPeonesMax() {
-        return t.getNumPiezas(PEON, BLANCO) > 8 && t.getNumPiezas(PEON, NEGRO) > 8;
+    private boolean noSuperaNumPeones() {
+        return (t.getNumPiezas(PEON, BLANCO) <= 8
+                && t.getNumPiezas(PEON, NEGRO) <= 8);
     }
 
     /**
@@ -98,14 +84,8 @@ public class Partida {
      * @param p Representa un objeto de tipo <code>Pieza</code>.
      * @return boolean
      */
-    public boolean posicionNoOcupada(Pieza p) {
-        boolean posicionValida = false;
-
-        if (t.getPieza(p.getPos()) == null) {
-            posicionValida = true;
-        }
-
-        return posicionValida;
+    public boolean esCasillaVacia(Pieza p) {
+        return (t.getPieza(p.getPos()) == null);
     }
 
     // Métodos de movimiento
@@ -114,36 +94,37 @@ public class Partida {
         return false;
     }
 
-    public Pieza.Color getJaque() {
+    private Pieza.Color hayJaque() {
         Pieza.Color color;
-        if(hayJaque(rB))
+        if(isReyEnJaque(rB))
             color = BLANCO;
-        else if(hayJaque(rN))
+        else if(isReyEnJaque(rN))
             color = NEGRO;
         else
             color = null;
         return color;
     }
 
-    private boolean hayJaque(Pieza rey) {
-        boolean hayJaque = false;
+    private boolean isReyEnJaque(Pieza rey) {
+        boolean reyEnJaque = false;
         for(Pieza[] fila : t.get())
             for(Pieza pieza : fila)
                 if(pieza.getColor() != rey.getColor()
-                        && esMovLegal(pieza, rey.getPos()) && !hayJaque)
-                    hayJaque = true;
-        return hayJaque;
+                        && esMovLegal(pieza, rey.getPos()) && !reyEnJaque)
+                    reyEnJaque = true;
+        return reyEnJaque;
     }
 
     // DELETE Métodos provisionales
 
-    private Tablero crearTableroClasico() {
+    private void crearTableroClasico() {
         this.t = new Tablero(8, 8);
 
         t.setPieza(new Pieza(TORRE, BLANCO, 1, 1));
         t.setPieza(new Pieza(TORRE, BLANCO, 8, 1));
         t.setPieza(new Pieza(TORRE, NEGRO, 1, 8));
         t.setPieza(new Pieza(TORRE, NEGRO, 8, 8));
+
         t.setPieza(new Pieza(CABALLO, BLANCO, 2, 1));
         t.setPieza(new Pieza(CABALLO, BLANCO, 7, 1));
         t.setPieza(new Pieza(CABALLO, NEGRO, 2, 8));
@@ -167,7 +148,5 @@ public class Partida {
             t.setPieza(new Pieza(PEON, NEGRO, i, 7));
 
         t.setPieza(new Pieza(PEON, NEGRO, 8, 8));
-
-        return t;
     }
 }
