@@ -10,29 +10,21 @@ public class Partida {
     private static final Pieza.Color BLANCO = Pieza.Color.BLANCO;
     private static final Pieza.Color NEGRO = Pieza.Color.NEGRO;
 
-    private static Tablero t;
+    private Tablero t;
+    private Pieza rB;
+    private Pieza rN;
 
-    public Partida(int colsT, int filT) {
-        t = new Tablero(colsT, filT);
+    // DELETE Pruebas de la clase
+    public static void main() {
+        Partida p = new Partida();
+        p.crearTableroClasico();
+        Pieza p1 = new Pieza(TORRE, BLANCO, 1, 8);
+        p.colocar(p1);
+        System.out.print(p.t);
     }
 
-    // DELETE
-    public void imprimirTablero() {
-        t.print();
-    }
-
-    public void main() {
-        System.out.println("PRUEBAS DE PARTIDA");
-        System.out.println("------------------");
-        System.out.println();
-        Partida p = new Partida(8, 8);
-        p.empezar();
-    }
-
-    //  DELETE Pruebas de creación y muestra de tablero
-    public void empezar() {
-        Tablero t = crearTableroClasico();
-        System.out.print(t);
+    public Partida() {
+        this.t = new Tablero(8, 8);
     }
 
     /**
@@ -101,6 +93,26 @@ public class Partida {
         int filMax = t.getNFilas();
 
         return col <= colMax && fil <= filMax;
+        if(p.getTipo() == REY) {
+            // TODO Asignar pieza a rB y rN
+        }
+    }
+
+    // Métodos de validación
+
+    public boolean esColocacionValida(Pieza p) {
+        return (noSuperaMargenes(p)
+                && esCasillaVacia(p)
+                && noSuperaNumPiezas()
+                && noSuperaNumPeones()
+                && noSuperaNumReyes()
+                && noHayPeonesEnMargenes());
+    }
+
+    private boolean noSuperaMargenes(Pieza p) {
+        Posicion pos = p.getPos();
+        return (pos.entreFilas(1, t.getNFilas())
+                && pos.entreCols(1, t.getNCols()));
     }
 
     /**
@@ -113,33 +125,14 @@ public class Partida {
         return (nW <= 16 && nB <= 16);
     }
 
-    /**
-     * Comprueba que no existan peones en la úlitmas filas.
-     * @return <code>True</code> si no encuentra peones en las últimas filas <code>False</code> en caso contrario.
-     */
-    private boolean noPeonesUltimasFilas() {
-        boolean correcto = true;
-
-        for (int i = 1; i <= t.getNCols() ; i++) {
-
-            if (t.getPieza(new Posicion(i, 1)) == null) {continue;}
-
-            if (t.getPieza(new Posicion(i, 1)).getTipo() == PEON){
-                correcto = false;
-            }
+    private boolean noHayPeonesEnMargenes() {
+        boolean noHayPeonEnMargenes = true;
+        for(int i = 1; i <= t.getNCols() && noHayPeonEnMargenes; i++) {
+            if(t.getPieza(new Posicion(i, 1)).getTipo() == PEON
+                    || t.getPieza(new Posicion(i,t.getNFilas())).getTipo() == PEON)
+                noHayPeonEnMargenes = false;
         }
-
-        int ultimaFila = t.getNFilas();
-        for (int i = 1; i <= t.getNCols(); i++) {
-
-            if (t.getPieza(new Posicion(i, ultimaFila)) == null) {continue;}
-
-            if (t.getPieza(new Posicion(i, ultimaFila)).getTipo() == PEON){
-                correcto = false;
-            }
-        }
-
-        return correcto;
+        return noHayPeonEnMargenes;
     }
 
     /**
@@ -148,6 +141,9 @@ public class Partida {
      */
     private boolean numPeonesMax() {
         return t.getNumPiezas(PEON, BLANCO) <= 8 && t.getNumPiezas(PEON, NEGRO) <= 8;
+    private boolean noSuperaNumPeones() {
+        return (t.getNumPiezas(PEON, BLANCO) <= 8
+                && t.getNumPiezas(PEON, NEGRO) <= 8);
     }
 
     /**
@@ -155,49 +151,69 @@ public class Partida {
      * @param p Objeto de tipo <code>Pieza</code>.
      * @return <code>True</code> espacio disponible <code>False</code> en caso contrario.
      */
-    private boolean posicionNoOcupada(Pieza p) {
-        return t.getPieza(p.getPos()) == null;
+    public boolean esCasillaVacia(Pieza p) {
+        return (t.getPieza(p.getPos()) == null);
     }
 
-    /**
-     * Valida que al menos exista un rey. Y solo pueda haber un rey.
-     * @return <code>True</code> cuando solo exite un rey <code>False</code> cuando hay más o no hay rey.
-     */
-    private boolean existeRey() {
-        return t.getNumPiezas(REY, BLANCO) == 1 && t.getNumPiezas(REY, NEGRO) == 1;
+    // Métodos de movimiento
+
+    private boolean esMovLegal(Pieza p, Posicion pos) {
+        return false;
     }
 
-    private Tablero crearTableroClasico() {
+    private Pieza.Color hayJaque() {
+        Pieza.Color color;
+        if(isReyEnJaque(rB))
+            color = BLANCO;
+        else if(isReyEnJaque(rN))
+            color = NEGRO;
+        else
+            color = null;
+        return color;
+    }
+
+    private boolean isReyEnJaque(Pieza rey) {
+        boolean reyEnJaque = false;
+        for(Pieza[] fila : t.get())
+            for(Pieza pieza : fila)
+                if(pieza.getColor() != rey.getColor()
+                        && esMovLegal(pieza, rey.getPos()) && !reyEnJaque)
+                    reyEnJaque = true;
+        return reyEnJaque;
+    }
+
+    // DELETE Métodos provisionales
+
+    private void crearTableroClasico() {
         this.t = new Tablero(8, 8);
 
-        t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(1, 1)));
-        t.setPieza(new Pieza(TORRE, BLANCO, new Posicion(8, 1)));
-        t.setPieza(new Pieza(TORRE, NEGRO, new Posicion(1, 8)));
-        t.setPieza(new Pieza(TORRE, NEGRO, new Posicion(8, 8)));
-        t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(2, 1)));
-        t.setPieza(new Pieza(CABALLO, BLANCO, new Posicion(7, 1)));
-        t.setPieza(new Pieza(CABALLO, NEGRO, new Posicion(2, 8)));
-        t.setPieza(new Pieza(CABALLO, NEGRO, new Posicion(7, 8)));
+        t.setPieza(new Pieza(TORRE, BLANCO, 1, 1));
+        t.setPieza(new Pieza(TORRE, BLANCO, 8, 1));
+        t.setPieza(new Pieza(TORRE, NEGRO, 1, 8));
+        t.setPieza(new Pieza(TORRE, NEGRO, 8, 8));
 
-        t.setPieza(new Pieza(ALFIL, BLANCO, new Posicion(3, 1)));
-        t.setPieza(new Pieza(ALFIL, BLANCO, new Posicion(6, 1)));
-        t.setPieza(new Pieza(ALFIL, NEGRO, new Posicion(3, 8)));
-        t.setPieza(new Pieza(ALFIL, NEGRO, new Posicion(6, 8)));
+        t.setPieza(new Pieza(CABALLO, BLANCO, 2, 1));
+        t.setPieza(new Pieza(CABALLO, BLANCO, 7, 1));
+        t.setPieza(new Pieza(CABALLO, NEGRO, 2, 8));
+        t.setPieza(new Pieza(CABALLO, NEGRO, 7, 8));
 
-        t.setPieza(new Pieza(DAMA, BLANCO, new Posicion(4, 1)));
-        t.setPieza(new Pieza(DAMA, NEGRO, new Posicion(4, 8)));
+        t.setPieza(new Pieza(ALFIL, BLANCO, 3, 1));
+        t.setPieza(new Pieza(ALFIL, BLANCO, 6, 1));
+        t.setPieza(new Pieza(ALFIL, NEGRO, 3, 8));
+        t.setPieza(new Pieza(ALFIL, NEGRO, 6, 8));
 
-        t.setPieza(new Pieza(REY, BLANCO, new Posicion(5, 1)));
-        t.setPieza(new Pieza(REY, NEGRO, new Posicion(5, 8)));
+        t.setPieza(new Pieza(DAMA, BLANCO, 4, 1));
+        t.setPieza(new Pieza(DAMA, NEGRO, 4, 8));
 
-        for(int i = 1; i <= 8; i++)
-            t.setPieza(new Pieza(PEON, BLANCO, new Posicion(i, 2)));
+        t.setPieza(new Pieza(REY, BLANCO, 5, 1));
+        t.setPieza(new Pieza(REY, NEGRO, 5, 8));
 
         for(int i = 1; i <= 8; i++)
-            t.setPieza(new Pieza(PEON, NEGRO, new Posicion(i, 7)));
+            t.setPieza(new Pieza(PEON, BLANCO, i, 2));
 
-        t.setPieza(new Pieza(PEON, NEGRO, new Posicion(8, 8)));
+        for(int i = 1; i <= 8; i++)
+            t.setPieza(new Pieza(PEON, NEGRO, i, 7));
 
-        return t;
+        t.setPieza(new Pieza(PEON, NEGRO, 8, 8));
     }
 }

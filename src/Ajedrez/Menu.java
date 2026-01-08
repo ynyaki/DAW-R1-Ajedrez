@@ -3,10 +3,14 @@ import java.util.Scanner;
 public abstract class Menu {
 
     private static Scanner sc;
-    static Partida p = new Partida(8, 8);
+    private static Partida partida;
+
+    private static Pieza.Color turnoActual;
+    private static boolean partidaActiva;
 
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
+        partida = new Partida();
         bienvenida();
         importar();
 
@@ -87,6 +91,15 @@ public abstract class Menu {
                 listaPiezas = crearPiezas(listaPiezasBlancas, listaPiezasNegras);
 
                 p.limpiar();    // Porque en caso de haberse ejecutado, las piezas se mantienen en el tablero.
+        System.out.println("¿Cómo jugar?: ");
+        // TODO Especificar más
+        System.out.println("Para jugar introduzca una línea con la inicial de las piezas + la posiciónes en el tablero.");
+        System.out.println("Debería de verse tal que así > Cb1 o Cg1, Ta1 o Th1, Ac1 o Af1...");
+        System.out.println("La partida se detendrá si se detecta algún movimiento no permitido" +
+                " o si desea salir introduciendo ( ).");
+        System.out.println();
+        System.out.println("¡Esperamos que disfrutes la partida!");
+        comenzarPartida();
 
                 // Validación dínamica mientras se añaden las piezas.
                 for (Pieza pieza:listaPiezas) {
@@ -133,6 +146,13 @@ public abstract class Menu {
             piezas[i] = pieza.trim();
             piezasIterables.delete(0, piezasIterables.indexOf(" ") + 1);
         }
+            boolean turnoBlancas = true; // empiezan blancas
+            boolean jugando = true;
+            System.out.print("Introduce la posición de las piezas de las figuras blancas y negras: ");
+            sc.nextLine();
+            // TODO Añadir coso de Ivan cuando pushee su .java :,)
+            // Formato.colocarP();
+            // - metodo de Ivan
 
         return piezas;
     }
@@ -217,35 +237,32 @@ public abstract class Menu {
         return listaPiezas;
     }
 
-    private Pieza.Color turnoActual;
-    private boolean partidaActiva;
-
-    public void jugar(Scanner sc) {
-
-        while (partidaActiva) {
-            // Que vaya imprimiendo el turno actual
-
-            System.out.println();
-            System.out.println("Turno de las " +
-                    (turnoActual == Pieza.Color.BLANCO ? "BLANCAS" : "NEGRAS"));
-
-            System.out.print("Introduce tu jugada (o SALIR): ");
-            String entrada = sc.nextLine();
-
-            if (entrada.equalsIgnoreCase("SALIR")) {
-                System.out.println("Partida finalizada.");
-                partidaActiva = false;
-                return;
+    private static boolean validarMovimiento(String movimiento) {
+            // Si el usuario no ha escrito nada (null), es inválido ya de por si xD
+            if (movimiento == null) {
+                /* return false;*/
+                // TODO que no devuelva falso sino que simplemente vuelva a pedir movimiento
             }
 
-            cambiarTurno();
-        }
-    }
+            //quitamos espacios al principio y al final
+            // Ej: "  Ta4 Ta5  " → "Ta4 Ta5"
+            movimiento = movimiento.trim();
 
-    private void cambiarTurno() {
-        if (turnoActual == Pieza.Color.BLANCO) {
-            turnoActual = Pieza.Color.NEGRO;
-        } else {
-            turnoActual = Pieza.Color.BLANCO; }
-    }
+        /*
+         Defino como se ha de poner
+         Ejemplos válidos:
+         - Ta4
+         - Ac3
+         - a2   (peón, sin letra)
+        */
+            String norma = "[TACDR]?[a-h][1-8]";
+
+            String movimientoValido = norma + "\\s+" + norma;
+        /*
+         comprueba si se cumple la regla que hemos hecho
+         */
+            return movimiento.matches(movimientoValido);
+        }
+
+
 }
