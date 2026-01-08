@@ -27,9 +27,72 @@ public class Partida {
         this.t = new Tablero(8, 8);
     }
 
-    public void colocar(Pieza p) {
-        if(esColocacionValida(p))
+    /**
+     * Coloca pieza en el tablero. Aparte de devulver si es posible o no colocar la pieza, en caso de poder
+     * colocarla la coloca.
+     * @param p Objeto de tipo <code>Pieza</code>
+     * @return <code>True</code> cuando se puede colocar la pieza en el tablero, <code>False</code> en caso contrario.
+     */
+    public boolean colocar(Pieza p) {
+        if (esColocacionValida(p)){
             t.setPieza(p);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Limpia el tablero.
+     */
+    public void limpiar(){
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                if (t.getPieza(new Posicion(i, j)) != null) {
+                    t.borrarPieza(new Posicion(i, j));
+                }
+            }
+        }
+    }
+
+    /**
+     * Validación post Piezas colocadas. Existen validaciones que no se pueden comprobar mientras se colocan las piezas.
+     * @return <code>True</code> validación valida <code>False</code> validación invalida.
+     */
+    public boolean valPostColocar(){
+        boolean a = existeRey();
+        boolean b = noSuperaNumPiezas();
+        boolean c = noPeonesUltimasFilas();
+        boolean d = numPeonesMax();
+
+        return existeRey()
+                && noSuperaNumPiezas()
+                && noPeonesUltimasFilas()
+                && numPeonesMax();
+    }
+
+    /**
+     * Valida que sea posible introducir una pieza en el tablero.
+     * @param p Objeto de tipo <code>Pieza</code>
+     * @return <code>True</code> cuando es posible la colocación, <code>False</code> en caso contrario.
+     */
+    private boolean esColocacionValida(Pieza p) {
+        return piezaDentroDeLimites(p)
+                && posicionNoOcupada(p);
+    }
+
+    /**
+     * Comprueba que la posición del objeto pasado de tipo <code>Pieza</code> este dentro de los límetes del tablero.
+     * @param p Objeto de tipo <code>Pieza</code> a evaluar.
+     * @return <code>True</code> posición valida <code>False</code> posición <strong>NO</strong> valida.
+     */
+    private boolean piezaDentroDeLimites(Pieza p) {
+        int col = p.getCol();
+        int fil = p.getFila();
+        int colMax = t.getNCols();
+        int filMax = t.getNFilas();
+
+        return col <= colMax && fil <= filMax;
         if(p.getTipo() == REY) {
             // TODO Asignar pieza a rB y rN
         }
@@ -52,12 +115,10 @@ public class Partida {
                 && pos.entreCols(1, t.getNCols()));
     }
 
-    private boolean noSuperaNumReyes() {
-        int nWK = t.getNumPiezas(REY, BLANCO);
-        int nBK = t.getNumPiezas(REY, NEGRO);
-        return (nWK <= 1 && nBK <= 1);
-    }
-
+    /**
+     * Comprueba que no exitan más piezas que las permitidas en el ajedrez.
+     * @return <code>True</code> cantidad valida <code>False</code> cantidad <strong>NO</strong> valida.
+     */
     private boolean noSuperaNumPiezas() {
         int nW = t.getNumPiezas(BLANCO);
         int nB = t.getNumPiezas(NEGRO);
@@ -74,15 +135,21 @@ public class Partida {
         return noHayPeonEnMargenes;
     }
 
+    /**
+     * Comprueba que no se exceda un número máximo de peones posibles.
+     * @return <code>True</code> número de peones posible <code>False</code> número <strong>NO</strong> posible de peones.
+     */
+    private boolean numPeonesMax() {
+        return t.getNumPiezas(PEON, BLANCO) <= 8 && t.getNumPiezas(PEON, NEGRO) <= 8;
     private boolean noSuperaNumPeones() {
         return (t.getNumPiezas(PEON, BLANCO) <= 8
                 && t.getNumPiezas(PEON, NEGRO) <= 8);
     }
 
     /**
-     * Método que devuelve <code>True</code> cuando se le pasa una pieza con una posición no ocupada.
-     * @param p Representa un objeto de tipo <code>Pieza</code>.
-     * @return boolean
+     * Comprueba que la posición de la pieza que se le pasa por parámetro no se encuentre ocupada.
+     * @param p Objeto de tipo <code>Pieza</code>.
+     * @return <code>True</code> espacio disponible <code>False</code> en caso contrario.
      */
     public boolean esCasillaVacia(Pieza p) {
         return (t.getPieza(p.getPos()) == null);

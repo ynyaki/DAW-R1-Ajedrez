@@ -53,6 +53,12 @@ public class Posicion {
         this.fila = fila;
     }
 
+    public Posicion(char col, int fila) {
+        int unicodeAnteriorPrimeraCol = 'a' - 1;
+        this.col = col - unicodeAnteriorPrimeraCol;
+        this.fila = fila;
+    }
+
     /**
      * Devuelve la columna (posición horizontal) de la posición.
      * @return Columna de la posición.

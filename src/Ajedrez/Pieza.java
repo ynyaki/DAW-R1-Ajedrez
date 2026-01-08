@@ -58,6 +58,25 @@ public class Pieza {
         this.pos = pos;
     }
 
+    public static Tipo obtenerTipoPieza(String pieza) {
+        Tipo tipo = null;
+
+        if (pieza.length() == 3) {
+            tipo = switch (pieza.charAt(0)) {
+                case 'R' -> Tipo.REY;
+                case 'D' -> Tipo.DAMA;
+                case 'T' -> Tipo.TORRE;
+                case 'A' -> Tipo.ALFIL;
+                case 'C' -> Tipo.CABALLO;
+                default -> throw new IllegalStateException("Valor no esperado: " + pieza.charAt(0));
+            };
+        } else {
+            tipo = Tipo.PEON;
+        }
+
+        return tipo;
+    }
+
     @Override
     public String toString() {
         if(this.tipo == Tipo.REY && this.color == Color.BLANCO)
