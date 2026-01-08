@@ -25,6 +25,10 @@ public class Tablero {
         this.nFilas = nFilas;
     }
 
+    public Pieza[][] get() {
+        return this.tablero;
+    }
+
     /**
      * Obtiene el n.º de columnas del tablero.
      * @return N.º de columnas del tablero.
@@ -55,7 +59,7 @@ public class Tablero {
      * Coloca una pieza en el tablero en la posición que tiene guardada.
      * @param p Pieza a colocar.
      */
-     public void setPieza(Pieza p) {
+    public void setPieza(Pieza p) {
         setPieza(p, p.getPos());
     }
 
@@ -78,8 +82,8 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Tipo tipo) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
+        for(Pieza[] fila : tablero)
+            for(Pieza pieza : fila)
                 if(pieza.getTipo() == tipo)
                     nPiezas++;
         return nPiezas;
@@ -92,8 +96,8 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Color color) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
+        for(Pieza[] fila : tablero)
+            for(Pieza pieza : fila)
                 if(pieza.getColor() == color)
                     nPiezas++;
         return nPiezas;
