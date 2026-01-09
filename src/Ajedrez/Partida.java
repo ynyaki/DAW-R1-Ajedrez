@@ -48,7 +48,7 @@ public class Partida {
     }
 
     // TODO Documentar
-    private boolean isReyEnJaque(Pieza rey) {
+    public boolean isReyEnJaque(Pieza rey) {
         boolean reyEnJaque = false;
         for(Pieza[] fila : t.get())
             for(Pieza pieza : fila)
