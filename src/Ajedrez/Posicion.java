@@ -5,7 +5,7 @@ public class Posicion {
     private final int col;
     private final int fila;
 
-    // TODO Método de pruebas de la clase
+    // DELETE Método de pruebas de la clase
     public static void main(String[] args) {
         Posicion p1;
         Posicion p2;
@@ -53,6 +53,12 @@ public class Posicion {
         this.fila = fila;
     }
 
+    public Posicion(char col, int fila) {
+        int unicodeAnteriorPrimeraCol = 'a' - 1;
+        this.col = col - unicodeAnteriorPrimeraCol;
+        this.fila = fila;
+    }
+
     /**
      * Devuelve la columna (posición horizontal) de la posición.
      * @return Columna de la posición.
@@ -69,46 +75,67 @@ public class Posicion {
         return fila;
     }
 
+    // TODO Documentar
+    public boolean esMismaPos(Posicion pos) {
+        return (this.col == pos.getCol() && this.fila == pos.getFila());
+    }
+
+    // TODO Documentar
+    public boolean enMismaCol(Posicion pos) {
+        return (this.col == pos.getCol());
+    }
+
+    // TODO Documentar
+    public boolean enMismaFila(Posicion pos) {
+        return (this.fila == pos.getFila());
+    }
+
     /**
      * Devuelve si una posición está entre dos columnas especificadas
      * (<code>colMin <= col <= colMax</code>).
-     * @param colMin
-     * @param colMax
-     * @return
+     * @param colMin Columna mínima para que se cumpla la condición.
+     * @param colMax Columna máxima para que se cumpla la condición.
+     * @return Si la columna de la posición está entre las dos columnas
+     * parámetro.
      */
     public boolean entreCols(int colMin, int colMax) {
         return (colMin <= this.getCol() && this.getCol() <= colMax);
     }
 
+    /**
+     * Devuelve si una posición está entre dos filas especificadas
+     * (<code>filaMin <= fila <= filaMax</code>).
+     * @param filaMin Fila mínima para que se cumpla la condición.
+     * @param filaMax Fila máxima para que se cumpla la condición.
+     * @return Si la fila de la posición está entre las dos filas
+     * parámetro.
+     */
     public boolean entreFilas(int filaMin, int filaMax) {
         return (filaMin <= this.getFila() && this.getFila() <= filaMax);
     }
 
+    // TODO Documentar
     public boolean esMov1Casilla(Posicion pos) {
         return (this.nColsDif(pos) <= 1 && this.nFilasDif(pos) <= 1);
     }
 
-    public boolean enMismaCol(Posicion pos) {
-        return (this.col != pos.getCol());
-    }
-
-    public boolean enMismaFila(Posicion pos) {
-        return (this.fila != pos.getFila());
-    }
-
+    // TODO Documentar
     public boolean esMovDiagonal(Posicion pos) {
         return (this.nColsDif(pos) == this.nFilasDif(pos));
     }
 
+    // TODO Documentar
     public boolean esMovEnL(Posicion pos) {
         return ((this.nColsDif(pos) == 2) && (this.nFilasDif(pos) == 1)
                 || (this.nColsDif(pos) == 1) && (this.nFilasDif(pos) == 2));
     }
 
+    // TODO Documentar
     public int nFilasDif(Posicion pos) {
         return Math.abs(this.fila - pos.getFila());
     }
 
+    // TODO Documentar
     public int nColsDif(Posicion pos) {
         return Math.abs(this.col - pos.getCol());
     }

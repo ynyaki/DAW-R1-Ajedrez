@@ -6,7 +6,7 @@ public class Tablero {
     public static final String BLANCO = "\u001B[47m";
     public static final String RESET = "\u001B[0m";
 
-    private final Pieza[][] tablero;
+    private final Pieza[][] t;
     private final int nCols;
     private final int nFilas;
 
@@ -20,9 +20,13 @@ public class Tablero {
         if(nCols < 8 || nFilas < 8)
             throw new InputMismatchException(
                     "El tablero debe ser al menos de 8x8.");
-        this.tablero = new Pieza[nFilas][nCols];
+        this.t = new Pieza[nFilas][nCols];
         this.nCols = nCols;
         this.nFilas = nFilas;
+    }
+
+    public Pieza[][] get() {
+        return this.t;
     }
 
     /**
@@ -55,7 +59,7 @@ public class Tablero {
      * Coloca una pieza en el tablero en la posición que tiene guardada.
      * @param p Pieza a colocar.
      */
-     public void setPieza(Pieza p) {
+    public void setPieza(Pieza p) {
         setPieza(p, p.getPos());
     }
 
@@ -67,8 +71,9 @@ public class Tablero {
         setInTablero(p, nPos);
     }
 
-    public void borrarPieza(Posicion pos) {
-        setInTablero(null, pos);
+    // TODO Documentar
+    public void borrarPieza(Pieza p) {
+        setInTablero(null, p.getPos());
     }
 
     /**
@@ -78,8 +83,8 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Tipo tipo) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
+        for(Pieza[] fila : t)
+            for(Pieza pieza : fila)
                 if(pieza.getTipo() == tipo)
                     nPiezas++;
         return nPiezas;
@@ -92,10 +97,11 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Color color) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
-                if(pieza.getColor() == color)
-                    nPiezas++;
+        for (Pieza[] filaPiezas : t)
+            for (Pieza pieza : filaPiezas) {
+                if (pieza == null) continue;
+                if (pieza.getColor() == color) nPiezas++;
+            }
         return nPiezas;
     }
 
@@ -108,86 +114,94 @@ public class Tablero {
      */
     public int getNumPiezas(Pieza.Tipo tipo, Pieza.Color color) {
         int nPiezas = 0;
-        for (Pieza[] filaPiezas : tablero)
-            for (Pieza pieza : filaPiezas)
-                if((pieza.getTipo() == tipo) && (pieza.getColor() == color))
-                    nPiezas++;
+        for (Pieza[] filaPiezas : t)
+            for (Pieza pieza : filaPiezas) {
+                if (pieza == null) continue;
+                if ((pieza.getTipo() == tipo) && (pieza.getColor() == color)) nPiezas++;
+            }
         return nPiezas;
     }
 
-    /**
-     * Devuelve una representación del tablero en formato <code>String</code>
-     * con todas las casillas, y las piezas en su posición correspondiente.
-     * Las casillas se representan con <code>[　]</code> (ejemplo de casilla
-     * vacía) y las piezas con su caracter Unicode correspondiente.
-     * @return Tablero en formato <code>String</code>
-     */
-    @Override
-    public String toString() {
-        String sTablero = "";
-        for (Pieza[] filaPiezas : tablero) {
-            for (Pieza pieza : filaPiezas) {
-                sTablero = sTablero.concat("[");
-                if (pieza != null)
-                    sTablero = sTablero.concat(pieza.toString());
-                else
-                    sTablero = sTablero.concat("　");
-                sTablero = sTablero.concat("]");
-            }
-            sTablero = sTablero.concat("\n");
-        }
-        return sTablero;
-    }
-
-    public void print() {
-        // TODO Recoger el símbolo de la pieza.
-        String simbolo = "   ";
-        for (int i = tablero.length - 1; i >= 0; i--) {
+    // FIXME Podría formar parte de Formato.imprTablero(t)
+    public void impr() {
+        String simboloVacio = " 　 ";
+        for (int i = t.length - 1; i >= 0; i--) {
             System.out.print(i + 1 + "┃ "); // Para la parte de los números
             if (i % 2 == 0) {   // Las que deberían empezar por negro.
-                colorearFila(tablero, i, NEGRO, BLANCO, simbolo);
+                colorearFila(t, i, NEGRO, BLANCO, simboloVacio);
             } else {    // Las que deberían empezar por blanco.
-                colorearFila(tablero, i, BLANCO, NEGRO, simbolo);
+                colorearFila(t, i, BLANCO, NEGRO, simboloVacio);
             }
+
+            leyenda(i);
+
             System.out.print("\n");
         }
+
         // Para las letras
         System.out.print(" ┗━");
-        for (int i = 0; i < tablero[0].length * 3; i++) {
-            System.out.print("━");
+        for (int i = 0; i < t[0].length; i++) {
+            System.out.print("━－━");
         }
-        System.out.println();
+
+        System.out.print("\n");
+
         System.out.print("   ");
         char letra = 'A';
-        for (int i = 0; i < tablero[0].length; i++) {
-            System.out.print(" " + letra + " ");
+        for (int i = 0; i < t[0].length; i++) {
+            System.out.print("　" + letra + " ");
             letra = (char) (letra + 1);
         }
     }
 
-    private Pieza getFromTablero(Posicion pos) {
-        pos = transPos(pos);
-        return tablero[pos.getFila() - 1][pos.getCol() - 1];
-    }
+    // FIXME Podría formar parte de Formato.imprTablero(t)
+    private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
+        String simbolo;
+        Pieza p;
 
-    private void setInTablero(Pieza p, Posicion pos) {
-        pos = transPos(pos);
-        tablero[pos.getFila() - 1][pos.getCol() - 1] = p;
-    }
-
-    private Posicion transPos(Posicion pos) {
-        int col = pos.getCol();
-        int fila = nFilas - pos.getFila() + 1;
-        return new Posicion(col, fila);
-    }
-
-    private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simbolo){
         for (int i = 0; i < tablero[filaIterar].length; i++) {
+            if (getFromTablero(new Posicion(i + 1, filaIterar + 1)) == null) {
+                simbolo = simboloVacio;
+            } else {
+                p = getFromTablero(new Posicion(i + 1, filaIterar + 1));
+
+                simbolo = " " + p.toString() + " ";
+            }
+
             if (i % 2 == 0) {
                 System.out.print(colorInicio + simbolo + RESET);
             } else {
                 System.out.print(colorSiguiente + simbolo + RESET);
             }
         }
+    }
+
+    // FIXME Podría formar parte de Formato.imprTablero(t)
+    private void leyenda(int n) {
+        switch (n) {
+            case 7 -> System.out.print("\t\tLeyenda:");
+            case 6 -> System.out.print("\t\t♔ Rey Blanco     ┃ ♚ Rey Negro");
+            case 5 -> System.out.print("\t\t♕ Dama Blanca    ┃ ♛ Dama Negra");
+            case 4 -> System.out.print("\t\t♖ Torre Blanca   ┃ ♜ Torre Negra");
+            case 3 -> System.out.print("\t\t♗ Alfil Blanco   ┃ ♝ Alfil Negro");
+            case 2 -> System.out.print("\t\t♘ Caballo Blanco ┃ ♞ Caballo Negro");
+            case 1 -> System.out.print("\t\t♙ Peón Blanco    ┃ ♟ Peón Negro");
+        }
+    }
+
+    private Pieza getFromTablero(Posicion pos) {
+        pos = transPos(pos);
+        return t[pos.getFila() - 1][pos.getCol() - 1];
+    }
+
+    private void setInTablero(Pieza p, Posicion pos) {
+        pos = transPos(pos);
+        t[pos.getFila() - 1][pos.getCol() - 1] = p;
+    }
+
+    private Posicion transPos(Posicion pos) {
+        int col = pos.getCol();
+        int fila = nFilas - pos.getFila() + 1;
+        return new Posicion(col, fila);
     }
 }

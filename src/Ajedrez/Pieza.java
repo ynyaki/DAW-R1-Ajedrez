@@ -34,6 +34,23 @@ public class Pieza {
         return tipo;
     }
 
+    // FIXME Pertenece al formato
+    public static Tipo obtenerTipoPieza(String pieza) {
+        Tipo tipo;
+        if (pieza.length() == 3)
+            tipo = switch (pieza.charAt(0)) {
+                case 'R' -> Tipo.REY;
+                case 'D' -> Tipo.DAMA;
+                case 'T' -> Tipo.TORRE;
+                case 'A' -> Tipo.ALFIL;
+                case 'C' -> Tipo.CABALLO;
+                default -> null;
+            };
+        else
+            tipo = Tipo.PEON;
+        return tipo;
+    }
+
     public Color getColor() {
         return color;
     }
