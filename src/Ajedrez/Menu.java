@@ -89,5 +89,8 @@ public abstract class Menu {
             turnoActual = Pieza.Color.NEGRO;
         } else {
             turnoActual = Pieza.Color.BLANCO; }
+        // TODO Desarrollar menú
+
+
     }
 }
