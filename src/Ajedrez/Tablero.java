@@ -122,7 +122,6 @@ public class Tablero {
         return nPiezas;
     }
 
-    // FIXME Podría formar parte de Formato.imprTablero(t)
     public void impr() {
         String simboloVacio = " 　 ";
         for (int i = t.length - 1; i >= 0; i--) {
@@ -154,7 +153,6 @@ public class Tablero {
         }
     }
 
-    // FIXME Podría formar parte de Formato.imprTablero(t)
     private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
         String simbolo;
         Pieza p;
@@ -176,7 +174,6 @@ public class Tablero {
         }
     }
 
-    // FIXME Podría formar parte de Formato.imprTablero(t)
     private void leyenda(int n) {
         switch (n) {
             case 7 -> System.out.print("\t\tLeyenda:");
@@ -189,16 +186,32 @@ public class Tablero {
         }
     }
 
+    /**
+     * Devuelve el contenido del tablero en la posición indicada. En caso de no tener contenido
+     * devuelve <code>NULL</code>.
+     * @param pos Objeto de tipo <code>Poscion</code> que representa la posición en el tablero que quieres representar.
+     * @return Objeto tipo <code>Pieza</code> o <code>NULL</code>.
+     */
     private Pieza getFromTablero(Posicion pos) {
         pos = transPos(pos);
         return t[pos.getFila() - 1][pos.getCol() - 1];
     }
 
+    /**
+     * Coloca en el tablero una pieza.
+     * @param p Objeto de tipo <code>Pieza</code>, el cual, quieres juardar.
+     * @param pos Objeto de tipo <code>Posicion</code>, que representa, donde quieres guardar la pieza.
+     */
     private void setInTablero(Pieza p, Posicion pos) {
         pos = transPos(pos);
         t[pos.getFila() - 1][pos.getCol() - 1] = p;
     }
 
+    /**
+     * Cambia una posición en formato humano a una con un formato correcto para la matriz.
+     * @param pos Objeto de tipo <code>Posicion</code>
+     * @return
+     */
     private Posicion transPos(Posicion pos) {
         int col = pos.getCol();
         int fila = nFilas - pos.getFila() + 1;
