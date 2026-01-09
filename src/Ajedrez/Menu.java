@@ -11,7 +11,6 @@ public abstract class Menu {
         partida = new Partida();
         bienvenida();
         importar();
-
         partida.imprTablero();
 
         // TODO
