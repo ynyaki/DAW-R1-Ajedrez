@@ -71,6 +71,11 @@ public class Tablero {
         setInTablero(p, nPos);
     }
 
+    // TODO Documentar
+    public void borrarPieza(Pieza p) {
+        setInTablero(null, p.getPos());
+    }
+
     /**
      * Devuelve el n.º de piezas que hay en el tablero del tipo especificado.
      * @param tipo Tipo de pieza a buscar.

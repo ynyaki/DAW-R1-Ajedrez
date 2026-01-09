@@ -28,10 +28,34 @@ public class Partida {
     public boolean mover(Pieza p, Posicion nPos) {
         boolean hayMov = esMovLegal(p, nPos);
         if(hayMov) {
+            t.borrarPieza(p);
             t.setPieza(p, nPos);
             p.setPos(nPos);
         }
         return hayMov;
+    }
+
+    // TODO Documentar
+    public Pieza.Color hayJaque() {
+        Pieza.Color color;
+        if(isReyEnJaque(rB))
+            color = BLANCO;
+        else if(isReyEnJaque(rN))
+            color = NEGRO;
+        else
+            color = null;
+        return color;
+    }
+
+    // TODO Documentar
+    private boolean isReyEnJaque(Pieza rey) {
+        boolean reyEnJaque = false;
+        for(Pieza[] fila : t.get())
+            for(Pieza pieza : fila)
+                if(pieza.getColor() != rey.getColor()
+                        && esMovLegal(pieza, rey.getPos()) && !reyEnJaque)
+                    reyEnJaque = true;
+        return reyEnJaque;
     }
 
     // TODO Revisar
@@ -107,10 +131,6 @@ public class Partida {
         return noHayPeonEnMargenes;
     }
 
-    private boolean numPeonesMax() {
-        return t.getNumPiezas(PEON, BLANCO) <= 8 && t.getNumPiezas(PEON, NEGRO) <= 8;
-    }
-
     private boolean noSuperaNumPeones() {
         return (t.getNumPiezas(PEON, BLANCO) <= 8
                 && t.getNumPiezas(PEON, NEGRO) <= 8);
@@ -118,27 +138,6 @@ public class Partida {
 
     private boolean esCasillaVacia(Pieza p) {
         return (t.getPieza(p.getPos()) == null);
-    }
-
-    private Pieza.Color hayJaque() {
-        Pieza.Color color;
-        if(isReyEnJaque(rB))
-            color = BLANCO;
-        else if(isReyEnJaque(rN))
-            color = NEGRO;
-        else
-            color = null;
-        return color;
-    }
-
-    private boolean isReyEnJaque(Pieza rey) {
-        boolean reyEnJaque = false;
-        for(Pieza[] fila : t.get())
-            for(Pieza pieza : fila)
-                if(pieza.getColor() != rey.getColor()
-                        && esMovLegal(pieza, rey.getPos()) && !reyEnJaque)
-                    reyEnJaque = true;
-        return reyEnJaque;
     }
 
     // DELETE Crear tablero por defecto
