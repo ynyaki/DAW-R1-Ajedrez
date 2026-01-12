@@ -122,6 +122,9 @@ public class Tablero {
         return nPiezas;
     }
 
+    /**
+     * Imprime el array que representa el tablero con el contenido.
+     */
     public void impr() {
         String simboloVacio = " 　 ";
         for (int i = t.length - 1; i >= 0; i--) {
@@ -153,6 +156,15 @@ public class Tablero {
         }
     }
 
+    /**
+     * Se encarga de colorear el fondo que representan las celdas según el número de fila. Aparte de añadir el
+     * contenido. También añade las letras y números.
+     * @param tablero El <code>array</code> del tablero.
+     * @param filaIterar Nº de fila. Tipo <code>int</code>.
+     * @param colorInicio Color de inicio. Tipo <code>String</code>.
+     * @param colorSiguiente Color a alternar. Tipo <code>String</code>.
+     * @param simboloVacio Símbolo a colocar en caso de non tener contenido. Tipo <code>String</code>.
+     */
     private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
         String simbolo;
         Pieza p;
@@ -174,6 +186,10 @@ public class Tablero {
         }
     }
 
+    /**
+     * Imprime una línea relacionada con la leyenda según la fila pasada por parámetros.
+     * @param n Número de la fila donde se tiene que imprimir.
+     */
     private void leyenda(int n) {
         switch (n) {
             case 7 -> System.out.print("\t\tLeyenda:");
