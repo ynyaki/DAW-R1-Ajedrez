@@ -226,7 +226,7 @@ public class Tablero {
     /**
      * Cambia una posición en formato humano a una con un formato correcto para la matriz.
      * @param pos Objeto de tipo <code>Posicion</code>
-     * @return
+     * @return Objeto posición basada en el inicial.
      */
     private Posicion transPos(Posicion pos) {
         int col = pos.getCol();
