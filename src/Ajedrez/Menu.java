@@ -9,13 +9,27 @@ public abstract class Menu {
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
         partida = new Partida();
-        bienvenida();
-        importar();
+
+//        bienvenida();
+//        importar();
+
+        prueba();
+
         partida.imprTablero();
+
+        System.out.print("\n");
+
+        partida.probarJuego();
 
         // TODO
         // ordenJuego();
         // juego();
+    }
+
+    // DELETE
+    public static void prueba() {
+        partida.colocar(new Pieza(Pieza.Tipo.REY, Pieza.Color.BLANCO, new Posicion('a', 1)));
+        partida.colocar(new Pieza(Pieza.Tipo.REY, Pieza.Color.NEGRO, new Posicion('a', 8)));
     }
 
     /**
@@ -80,7 +94,7 @@ public abstract class Menu {
             // Valida la sintaxis
             if (!esValidarSintaxis(listaPiezasBlancas) || !esValidarSintaxis(listaPiezasNegras)) {
                 importacionCorrecta = false;
-                System.out.println("Se ha encontrado un problema en la importación.");
+                System.out.println("Se ha encontrado un problema en la importación. .");
             }
 
             // Crea las piezas y se valida.
@@ -93,7 +107,7 @@ public abstract class Menu {
                 for (Pieza pieza:listaPiezas) {
                     if (!partida.colocar(pieza)) {
                         importacionCorrecta = false;
-                        System.out.println("Se ha encontrado un problema en la importación.");
+                        System.out.println("Se ha encontrado un problema en la importación. -");
                         break;
                     }
                 }
@@ -101,7 +115,7 @@ public abstract class Menu {
                 // Validación posterior a colocar las piezas.
                 if (!partida.validarPartida() && importacionCorrecta) {
                     importacionCorrecta = false;
-                    System.out.println("Se ha encontrado un problema en la importación.");
+                    System.out.println("Se ha encontrado un problema en la importación. a");
                 }
             }
         } while(!importacionCorrecta);

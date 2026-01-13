@@ -14,6 +14,11 @@ public class Partida {
     private Pieza rB;
     private Pieza rN;
 
+    // DELETE Probar Juego.java
+    public void probarJuego() {
+        Juego.main(BLANCO, t);
+    }
+
     /** Inicializa un tablero vacío de 8x8 para la partida. */
     public Partida() {
         crearNuevoTablero();
@@ -34,7 +39,7 @@ public class Partida {
         return hayMov;
     }
 
-    // TODO Revisar
+    // TODO MODIFICADO 13/01/2026
     /**
      * Coloca pieza en el tablero. Aparte de devulver si es posible o no colocar la pieza, en caso de poder
      * colocarla la coloca.
@@ -42,15 +47,8 @@ public class Partida {
      * @return <code>True</code> cuando se puede colocar la pieza en el tablero, <code>False</code> en caso contrario.
      */
     public boolean colocar(Pieza p) {
-        boolean esValida = esColocacionValida(p);
-        if(esValida) {
-            t.setPieza(p);
-            if(p.getTipo() == REY && p.getColor() == BLANCO)
-                rB = p;
-            else if(p.getTipo() == REY && p.getColor() == NEGRO)
-                rN = p;
-        }
-        return esValida;
+        t.setPieza(p);
+        return true;
     }
 
     /**
