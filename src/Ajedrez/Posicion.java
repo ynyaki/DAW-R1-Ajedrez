@@ -121,7 +121,7 @@ public class Posicion {
 
     // TODO Documentar
     public boolean esMovDiagonal(Posicion pos) {
-        return (this.nColsDif(pos) == this.nFilasDif(pos));
+        return (Math.abs(this.nColsDif(pos)) == Math.abs(this.nFilasDif(pos)));
     }
 
     // TODO Documentar
@@ -132,11 +132,11 @@ public class Posicion {
 
     // TODO Documentar
     public int nFilasDif(Posicion pos) {
-        return Math.abs(this.fila - pos.getFila());
+        return (pos.getFila() - this.fila);
     }
 
     // TODO Documentar
     public int nColsDif(Posicion pos) {
-        return Math.abs(this.col - pos.getCol());
+        return (pos.getCol() - this.col);
     }
 }

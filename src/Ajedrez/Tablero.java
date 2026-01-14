@@ -45,6 +45,7 @@ public class Tablero {
         return nFilas;
     }
 
+    // TODO Revisar
     /**
      * Obtiene el objeto <code>Pieza</code> en una posición del tablero
      * (si no hay ninguna pieza devuelve <code>null</code>).
@@ -53,6 +54,21 @@ public class Tablero {
      */
     public Pieza getPieza(Posicion pos) {
         return getFromTablero(pos);
+    }
+
+    // TODO Documentar
+    public Pieza getPieza(int col, int fila) {
+        return getFromTablero(new Posicion(col, fila));
+    }
+
+    // TODO Documentar
+    public boolean estaVacia(Posicion pos) {
+        return (getPieza(pos) == null);
+    }
+
+    // TODO Documentar
+    public boolean estaOcupada(Posicion pos) {
+        return (getPieza(pos) != null);
     }
 
     /**
