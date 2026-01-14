@@ -1,6 +1,17 @@
 import java.util.Scanner;
 
+// TODO Documentar
 public abstract class Menu {
+
+    private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
+    private static final Pieza.Tipo CABALLO = Pieza.Tipo.CABALLO;
+    private static final Pieza.Tipo TORRE = Pieza.Tipo.TORRE;
+    private static final Pieza.Tipo ALFIL = Pieza.Tipo.ALFIL;
+    private static final Pieza.Tipo DAMA = Pieza.Tipo.DAMA;
+    private static final Pieza.Tipo REY = Pieza.Tipo.REY;
+
+    private static final Pieza.Color BLANCO = Pieza.Color.BLANCO;
+    private static final Pieza.Color NEGRO = Pieza.Color.NEGRO;
 
     private static Scanner sc;
     private static Partida partida;
@@ -246,4 +257,22 @@ public abstract class Menu {
         }
 
 
+    private static Pieza.Tipo menuPromocionar() {
+        // TODO Mensaje de pedir pieza (con instrucciones de comando para cada pieza)
+        /* Ejemplo:
+        *
+        * Elija a qué pieza desea promocionar:
+        *   - Dama: D
+        *   - Torre: T
+        *   - Alfil: A
+        *   - Caballo: C
+        *
+        * Promocionar a: "D"
+        */
+        // TODO Escáner para obtener input
+        //   (decidir si es mov. ilegal o repetir inf. hasta input válido).
+        // TODO Validación del tipo de pieza
+        // TODO Cambiar valor de retorno
+        return null;
+    }
 }

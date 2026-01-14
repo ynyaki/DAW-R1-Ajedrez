@@ -1,5 +1,6 @@
 import java.util.InputMismatchException;
 
+// TODO Documentar
 public class Posicion {
 
     private final int col;
@@ -40,6 +41,7 @@ public class Posicion {
         System.out.println(p1.esMovEnL(p2));
     }
 
+    // TODO Revisar
     /**
      * Crea un vector posición, en formato (columna, fila). Con formato número de columna, número de fila.
      * @param col Columna (posición horizontal) de la posición.
@@ -53,6 +55,7 @@ public class Posicion {
         this.fila = fila;
     }
 
+    // TODO Revisar
     /**
      * Crea un vector posición, en formato (columna, fila). Con formato letra, número.
      * @param col Columna (posición horizontal) de la posición.
@@ -64,6 +67,7 @@ public class Posicion {
         this.fila = fila;
     }
 
+    // TODO Revisar
     /**
      * Devuelve la columna (posición horizontal) de la posición.
      * @return Columna de la posición.
@@ -72,6 +76,7 @@ public class Posicion {
         return col;
     }
 
+    // TODO Revisar
     /**
      * Devuelve la fila (posición vertical) de la posición.
      * @return Fila de la posición.
@@ -80,6 +85,7 @@ public class Posicion {
         return fila;
     }
 
+    // TODO Revisar
     /**
      * Comprueba si la posición pasada por parametros es la misma que la del objeto.
      * @param pos Objeto de tipo <code>Posicion</code>.
@@ -89,6 +95,7 @@ public class Posicion {
         return (this.col == pos.getCol() && this.fila == pos.getFila());
     }
 
+    // TODO Revisar
     /**
      * Comprueba si la columna pasada por parametro es la misma que la que contiene el objeto.
      * @param pos Objeto de tipo <code>Posicion</code>.
@@ -98,6 +105,7 @@ public class Posicion {
         return (this.col == pos.getCol());
     }
 
+    // TODO Revisar
     /**
      * Comprueba si la columna pasada por parametro es la misma que la que contiene el objeto.
      * @param pos Objeto de tipo <code>Posicion</code>.
@@ -107,28 +115,14 @@ public class Posicion {
         return (this.fila == pos.getFila());
     }
 
-    /**
-     * Devuelve si una posición está entre dos columnas especificadas
-     * (<code>colMin <= col <= colMax</code>).
-     * @param colMin Columna mínima para que se cumpla la condición.
-     * @param colMax Columna máxima para que se cumpla la condición.
-     * @return Si la columna de la posición está entre las dos columnas
-     * parámetro.
-     */
-    public boolean entreCols(int colMin, int colMax) {
-        return (colMin <= this.getCol() && this.getCol() <= colMax);
+    // TODO Documentar
+    public boolean enCol(int col) {
+        return (this.col == col);
     }
 
-    /**
-     * Devuelve si una posición está entre dos filas especificadas
-     * (<code>filaMin <= fila <= filaMax</code>).
-     * @param filaMin Fila mínima para que se cumpla la condición.
-     * @param filaMax Fila máxima para que se cumpla la condición.
-     * @return Si la fila de la posición está entre las dos filas
-     * parámetro.
-     */
-    public boolean entreFilas(int filaMin, int filaMax) {
-        return (filaMin <= this.getFila() && this.getFila() <= filaMax);
+    // TODO Documentar
+    public boolean enFila(int fila) {
+        return (this.fila == fila);
     }
 
     // TODO Documentar
@@ -147,6 +141,7 @@ public class Posicion {
                 || (this.nColsDif(pos) == 1) && (this.nFilasDif(pos) == 2));
     }
 
+    // TODO Revisar
     /**
      * Devuelve la diferencia entre las filas de dos objeto posición.
      * @param pos Objeto de tipo <code>Posicion</code>.
@@ -156,6 +151,7 @@ public class Posicion {
         return (pos.getFila() - this.fila);
     }
 
+    // TODO Revisar
     /**
      * Devuelve la diferencia entre las columnas de dos objeto posición.
      * @param pos Objeto de tipo <code>Posicion</code>.
