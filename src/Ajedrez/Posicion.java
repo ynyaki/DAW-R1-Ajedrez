@@ -41,7 +41,7 @@ public class Posicion {
     }
 
     /**
-     * Crea un vector posición, en formato (columna, fila).
+     * Crea un vector posición, en formato (columna, fila). Con formato número de columna, número de fila.
      * @param col Columna (posición horizontal) de la posición.
      * @param fila Fila (posición vertical) de la posición.
      */
@@ -53,6 +53,11 @@ public class Posicion {
         this.fila = fila;
     }
 
+    /**
+     * Crea un vector posición, en formato (columna, fila). Con formato letra, número.
+     * @param col Columna (posición horizontal) de la posición.
+     * @param fila Fila (posición vertical) de la posición.
+     */
     public Posicion(char col, int fila) {
         int unicodeAnteriorPrimeraCol = 'a' - 1;
         this.col = col - unicodeAnteriorPrimeraCol;
@@ -75,17 +80,29 @@ public class Posicion {
         return fila;
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la posición pasada por parametros es la misma que la del objeto.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return <code>True</code> si contiene el mismo contenido, <code>False</code> en caso contrario.
+     */
     public boolean esMismaPos(Posicion pos) {
         return (this.col == pos.getCol() && this.fila == pos.getFila());
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la columna pasada por parametro es la misma que la que contiene el objeto.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return <code>True</code> si contiene el mismo contenido, <code>False</code> en caso contrario.
+     */
     public boolean enMismaCol(Posicion pos) {
         return (this.col == pos.getCol());
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la columna pasada por parametro es la misma que la que contiene el objeto.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return <code>True</code> si contiene el mismo contenido, <code>False</code> en caso contrario.
+     */
     public boolean enMismaFila(Posicion pos) {
         return (this.fila == pos.getFila());
     }
@@ -130,12 +147,20 @@ public class Posicion {
                 || (this.nColsDif(pos) == 1) && (this.nFilasDif(pos) == 2));
     }
 
-    // TODO Documentar
+    /**
+     * Devuelve la diferencia entre las filas de dos objeto posición.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return Devuelve un <code>int</code> sobre la distancia entre las dos filas.
+     */
     public int nFilasDif(Posicion pos) {
         return (pos.getFila() - this.fila);
     }
 
-    // TODO Documentar
+    /**
+     * Devuelve la diferencia entre las columnas de dos objeto posición.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return Devuelve un <code>int</code> sobre la distancia entre las dos columnas.
+     */
     public int nColsDif(Posicion pos) {
         return (pos.getCol() - this.col);
     }
