@@ -98,14 +98,6 @@ public class Formato {
             piezas[i] = pieza.trim();
             piezasIterables.delete(0, piezasIterables.indexOf(" ") + 1);
         }
-        boolean turnoBlancas = true; // empiezan blancas
-        boolean jugando = true;
-        System.out.print("Introduce la posición de las piezas de las figuras blancas y negras: ");
-        sc.nextLine();
-        // TODO Añadir coso de Ivan cuando pushee su .java :,)
-        // Formato.colocarP();
-        // - metodo de Ivan
-
         return piezas;
     }
 
@@ -189,7 +181,7 @@ public class Formato {
         return listaPiezas;
     }
 
-    private static boolean validarFormatoSAN(String movimiento) {
+    public static String validarFormatoSAN(String movimiento) {
         while (movimiento == null) {
             System.out.println("Introduce un movimiento válido: ");
             movimiento = sc.nextLine();
@@ -208,20 +200,21 @@ public class Formato {
          * Ac3
          * a2   (peón, sin letra)
          */
-        String NT = "[TACDR]?[a-h][1-8]";
+
+        String NT = "[TACDR]?[a-h][1-8]([a-h][1-8])?";
+
 
         /**
          * Esto comprueba si el usuario introduce O + D Y D solo.
          * v v v v
          * */
 
-        if (movimiento.matches(NT)) {
-            return true;}
-        if (movimiento.matches(NT + "\\s+" + NT)) {
-            return true;
+        if (movimiento.matches(NT) ||
+                movimiento.matches(NT + "\\s+" + NT)) {
+            return movimiento;
+
         }
-
-        return false;
+        // TODO el formato correcto de movimiento es Cb6g4 (Ejemplo)
+        return null;
     }
-
 }
