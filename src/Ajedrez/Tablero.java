@@ -45,6 +45,7 @@ public class Tablero {
         return nFilas;
     }
 
+    // TODO Revisar
     /**
      * Obtiene el objeto <code>Pieza</code> en una posición del tablero
      * (si no hay ninguna pieza devuelve <code>null</code>).
@@ -53,6 +54,21 @@ public class Tablero {
      */
     public Pieza getPieza(Posicion pos) {
         return getFromTablero(pos);
+    }
+
+    // TODO Documentar
+    public Pieza getPieza(int col, int fila) {
+        return getFromTablero(new Posicion(col, fila));
+    }
+
+    // TODO Documentar
+    public boolean estaVacia(Posicion pos) {
+        return (getPieza(pos) == null);
+    }
+
+    // TODO Documentar
+    public boolean estaOcupada(Posicion pos) {
+        return (getPieza(pos) != null);
     }
 
     /**
@@ -69,6 +85,11 @@ public class Tablero {
      */
     public void setPieza(Pieza p, Posicion nPos) {
         setInTablero(p, nPos);
+    }
+
+    // TODO Documentar
+    public void borrarPieza(Pieza p) {
+        setInTablero(null, p.getPos());
     }
 
     /**
@@ -117,7 +138,9 @@ public class Tablero {
         return nPiezas;
     }
 
-    // FIXME Podría formar parte de Formato.imprTablero(t)
+    /**
+     * Imprime el array que representa el tablero con el contenido.
+     */
     public void impr() {
         String simboloVacio = " 　 ";
         for (int i = t.length - 1; i >= 0; i--) {
@@ -149,7 +172,15 @@ public class Tablero {
         }
     }
 
-    // FIXME Podría formar parte de Formato.imprTablero(t)
+    /**
+     * Se encarga de colorear el fondo que representan las celdas según el número de fila. Aparte de añadir el
+     * contenido. También añade las letras y números.
+     * @param tablero El <code>array</code> del tablero.
+     * @param filaIterar Nº de fila. Tipo <code>int</code>.
+     * @param colorInicio Color de inicio. Tipo <code>String</code>.
+     * @param colorSiguiente Color a alternar. Tipo <code>String</code>.
+     * @param simboloVacio Símbolo a colocar en caso de non tener contenido. Tipo <code>String</code>.
+     */
     private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
         String simbolo;
         Pieza p;
@@ -171,7 +202,10 @@ public class Tablero {
         }
     }
 
-    // FIXME Podría formar parte de Formato.imprTablero(t)
+    /**
+     * Imprime una línea relacionada con la leyenda según la fila pasada por parámetros.
+     * @param n Número de la fila donde se tiene que imprimir.
+     */
     private void leyenda(int n) {
         switch (n) {
             case 7 -> System.out.print("\t\tLeyenda:");
@@ -184,16 +218,32 @@ public class Tablero {
         }
     }
 
+    /**
+     * Devuelve el contenido del tablero en la posición indicada. En caso de no tener contenido
+     * devuelve <code>NULL</code>.
+     * @param pos Objeto de tipo <code>Poscion</code> que representa la posición en el tablero que quieres representar.
+     * @return Objeto tipo <code>Pieza</code> o <code>NULL</code>.
+     */
     private Pieza getFromTablero(Posicion pos) {
         pos = transPos(pos);
         return t[pos.getFila() - 1][pos.getCol() - 1];
     }
 
+    /**
+     * Coloca en el tablero una pieza.
+     * @param p Objeto de tipo <code>Pieza</code>, el cual, quieres juardar.
+     * @param pos Objeto de tipo <code>Posicion</code>, que representa, donde quieres guardar la pieza.
+     */
     private void setInTablero(Pieza p, Posicion pos) {
         pos = transPos(pos);
         t[pos.getFila() - 1][pos.getCol() - 1] = p;
     }
 
+    /**
+     * Cambia una posición en formato humano a una con un formato correcto para la matriz.
+     * @param pos Objeto de tipo <code>Posicion</code>
+     * @return Objeto posición basada en el inicial.
+     */
     private Posicion transPos(Posicion pos) {
         int col = pos.getCol();
         int fila = nFilas - pos.getFila() + 1;
