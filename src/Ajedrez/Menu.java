@@ -1,3 +1,5 @@
+import java.awt.*;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public abstract class Menu {
@@ -11,9 +13,9 @@ public abstract class Menu {
         partida = new Partida();
         bienvenida();
         importar();
-
         partida.imprTablero();
 
+        elegirTurno();
         // TODO
         // ordenJuego();
         // juego();
@@ -245,5 +247,62 @@ public abstract class Menu {
             return movimiento.matches(movimientoValido);
         }
 
+    /**
+     * El usuario introduce el color que empezará primero si <code>partida.isReyEnJaque()==false</code>.
+     * @param sc Se introducira un color (b/n)
+     * @return <code>Pieza.Color</code>
+     */
+    private static Pieza.Color turno(Scanner sc){
+        if(turnoJaque() == Pieza.Color.BLANCO)
+            return Pieza.Color.BLANCO;
 
+        if(turnoJaque() == Pieza.Color.NEGRO)
+            return Pieza.Color.NEGRO;
+
+        System.out.print("Que color quieres que empiece primero (b/n): ");
+        String color;
+        color = sc.next();
+        if(color.equalsIgnoreCase("b")) return Pieza.Color.BLANCO;
+        if(color.equalsIgnoreCase("n")) return Pieza.Color.NEGRO;
+        return null;
+    }
+
+    private static void elegirTurno(){
+        if(turno(sc)== Pieza.Color.BLANCO){
+            System.out.println("mueven Blancas");
+            //TODO mover(Pieza.Color.BLANCO);
+        }
+        if(turno(sc)== Pieza.Color.NEGRO){
+            System.out.println("mueven Negras");
+            //TODO mover(Pieza.Color.NEGRA);
+        }
+        else {
+            System.out.println("Error, Introduce b/n");
+           // throw new InputMismatchException("Error, Introduce b/n");
+        }
+    }
+
+    /**
+     * Comprueba si existe un jaque, y en caso de que haya, empieza el color que esta en jaque.
+     * @return <code>Pieza.Color</code>
+     */
+    private static Pieza.Color turnoJaque(){
+
+        if(partida.hayJaque() == Pieza.Color.BLANCO){
+            return Pieza.Color.BLANCO;
+        }
+        if(partida.hayJaque() == Pieza.Color.NEGRO){
+            return Pieza.Color.NEGRO;
+        }
+        return null;
+    }
+
+    private static boolean hayDoblejaque(){
+        //FIXME
+//        if(partida.hayJaque() == Pieza.Color.BLANCO && partida.hayJaque() == Pieza.Color.NEGRO){
+//            System.out.println("Error: Los dos reyes estan en jaque");
+//            throw new InputMismatchException("Error: Los dos reyes estan en jaque");
+            return partida.hayJaque() == Pieza.Color.BLANCO && partida.hayJaque() == Pieza.Color.NEGRO;
+
+    }
 }
