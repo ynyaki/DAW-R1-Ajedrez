@@ -6,7 +6,6 @@ public abstract class Menu {
 
     private static Scanner sc;
     private static Partida partida;
-    private static Pieza.Color turno;
 
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
