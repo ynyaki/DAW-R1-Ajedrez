@@ -10,16 +10,14 @@ public abstract class Menu {
         Menu.sc = sc;
         partida = new Partida();
 
-//        bienvenida();
-//        importar();
+        bienvenida();
+        importar();
 
         prueba();
 
         partida.imprTablero();
 
         System.out.print("\n");
-
-        partida.probarJuego();
 
         // TODO
         // ordenJuego();

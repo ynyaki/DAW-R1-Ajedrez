@@ -208,7 +208,6 @@ public class Partida {
         Posicion nPos = p.getPos();
         return (noSuperaMargenes(nPos)
                 && esPosVacia(nPos)
-                && numReyesValido()
                 && noSuperaNumPiezas()
                 && noSuperaNumCadaPieza()
                 && noHayPeonesEnMargenes());
