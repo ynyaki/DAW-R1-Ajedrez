@@ -63,6 +63,16 @@ public class Pieza {
     }
 
     // TODO Documentar
+    public boolean esBlanca() {
+        return color.equals(Color.BLANCO);
+    }
+
+    // TODO Documentar
+    public boolean esNegra() {
+        return color.equals(Color.NEGRO);
+    }
+
+    // TODO Documentar
     public Posicion getPos() {
         return pos;
     }

@@ -27,6 +27,13 @@ public class Partida {
         pruebaMover(p, 5, 7, 5, 5);
         pruebaMover(p, 7, 1, 6, 3);
         pruebaMover(p, 6, 7, 6, 6);
+        pruebaMover(p, 6, 3, 5, 5);
+        pruebaMover(p, 6, 6, 5, 5);
+            pruebaMover(p, 1, 1, 1, 5);
+            pruebaMover(p, 1, 1, 6, 1);
+        pruebaMover(p, 1, 2, 1, 4);
+            pruebaMover(p, 1, 1, 1, 4);
+        pruebaMover(p, 1, 1, 1, 3);
     }
 
     // DELETE Método de pruebas
@@ -104,7 +111,7 @@ public class Partida {
      */
     public boolean validarPartida() {
         if(numReyesValido())
-            return (estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
+            return !(estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
         else
             return false;
     }
@@ -174,7 +181,7 @@ public class Partida {
                 || nPos.esMismaPos(posEnPD) && t.estaVacia(posEnPD));
     }
 
-    // FIXME No borrar peón
+    // TODO Revisar lógica
     private void moverEnPassant(Pieza p, Posicion nPos) {
         Posicion posPComida;
         int desp1C;
@@ -195,7 +202,7 @@ public class Partida {
     private boolean esMovLegal(Pieza p, Posicion nPos) {
         return (noSuperaMargenes(nPos)
                 && esDiferentePos(p, nPos)
-                && noEsPiezaPropia(p, nPos)
+                && esCasillaVaciaOEnemiga(p, nPos)
                 && esMovLegalDePieza(p, nPos));
     }
 
@@ -281,42 +288,58 @@ public class Partida {
     }
 
     private boolean esMovLegalPeon(Pieza p, Posicion nPos) {
-        int dir = 0;
-        boolean enFilaMov2C = false;
-        int desp1C;
-        int desp2C;
-        Posicion posMov1C;
-        Posicion posMov2C;
-        Posicion posComI;
-        Posicion posComD;
-        Posicion pos = p.getPos();
-        int col = pos.getCol();
-        int fila = pos.getFila();
+        return (esMovPeon1Cas(p, nPos) || esMovPeon2Cas(p, nPos)
+                || esMovPeonComerIzq(p, nPos) || esMovPeonComerDer(p, nPos));
+    }
 
-        if(p.getColor() == BLANCO) {
-            dir = 1;
-            if(pos.getFila() == 2)
-                enFilaMov2C = true;
-        }
-        else if(p.getColor() == NEGRO) {
-            dir = -1;
-            if(pos.getFila() == 7)
-                enFilaMov2C = true;
-        }
+    private boolean esMovPeon1Cas(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
 
-        desp1C = dir;
-        desp2C = 2 * dir;
+        if(p.esBlanca())
+            posVal = new Posicion(p, 0, 1);
+        else if(p.esNegra())
+            posVal = new Posicion(p, 0 , -1);
 
-        posMov1C = new Posicion(col, fila + desp1C);
-        posMov2C = new Posicion(col, fila + desp2C);
-        posComI = new Posicion(col - 1, fila + desp1C);
-        posComD = new Posicion(col + 1, fila + desp1C);
+        return (posVal != null && nPos.esMismaPos(posVal));
+    }
 
-        return (nPos.esMismaPos(posMov1C) && t.estaVacia(posMov1C)
-                || (nPos.esMismaPos(posMov2C) && enFilaMov2C
-                && t.estaVacia(posMov1C) && t.estaVacia(posMov2C))
-                || nPos.esMismaPos(posComI) && t.estaOcupada(posComI)
-                || nPos.esMismaPos(posComD) && t.estaOcupada(posComD));
+    private boolean esMovPeon2Cas(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
+
+        if(p.esBlanca() && (p.getFila() == 2)
+                && t.estaVacia(new Posicion(p, 0, 1)))
+            posVal = new Posicion(p, 0, 2);
+        else if(p.esNegra() && (p.getFila() == 7)
+                && t.estaVacia(new Posicion(p, 0, -1)))
+            posVal = new Posicion(p, 0, -2);
+
+        return (posVal != null && nPos.esMismaPos(posVal));
+    }
+
+    private boolean esMovPeonComerIzq(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
+
+        if(p.getCol() >= 2)
+            if(p.esBlanca())
+                posVal = new Posicion(p, -1, 1);
+            else if(p.esNegra())
+                posVal = new Posicion(p, -1, -1);
+
+        return (posVal != null && posVal.esMismaPos(nPos) && t.estaOcupada(nPos)
+                && (p.getColor() != t.getPieza(nPos).getColor()));
+    }
+
+    private boolean esMovPeonComerDer(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
+
+        if(p.getCol() <= 7)
+            if(p.esBlanca())
+                posVal = new Posicion(p, 1, 1);
+            else if(p.esNegra())
+                posVal = new Posicion(p, 1, -1);
+
+        return (posVal != null && posVal.esMismaPos(nPos) && t.estaOcupada(nPos)
+                && (p.getColor() != t.getPieza(nPos).getColor()));
     }
 
     private boolean noSuperaMargenes(Posicion pos) {
@@ -327,15 +350,11 @@ public class Partida {
         return !p.getPos().esMismaPos(nPos);
     }
 
-    private boolean noEsPiezaPropia(Pieza p, Posicion nPos) {
-        if(t.getPieza(nPos) == null)
+    private boolean esCasillaVaciaOEnemiga(Pieza p, Posicion nPos) {
+        if(t.estaVacia(nPos))
             return true;
         else
             return (p.getColor() != t.getPieza(nPos).getColor());
-    }
-
-    private boolean esPosVacia(Posicion pos) {
-        return t.estaVacia(pos);
     }
 
     private boolean noSuperaNumPiezas() {
@@ -371,6 +390,10 @@ public class Partida {
                 noHayPeonEnMargenes = false;
         }
         return noHayPeonEnMargenes;
+    }
+
+    private boolean esPosVacia(Posicion nPos) {
+        return t.estaVacia(nPos);
     }
 
     private boolean numReyesValido() {
