@@ -24,8 +24,6 @@ public abstract class Menu {
         bienvenida();
         importar();
 
-        prueba();
-
         partida.imprTablero();
 
         System.out.print("\n");
@@ -33,12 +31,6 @@ public abstract class Menu {
         // TODO
         // ordenJuego();
         // juego();
-    }
-
-    // DELETE
-    public static void prueba() {
-        partida.colocar(new Pieza(Pieza.Tipo.REY, Pieza.Color.BLANCO, new Posicion('a', 1)));
-        partida.colocar(new Pieza(Pieza.Tipo.REY, Pieza.Color.NEGRO, new Posicion('a', 8)));
     }
 
     /**
