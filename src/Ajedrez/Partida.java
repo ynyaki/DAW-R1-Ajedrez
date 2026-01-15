@@ -104,7 +104,7 @@ public class Partida {
      */
     public boolean validarPartida() {
         if(numReyesValido())
-            return (estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
+            return !(estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
         else
             return false;
     }

@@ -24,8 +24,7 @@ public abstract class Menu {
         bienvenida();
         importar();
         partida.imprTablero();
-
-        elegirTurno();
+        elegirTurno(sc);
         // TODO
         // ordenJuego();
         // juego();
@@ -263,33 +262,45 @@ public abstract class Menu {
      * @return <code>Pieza.Color</code>
      */
     private static Pieza.Color turno(Scanner sc){
+
         if(turnoJaque() == Pieza.Color.BLANCO)
             return Pieza.Color.BLANCO;
 
         if(turnoJaque() == Pieza.Color.NEGRO)
             return Pieza.Color.NEGRO;
 
-        System.out.print("Que color quieres que empiece primero (b/n): ");
-        String color;
-        color = sc.next();
-        if(color.equalsIgnoreCase("b")) return Pieza.Color.BLANCO;
-        if(color.equalsIgnoreCase("n")) return Pieza.Color.NEGRO;
         throw new InputMismatchException("El valor introducido no es valido, vuelva a intentarlo");
     }
 
-    private static void elegirTurno(){
-        if(turno(sc)== Pieza.Color.BLANCO){
-            System.out.println("mueven Blancas");
-            //TODO mover(Pieza.Color.BLANCO);
+    private static void elegirTurno(Scanner sc){
+        String color;
+        Pieza.Color pColor = null;
+        boolean esTurnoValido = false;
+        System.out.print("Que color quieres que empiece primero (b/n): ");
+    do{        color = sc.next();
+        if(color.equalsIgnoreCase("b")){
+            pColor = Pieza.Color.BLANCO;
+            esTurnoValido=true;
         }
-        if(turno(sc)== Pieza.Color.NEGRO){
-            System.out.println("mueven Negras");
-            //TODO mover(Pieza.Color.NEGRA);
+        if(color.equalsIgnoreCase("n")) {
+            pColor = Pieza.Color.NEGRO;
+            esTurnoValido=true;
         }
         else {
             System.out.println("Error, Introduce b/n");
-           // throw new InputMismatchException("Error, Introduce b/n");
+            // throw new InputMismatchException("Error, Introduce b/n");
         }
+    }while(!esTurnoValido);
+
+        if(pColor== Pieza.Color.BLANCO){
+            System.out.println("mueven Blancas");
+            //TODO mover(Pieza.Color.BLANCO);
+        }
+        if(pColor== Pieza.Color.NEGRO){
+            System.out.println("mueven Negras");
+            //TODO mover(Pieza.Color.NEGRA);
+        }
+
     }
 
     /**
