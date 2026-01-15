@@ -132,13 +132,15 @@ public class Posicion {
 
     // TODO Documentar
     public boolean esMovDiagonal(Posicion pos) {
-        return (Math.abs(this.nColsDif(pos)) == Math.abs(this.nFilasDif(pos)));
+        return (this.nColsDif(pos) == this.nFilasDif(pos));
     }
 
     // TODO Documentar
     public boolean esMovEnL(Posicion pos) {
-        return ((this.nColsDif(pos) == 2) && (this.nFilasDif(pos) == 1)
-                || (this.nColsDif(pos) == 1) && (this.nFilasDif(pos) == 2));
+        return ((Math.abs(this.nColsDif(pos)) == 2
+                && this.nFilasDif(pos) == 1)
+                || (this.nColsDif(pos) == 1
+                && this.nFilasDif(pos) == 2));
     }
 
     // TODO Revisar
@@ -148,7 +150,7 @@ public class Posicion {
      * @return Devuelve un <code>int</code> sobre la distancia entre las dos filas.
      */
     public int nFilasDif(Posicion pos) {
-        return (pos.getFila() - this.fila);
+        return Math.abs(pos.getFila() - this.fila);
     }
 
     // TODO Revisar
@@ -158,6 +160,26 @@ public class Posicion {
      * @return Devuelve un <code>int</code> sobre la distancia entre las dos columnas.
      */
     public int nColsDif(Posicion pos) {
+        return Math.abs(pos.getCol() - this.col);
+    }
+
+    // TODO Revisar
+    /**
+     * Devuelve la diferencia entre las filas de dos objeto posición.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return Devuelve un <code>int</code> sobre la distancia entre las dos filas.
+     */
+    public int nFilasDifSigno(Posicion pos) {
+        return (pos.getFila() - this.fila);
+    }
+
+    // TODO Revisar
+    /**
+     * Devuelve la diferencia entre las columnas de dos objeto posición.
+     * @param pos Objeto de tipo <code>Posicion</code>.
+     * @return Devuelve un <code>int</code> sobre la distancia entre las dos columnas.
+     */
+    public int nColsDifSigno(Posicion pos) {
         return (pos.getCol() - this.col);
     }
 }

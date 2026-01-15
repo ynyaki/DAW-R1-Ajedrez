@@ -25,6 +25,8 @@ public class Partida {
             pruebaMover(p, 5, 7, 5, 7); // Misma pos
             pruebaMover(p, 5, 7, 5, 4); // Mov de 3C + cas ocupada
         pruebaMover(p, 5, 7, 5, 5);
+        pruebaMover(p, 7, 1, 6, 3);
+        pruebaMover(p, 6, 7, 6, 6);
     }
 
     // DELETE Método de pruebas
@@ -67,7 +69,7 @@ public class Partida {
     public boolean mover(Pieza p, Posicion nPos) {
         boolean hayMov = esMovLegal(p, nPos);
         if(hayMov)
-            t.setPieza(p, nPos);
+            t.moverPieza(p, nPos);
         return hayMov;
     }
 
@@ -76,20 +78,35 @@ public class Partida {
         return mover(t.getPieza(pos), nPos);
     }
 
-    // TODO Documentar
-    public boolean hayPromocion(Pieza p, Posicion nPos) {
-        Posicion pos = p.getPos();
-        Posicion posPB = new Posicion(pos.getCol(), 8);
-        Posicion posPN = new Posicion(pos.getCol(), 1);
-        return (t.estaVacia(nPos) && p.getTipo().equals(PEON)
-                && (p.getColor().equals(BLANCO) && nPos.esMismaPos(posPB))
-                || (p.getColor().equals(NEGRO) && nPos.esMismaPos(posPN)));
+    // TODO Revisar
+    /**
+     * Coloca pieza en el tablero. Aparte de devulver si es posible o no colocar la pieza, en caso de poder
+     * colocarla la coloca.
+     * @param p Objeto de tipo <code>Pieza</code>
+     * @return <code>True</code> cuando se puede colocar la pieza en el tablero, <code>False</code> en caso contrario.
+     */
+    public boolean colocar(Pieza p) {
+        boolean esValida = esColocacionValida(p);
+        if(esValida) {
+            t.setPieza(p);
+            if(p.getTipo().equals(REY))
+                if(p.getColor().equals(BLANCO))
+                    rB = p;
+                else if(p.getColor().equals(NEGRO))
+                    rN = p;
+        }
+        return esValida;
     }
 
-    // TODO Documentar
-    public void promocionar(Pieza p, Posicion nPos, Pieza.Tipo tipoNuevo) {
-        t.setPieza(new Pieza(tipoNuevo, p.getColor(), nPos));
-        t.borrarPieza(p);
+    /**
+     * Validación post Piezas colocadas. Existen validaciones que no se pueden comprobar mientras se colocan las piezas.
+     * @return <code>True</code> validación válida <code>False</code> validación inválida.
+     */
+    public boolean validarPartida() {
+        if(numReyesValido())
+            return (estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
+        else
+            return false;
     }
 
     // TODO Documentar
@@ -106,41 +123,27 @@ public class Partida {
 
         for(Pieza[] fila : t.get())
             for(Pieza pieza : fila)
-                if(pieza.getColor() != rey.getColor()
+                if(pieza != null && pieza.getColor() != rey.getColor()
                         && esMovLegal(pieza, rey.getPos()))
                     reyEnJaque = true;
 
         return reyEnJaque;
     }
 
-    // TODO Revisar
-    /**
-     * Coloca pieza en el tablero. Aparte de devulver si es posible o no colocar la pieza, en caso de poder
-     * colocarla la coloca.
-     * @param p Objeto de tipo <code>Pieza</code>
-     * @return <code>True</code> cuando se puede colocar la pieza en el tablero, <code>False</code> en caso contrario.
-     */
-    public boolean colocar(Pieza p) {
-        boolean esValida = esColocacionValida(p);
-        if(esValida) {
-            t.setPieza(p);
-            if(p.getTipo() == REY && p.getColor() == BLANCO)
-                rB = p;
-            else if(p.getTipo() == REY && p.getColor() == NEGRO)
-                rN = p;
-        }
-        return esValida;
+    // TODO Documentar
+    public boolean hayPromocion(Pieza p, Posicion nPos) {
+        Posicion pos = p.getPos();
+        Posicion posPB = new Posicion(pos.getCol(), 8);
+        Posicion posPN = new Posicion(pos.getCol(), 1);
+        return (t.estaVacia(nPos) && p.getTipo().equals(PEON)
+                && (p.getColor().equals(BLANCO) && nPos.esMismaPos(posPB))
+                || (p.getColor().equals(NEGRO) && nPos.esMismaPos(posPN)));
     }
 
-    /**
-     * Validación post Piezas colocadas. Existen validaciones que no se pueden comprobar mientras se colocan las piezas.
-     * @return <code>True</code> validación valida <code>False</code> validación invalida.
-     */
-    public boolean validarPartida() {
-        if(numReyesValido())
-            return (estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
-        else
-            return false;
+    // TODO Documentar
+    public void promocionar(Pieza p, Posicion nPos, Pieza.Tipo tipoNuevo) {
+        t.setPieza(new Pieza(tipoNuevo, p.getColor(), nPos));
+        t.borrarPieza(p);
     }
 
     // TODO Documentar
@@ -185,8 +188,7 @@ public class Partida {
 
         posPComida = new Posicion(nPos.getCol(), nPos.getFila() - desp1C);
 
-        t.borrarPieza(p);
-        t.setPieza(p, nPos);
+        t.moverPieza(p, nPos);
         t.borrarPieza(t.getPieza(posPComida));
     }
 

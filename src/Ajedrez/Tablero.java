@@ -91,6 +91,13 @@ public class Tablero {
     }
 
     // TODO Documentar
+    public void moverPieza(Pieza p, Posicion nPos) {
+        setInTablero(null, p.getPos());
+        setInTablero(p, nPos);
+        p.setPos(nPos);
+    }
+
+    // TODO Documentar
     public void borrarPieza(Pieza p) {
         setInTablero(null, p.getPos());
     }
