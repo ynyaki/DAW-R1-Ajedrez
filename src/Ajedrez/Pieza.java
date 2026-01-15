@@ -1,5 +1,7 @@
+// TODO Documentar
 public class Pieza {
 
+    // TODO Documentar
     public enum Tipo {
         PEON,
         CABALLO,
@@ -9,6 +11,7 @@ public class Pieza {
         REY
     }
 
+    // TODO Documentar
     public enum Color {
         BLANCO,
         NEGRO
@@ -18,10 +21,12 @@ public class Pieza {
     private final Color color;
     private Posicion pos;
 
+    // TODO Documentar
     public Pieza(Tipo tipo, Color color, int col, int fila) {
         this(tipo, color, new Posicion(col, fila));
     }
 
+    // TODO Documentar
     public Pieza(Tipo tipo, Color color, Posicion pos) {
         if(tipo == null || color == null)
             throw new NullPointerException();
@@ -30,6 +35,7 @@ public class Pieza {
         this.pos = pos;
     }
 
+    // TODO Documentar
     public Tipo getTipo() {
         return tipo;
     }
@@ -51,30 +57,37 @@ public class Pieza {
         return tipo;
     }
 
+    // TODO Documentar
     public Color getColor() {
         return color;
     }
 
+    // TODO Documentar
     public Posicion getPos() {
         return pos;
     }
 
+    // TODO Documentar
     public int getCol() {
         return pos.getCol();
     }
 
+    // TODO Documentar
     public int getFila() {
         return pos.getFila();
     }
 
+    // TODO Documentar
     public void setPos(int col, int fila) {
         this.pos = new Posicion(col, fila);
     }
 
+    // TODO Documentar
     public void setPos(Posicion pos) {
         this.pos = pos;
     }
 
+    // TODO Documentar
     @Override
     public String toString() {
         if(this.tipo == Tipo.REY && this.color == Color.BLANCO)

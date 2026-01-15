@@ -1,5 +1,6 @@
 import java.util.InputMismatchException;
 
+// TODO Documentar
 public class Tablero {
 
     public static final String NEGRO = "\u001B[40m";
@@ -25,6 +26,7 @@ public class Tablero {
         this.nFilas = nFilas;
     }
 
+    // TODO Documentar
     public Pieza[][] get() {
         return this.t;
     }
@@ -85,6 +87,7 @@ public class Tablero {
      */
     public void setPieza(Pieza p, Posicion nPos) {
         setInTablero(p, nPos);
+        p.setPos(nPos);
     }
 
     // TODO Documentar

@@ -1,3 +1,4 @@
+// TODO Documentar
 public class Partida {
 
     private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
@@ -18,30 +19,38 @@ public class Partida {
     public static void main(String[] args) {
         Partida p = new Partida();
         p.crearTableroClasico();
-        Tablero tb = p.getTablero();
-        p.getTablero().impr();
-        System.out.println();
+        pruebaImprTablero(p);
 
-        p.mover(new Posicion(4, 2), new Posicion(4, 4));
-        p.getTablero().impr();
-        System.out.println();
+        pruebaMover(p, 5, 2, 5, 4);
+            pruebaMover(p, 5, 7, 5, 7); // Misma pos
+            pruebaMover(p, 5, 7, 5, 4); // Mov de 3C + cas ocupada
+        pruebaMover(p, 5, 7, 5, 5);
+    }
 
-        p.mover(new Posicion(5, 7), new Posicion(5, 5));
-        p.getTablero().impr();
+    // DELETE Método de pruebas
+    private static void pruebaImprTablero(Partida p) {
         System.out.println();
-
-        p.mover(new Posicion(4, 4), new Posicion(4, 5));
-        p.getTablero().impr();
+        System.out.println();
+        p.imprTablero();
+        System.out.println();
+        System.out.println();
         System.out.println();
     }
 
-    // DELETE Método de prueba
-    private void pruebaMover(Partida p, int[] iPos, int[] fPos) {
-        if(iPos.length != 2 || fPos.length != 2)
-            return;
-        p.mover(new Posicion(iPos[0], iPos[1]), new Posicion(fPos[0], fPos[1]));
-        p.getTablero().impr();
-        System.out.println();
+    // DELETE Método de pruebas
+    private static void pruebaMover(
+            Partida p, int cPI, int fPI, int cPF, int fPF) {
+        if(p.mover(new Posicion(cPI, fPI), new Posicion(cPF, fPF))) {
+            System.out.println("Movimiento válido");
+            System.out.println();
+            p.imprTablero();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+        } else {
+            System.out.println("Movimiento inválido");
+            System.out.println();
+        }
     }
 
     /** Inicializa un tablero vacío de 8x8 para la partida. */
@@ -55,28 +64,10 @@ public class Partida {
     }
 
     // TODO Documentar
-    public Tablero getTablero() {
-        return t;
-    }
-
-    // TODO Documentar
-    public Pieza getReyBlanco() {
-        return rB;
-    }
-
-    // TODO Documentar
-    public Pieza getReyNegro() {
-        return rN;
-    }
-
-    // TODO Documentar
     public boolean mover(Pieza p, Posicion nPos) {
         boolean hayMov = esMovLegal(p, nPos);
-        if(hayMov) {
-            t.borrarPieza(p);
+        if(hayMov)
             t.setPieza(p, nPos);
-            p.setPos(nPos);
-        }
         return hayMov;
     }
 
@@ -86,17 +77,19 @@ public class Partida {
     }
 
     // TODO Documentar
-    public boolean promocionar(Pieza p, Pieza.Tipo tipoNuevo) {
-        boolean hayPromocion;
+    public boolean hayPromocion(Pieza p, Posicion nPos) {
         Posicion pos = p.getPos();
-        if(p.getTipo().equals(PEON) && (tipoNuevo.equals(DAMA)
-                || tipoNuevo.equals(TORRE) || tipoNuevo.equals(ALFIL)
-                        || tipoNuevo.equals(CABALLO))) {
-            t.setPieza(new Pieza(tipoNuevo, p.getColor(), pos));
-            hayPromocion = true;
-        } else
-            hayPromocion = false;
-        return hayPromocion;
+        Posicion posPB = new Posicion(pos.getCol(), 8);
+        Posicion posPN = new Posicion(pos.getCol(), 1);
+        return (t.estaVacia(nPos) && p.getTipo().equals(PEON)
+                && (p.getColor().equals(BLANCO) && nPos.esMismaPos(posPB))
+                || (p.getColor().equals(NEGRO) && nPos.esMismaPos(posPN)));
+    }
+
+    // TODO Documentar
+    public void promocionar(Pieza p, Posicion nPos, Pieza.Tipo tipoNuevo) {
+        t.setPieza(new Pieza(tipoNuevo, p.getColor(), nPos));
+        t.borrarPieza(p);
     }
 
     // TODO Documentar
@@ -114,7 +107,7 @@ public class Partida {
         for(Pieza[] fila : t.get())
             for(Pieza pieza : fila)
                 if(pieza.getColor() != rey.getColor()
-                        && esMovLegal(pieza, rey.getPos()) && !reyEnJaque)
+                        && esMovLegal(pieza, rey.getPos()))
                     reyEnJaque = true;
 
         return reyEnJaque;
@@ -144,10 +137,10 @@ public class Partida {
      * @return <code>True</code> validación valida <code>False</code> validación invalida.
      */
     public boolean validarPartida() {
-        return (numReyesValido()
-                && noSuperaNumPiezas()
-                && noSuperaNumCadaPieza()
-                && noHayPeonesEnMargenes());
+        if(numReyesValido())
+            return (estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
+        else
+            return false;
     }
 
     // TODO Documentar
@@ -155,6 +148,7 @@ public class Partida {
         t.impr();
     }
 
+    // TODO Añadir restricciones
     private boolean esEnPassant(Pieza p, Posicion nPos) {
         Posicion posEnPI;
         Posicion posEnPD;
@@ -177,6 +171,7 @@ public class Partida {
                 || nPos.esMismaPos(posEnPD) && t.estaVacia(posEnPD));
     }
 
+    // FIXME No borrar peón
     private void moverEnPassant(Pieza p, Posicion nPos) {
         Posicion posPComida;
         int desp1C;
@@ -192,7 +187,6 @@ public class Partida {
 
         t.borrarPieza(p);
         t.setPieza(p, nPos);
-        p.setPos(nPos);
         t.borrarPieza(t.getPieza(posPComida));
     }
 
@@ -232,6 +226,7 @@ public class Partida {
         return (esMovLegalTorre(p, nPos) || esMovLegalAlfil(p, nPos));
     }
 
+    // TODO Revisar
     private boolean esMovLegalTorre(Pieza p, Posicion nPos) {
         Posicion pos = p.getPos();
         boolean esMovEnCruz = (pos.enMismaFila(nPos) || pos.enMismaCol(nPos));
@@ -274,6 +269,7 @@ public class Partida {
         return (esMovEnCruz && esMovConVision);
     }
 
+    // TODO Añadir restricciones faltantes
     private boolean esMovLegalAlfil(Pieza p, Posicion nPos) {
         return p.getPos().esMovDiagonal(nPos);
     }
@@ -340,11 +336,6 @@ public class Partida {
         return t.estaVacia(pos);
     }
 
-    private boolean numReyesValido() {
-        return (t.getNumPiezas(REY, BLANCO) == 1
-                && t.getNumPiezas(REY, NEGRO) == 1);
-    }
-
     private boolean noSuperaNumPiezas() {
         int nW = t.getNumPiezas(BLANCO);
         int nB = t.getNumPiezas(NEGRO);
@@ -352,11 +343,13 @@ public class Partida {
     }
 
     private boolean noSuperaNumCadaPieza() {
-        return (t.getNumPiezas(DAMA, BLANCO) <= 9
+        return (t.getNumPiezas(REY, BLANCO) <= 1
+                && t.getNumPiezas(DAMA, BLANCO) <= 9
                 && t.getNumPiezas(TORRE, BLANCO) <= 10
                 && t.getNumPiezas(ALFIL, BLANCO) <= 10
                 && t.getNumPiezas(CABALLO, BLANCO) <= 10
                 && t.getNumPiezas(PEON, BLANCO) <= 8
+                && t.getNumPiezas(REY, NEGRO) <= 1
                 && t.getNumPiezas(DAMA, NEGRO) <= 9
                 && t.getNumPiezas(TORRE, NEGRO) <= 10
                 && t.getNumPiezas(ALFIL, NEGRO) <= 10
@@ -376,6 +369,11 @@ public class Partida {
                 noHayPeonEnMargenes = false;
         }
         return noHayPeonEnMargenes;
+    }
+
+    private boolean numReyesValido() {
+        return (t.getNumPiezas(REY, BLANCO) == 1
+                && t.getNumPiezas(REY, NEGRO) == 1);
     }
 
     // DELETE Crear tablero por defecto
