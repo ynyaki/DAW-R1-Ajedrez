@@ -264,7 +264,7 @@ public abstract class Menu {
         color = sc.next();
         if(color.equalsIgnoreCase("b")) return Pieza.Color.BLANCO;
         if(color.equalsIgnoreCase("n")) return Pieza.Color.NEGRO;
-        return null;
+        throw new InputMismatchException("El valor introducido no es valido, vuelva a intentarlo");
     }
 
     private static void elegirTurno(){
@@ -288,21 +288,12 @@ public abstract class Menu {
      */
     private static Pieza.Color turnoJaque(){
 
-        if(partida.hayJaque() == Pieza.Color.BLANCO){
+        if(partida.estaReyEnJaque(Pieza.Color.BLANCO) ){
             return Pieza.Color.BLANCO;
         }
-        if(partida.hayJaque() == Pieza.Color.NEGRO){
+        if(partida.estaReyEnJaque(Pieza.Color.NEGRO)){
             return Pieza.Color.NEGRO;
         }
         return null;
-    }
-
-    private static boolean hayDoblejaque(){
-        //FIXME
-//        if(partida.hayJaque() == Pieza.Color.BLANCO && partida.hayJaque() == Pieza.Color.NEGRO){
-//            System.out.println("Error: Los dos reyes estan en jaque");
-//            throw new InputMismatchException("Error: Los dos reyes estan en jaque");
-            return partida.hayJaque() == Pieza.Color.BLANCO && partida.hayJaque() == Pieza.Color.NEGRO;
-
     }
 }
