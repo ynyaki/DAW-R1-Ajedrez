@@ -180,6 +180,8 @@ public class Tablero {
             System.out.print("　" + letra + " ");
             letra = (char) (letra + 1);
         }
+
+        System.out.print("\n");
     }
 
     /**
