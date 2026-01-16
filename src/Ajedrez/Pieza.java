@@ -88,11 +88,6 @@ public class Pieza {
     }
 
     // TODO Documentar
-    public void setPos(int col, int fila) {
-        this.pos = new Posicion(col, fila);
-    }
-
-    // TODO Documentar
     public void setPos(Posicion pos) {
         this.pos = pos;
     }
