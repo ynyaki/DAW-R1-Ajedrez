@@ -101,5 +101,52 @@ public abstract class Menu {
             return movimiento.matches(movimientoValido);
         }
 
+    private static Pieza.Tipo menuPromocionar() {
+        // TODO Mensaje de pedir pieza (con instrucciones de comando para cada pieza)
+        /* Ejemplo:
+         *
+         * Elija a qué pieza desea promocionar:
+         *   - Dama: D
+         *   - Torre: T
+         *   - Alfil: A
+         *   - Caballo: C
+         *
+         * Promocionar a: "D"
+         */
+        // TODO Escáner para obtener input
+        //   (decidir si es mov. ilegal o repetir inf. hasta input válido).
+        // TODO Validación del tipo de pieza
+        // TODO Cambiar valor de retorno
+
+        System.out.println("Peón promociado, escoge la pieza a la que quieres promocionar");
+
+        Pieza.Tipo tipo = null;
+        while (tipo == null) {
+            System.out.println("OPCIONES: \n");
+
+            System.out.println("D → Dama (♔)");
+            System.out.println("T → Torre (♖)");
+            System.out.println("A → Alfil (♗)");
+            System.out.println("C → Caballo (♘)");
+
+            System.out.println("(Este Menu se seguirá ejecutando hasta realizar la elección");
+            String opciones = sc.nextLine().trim();
+
+            if (opciones.equalsIgnoreCase("D")){
+                tipo = DAMA;
+            }
+            else if (opciones.equalsIgnoreCase("T")) {
+                tipo = TORRE;
+            }
+            else if (opciones.equalsIgnoreCase("A")){
+                tipo = ALFIL;
+            }
+            else if (opciones.equalsIgnoreCase("C")){
+                tipo = CABALLO;
+            }
+        }
+        return tipo;
+    }
+
 
 }
