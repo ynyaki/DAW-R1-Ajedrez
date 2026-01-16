@@ -29,6 +29,8 @@ public abstract class Menu {
 
         colorSalida = elegirTurno(sc);
 
+        Juego.main(colorSalida, partida, sc);
+
         // TODO
         // juego();
     }
