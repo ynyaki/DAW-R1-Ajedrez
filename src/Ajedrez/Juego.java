@@ -8,42 +8,39 @@ public class Juego {
         turnoMovimiento(turno, partida, sc);
 
         if (hashTableroInicial == partida.obtenerHashTablero()) System.out.println("Se tendría terminar la partida.");
-        hashTableroInicial = partida.obtenerHashTablero();
 
-        partida.imprTablero();
-
-        turno = colorContrario(turno);
-
-        turnoMovimiento(turno, partida, sc);
-
-        if (hashTableroInicial == partida.obtenerHashTablero()) System.out.println("Se tendría terminar la partida.");
         partida.imprTablero();
     }
 
     private static void turnoMovimiento(Pieza.Color turno, Partida partida, Scanner sc) {
         Pieza[] mov = Formato.validarFormatoSAN(sc, turno);
 
-        // TODO Métodos de validación.
-        // FIXME Esto es de Partida.
-        // Si no es del color en turno se acaba.
-//        boolean esNoPosible = false;
-//        if (partida.getPieza(posOrg) != null) {
-//            if (partida.getPieza(posOrg).getColor() != turno) esNoPosible = true;
-//        }
-//        if (partida.getPieza(posDes) != null) {
-//            if (partida.getPieza(posDes).getColor() == turno) esNoPosible = true;
-//        }
-//        if (partida.getPieza(posOrg) == null) esNoPosible = true;
-//        // Comprobar que tengan sea a una casilla valida.
-//
-//
-//        // TODO Bifurcación -> Se mueve, Se acaba la partida.
-//        if (!esNoPosible) {
-//            partida.setPieza(partida.getPieza(posOrg), posDes);
-//            partida.getPieza(posOrg).setPos(posDes);
-//
-//            partida.setPieza(null, posOrg);
-//        }
+        if (mov.length == 2) {
+            // Datos supuestos de la actual posición.
+            Posicion posAct = mov[0].getPos();
+            Pieza.Tipo pieza = mov[0].getTipo();
+            Pieza.Color color = mov[0].getColor();
+
+            // Datos de la posición deseada.
+            Posicion posDes = mov[1].getPos();
+
+            // Validación del supuesto de posición.
+            if (posicionesEnLimites(posAct, posDes)) {
+                Partida.mover();
+            }
+        } else if (mov.length == 1) {
+            // Tipo de pieza supuesta.
+            Pieza.Tipo pieza = mov[0].getTipo();
+            Pieza.Color color = mov[0].getColor();
+
+            // Posicion Deseada
+            Posicion posDes = mov[0].getPos();
+
+            // Validación del supuesto de posición.
+            if (posicionesEnLimites(posDes)) {
+                Partida.mover();
+            }
+        }
     }
 
     private static Pieza.Color colorContrario(Pieza.Color color){
@@ -51,5 +48,22 @@ public class Juego {
             case Pieza.Color.BLANCO -> Pieza.Color.NEGRO;
             case Pieza.Color.NEGRO -> Pieza.Color.BLANCO;
         };
+    }
+
+    private static boolean posicionesEnLimites(Posicion posDes) {
+        boolean esPosDesCol = posDes.getCol() <= 8;
+        boolean esPosDesFila = posDes.getFila() <= 8;
+
+        return esPosDesCol && esPosDesFila;
+    }
+
+    private static boolean posicionesEnLimites(Posicion posAct, Posicion posDes) {
+        boolean esPosActCol = posAct.getCol() <= 8;
+        boolean esPosActFila = posAct.getFila() <= 8;
+
+        boolean esPosDesCol = posDes.getCol() <= 8;
+        boolean esPosDesFila = posDes.getFila() <= 8;
+
+        return esPosActCol && esPosActFila && esPosDesCol && esPosDesFila;
     }
 }

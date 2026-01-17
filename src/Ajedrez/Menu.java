@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-// TODO Documentar
 public abstract class Menu {
 
     private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
@@ -30,9 +29,6 @@ public abstract class Menu {
         colorSalida = elegirTurno(sc);
 
         Juego.main(colorSalida, partida, sc);
-
-        // TODO
-        // juego();
     }
 
     private static Pieza.Color elegirTurno(Scanner sc){

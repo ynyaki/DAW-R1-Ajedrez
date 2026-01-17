@@ -80,7 +80,7 @@ public class Partida {
 
     // TODO Revisar
     /**
-     * Coloca pieza en el tablero. Aparte de devulver si es posible o no colocar la pieza, en caso de poder
+     * Coloca pieza en el tablero. Aparte de develver si es posible o no colocar la pieza, en caso de poder
      * colocarla la coloca.
      * @param p Objeto de tipo <code>Pieza</code>
      * @return <code>True</code> cuando se puede colocar la pieza en el tablero, <code>False</code> en caso contrario.
