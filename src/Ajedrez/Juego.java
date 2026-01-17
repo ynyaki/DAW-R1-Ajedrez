@@ -3,11 +3,11 @@ import java.util.Scanner;
 public class Juego {
 
     public static void main(Pieza.Color turno, Partida partida, Scanner sc){
-        int hashTableroInicial = partida.obtenerHashTablero();
+        int hashTableroInicial = partida.getHashTablero();
 
         turnoMovimiento(turno, partida, sc);
 
-        if (hashTableroInicial == partida.obtenerHashTablero()) System.out.println("Se tendría terminar la partida.");
+        if (hashTableroInicial == partida.getHashTablero()) System.out.println("Se tendría terminar la partida.");
 
         partida.imprTablero();
     }
@@ -26,7 +26,7 @@ public class Juego {
 
             // Validación del supuesto de posición.
             if (posicionesEnLimites(posAct, posDes)) {
-                Partida.mover();
+                partida.mover(color, pieza, posAct, posDes);
             }
         } else if (mov.length == 1) {
             // Tipo de pieza supuesta.
@@ -38,7 +38,7 @@ public class Juego {
 
             // Validación del supuesto de posición.
             if (posicionesEnLimites(posDes)) {
-                Partida.mover();
+                partida.mover(color, pieza, posDes);
             }
         }
     }
