@@ -13,7 +13,6 @@ public abstract class Menu {
     private static final Pieza.Color NEGRO = Pieza.Color.NEGRO;
 
     private static Partida partida;
-    private static Pieza.Color turno;
 
     public static void ejecutar(Scanner sc) {
         partida = new Partida();
@@ -32,6 +31,9 @@ public abstract class Menu {
     }
 
     private static Pieza.Color elegirTurno(Scanner sc){
+        final String ROJO = "\u001B[31m";
+        final String RESET = "\u001B[0m";
+
         String color;
         Pieza.Color colorEnJaque = turnoJaque();
         Pieza.Color pColor = null;
@@ -40,12 +42,12 @@ public abstract class Menu {
         if (colorEnJaque != null) {
             esTurnoValido = true;
             if (colorEnJaque == BLANCO) {
-                System.out.println("¡MUEVEN LAS BLANCAS AL ESTAR EN AMENAZA DE JAQUE!");
+                System.out.printf("%s¡MUEVEN LAS BLANCAS AL ESTAR EN AMENAZA DE JAQUE!\n%s", ROJO, RESET);
                 return BLANCO;
             }
 
             if (colorEnJaque == NEGRO) {
-                System.out.println("¡MUEVEN LAS NEGRAS AL ESTAR EN AMENAZA DE JAQUE!");
+                System.out.printf("%s¡MUEVEN LAS NEGRAS AL ESTAR EN AMENAZA DE JAQUE!\n%s", ROJO, RESET);
                 return NEGRO;
             }
         }

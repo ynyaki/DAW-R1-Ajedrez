@@ -290,6 +290,18 @@ public class Partida {
         return Arrays.deepHashCode(t.get());
     }
 
+    public int getCantPiezaMovil (
+            Pieza.Color color, Pieza.Tipo tipo, Posicion nPos) {
+        int contPiezasEncontradas = 0;
+
+        for(Pieza[] fila : t.get())
+            for(Pieza p : fila)
+                if((p != null) && (p.getTipo() == tipo)
+                        && (p.getColor() == color) && esMovLegal(p, nPos)) contPiezasEncontradas++;
+
+        return contPiezasEncontradas;
+    }
+
     private Pieza getPiezaMovil(
             Pieza.Color color, Pieza.Tipo tipo, Posicion nPos) {
         for(Pieza[] fila : t.get())

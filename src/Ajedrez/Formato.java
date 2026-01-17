@@ -8,38 +8,50 @@ public class Formato {
     private static final Pieza.Tipo DAMA = Pieza.Tipo.DAMA;
     private static final Pieza.Tipo REY = Pieza.Tipo.REY;
 
+    public static final String AMARILLO = "\u001B[33m";
+    public static final String MORADO = "\u001B[35m";
+    public static final String RESET = "\u001B[0m";
+
     /**
      * Método para mostrar el mensaje de Bienvenida.
      * Solo <strong>imprime</strong> por terminal.
      */
     public static void bienvenida() {
-        System.out.println("¡Bienvenido a nuestro programa de ajedrez!");
-        System.out.println("Desarrollado por Iñaki, Iván, Juan y Manuel.");
+        System.out.printf("%s¡Bienvenido a nuestro programa de ajedrez!%s\n", MORADO, RESET);
+        System.out.printf("%sDesarrollado%s por %sIñaki%s, %sIván%s, %sJuan%s y %sManuel%s.\n",
+                MORADO, RESET,
+                MORADO, RESET,
+                MORADO, RESET,
+                MORADO, RESET,
+                MORADO, RESET
+        );
         System.out.print("\n");
 
         System.out.println("Importa tu partida: ");
-        System.out.println("Se debe usar la notación algebraica.");
+        System.out.printf("Se debe usar la %snotación algebraica%s.\n", AMARILLO, RESET);
         System.out.println("Consiste:");
-        System.out.println("\t· Inicial de la pieza más su posición.");
-        System.out.println("\t· Los peones no tienen inicial.");
-        System.out.println("\t· La inicial en mayúscula.");
-        System.out.println("\t· La posición en minúscula.");
-        System.out.println("\t· Primero se indica la pieza.");
-        System.out.println("\t· Segundo se indica la fila.");
-        System.out.println("\t· Tercero se indica la columna.");
-        System.out.println("\t· Separa cada pieza con un espacio.");
+        System.out.printf("\t· %sInicial%s de la pieza más su %sposición%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· Los %speones no%s tienen %sinicial%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· La %sinicial%s en %smayúsculas%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· La %sposición%s en %sminúsculas%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· %sPrimero%s se indica la %spieza%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· %sSegundo%s se indica la %sfila%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· %sTercero%s se indica la %scolumna%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· %sSepara%s cada %spieza%s con un %sespacio%s.\n", AMARILLO, RESET, AMARILLO, RESET, AMARILLO, RESET);
 
         System.out.print("\n");
 
         System.out.println("Leyenda:");
         System.out.println("R → Rey   | D → Dama    |   T   → Torre");
         System.out.println("A → Alfil | C → Caballo | vacío → Peón");
-        System.out.println("* El peón puede no tener letra.");
+        System.out.printf("* El %speón puede no tener letra%s.", AMARILLO, RESET);
 
+        System.out.print("\n");
         System.out.print("\n");
 
         System.out.println("Ejemplo.:");
         System.out.println("Rg1 Tf1 h2 g2 f2 d4 e4 Ce5 a4 b3 c2 Ab2 Ta1");
+        System.out.print("\n");
     }
 
     /**
@@ -48,22 +60,57 @@ public class Formato {
      */
     public static void reglasMovimientos() {
         System.out.print("\n");
-        System.out.println("Para mover una pieza puedes: ");
-        System.out.println("\t· Si solo puede llegar a la casilla de destino una unica pieza puedes solo escribir la casilla de destino.");
+        System.out.printf("Para %smover una pieza%s puedes: \n", AMARILLO, RESET);
+        System.out.println("\t· Si solo una pieza dentro de un mismo tipo de pieza puede llegar a la casilla de destino.");
+        System.out.printf("\t  Puedes escribir solo el %stipo de pieza%s y la %scasilla de destino%s.\n", AMARILLO, RESET, AMARILLO, RESET);
         System.out.println("\t\tEjemplo.: Rh2 → R para representar al Rey; h2 es donde quieres mover al rey.");
-        System.out.println("\t· Si existen varias piezas que pueden llegar al destino escribe posición de inicio y final.");
+        System.out.printf("\t· Si existen varias piezas que pueden llegar al destino escribe %sposición de inicio y final%s.\n", AMARILLO, RESET);
         System.out.println("\t\tEjemplo.: Rh1h2 → R de Rey; h1 es la posición donde esta el rey; h2 a donde mueves al rey.");
+        System.out.printf("%sRecuerda que los peones no tienen inicial%s.\n", AMARILLO, RESET);
         System.out.print("\n");
     }
 
+    /**
+     * Imprime los criterios de victoria.
+     * Solo <strong>imprime</strong> por terminal.
+     */
     public static void criteriosParaVictoria() {
         System.out.print("\n");
-        System.out.println("Para decidir si se ha ganado una partida se tienen en cuenta tres cosas:");
-        System.out.println("\t· Si los dos reyes acaban en jaque → Tablas.");
-        System.out.println("\t· Si esta un rey en jaque → Gana el color contrario.");
-        System.out.println("\t· Se calculará un total de puntos según las piezas de cada color → El color con más puntos gana.");
+        System.out.printf("Para %sdecidir el ganador%s de una partida %sse tienen en cuenta%s tres cosas:\n",
+                AMARILLO, RESET,
+                AMARILLO, RESET
+        );
+
+        System.out.printf("\t· Si los %sdos reyes%s acaban en %sjaque%s → %sTablas%s.\n",
+                AMARILLO, RESET,
+                AMARILLO, RESET,
+                AMARILLO, RESET);
+
+        System.out.printf("\t· En caso de %smovimiento ilegal%s → %sGana el color contrario%s.\n",
+                AMARILLO, RESET,
+                AMARILLO, RESET);
+
+        System.out.printf("\t· Si esta %sun rey en jaque%s → %sGana el color contrario%s.\n",
+                AMARILLO, RESET,
+                AMARILLO, RESET);
+
+        System.out.printf("\t· Se %scalculará%s un total de %spuntos%s según las piezas de cada %scolor%s → El color con más puntos gana.\n",
+                AMARILLO, RESET,
+                AMARILLO, RESET,
+                AMARILLO, RESET);
+
         System.out.println("Los puntos que recibe cada pieza están asociados a su valor estratégico.");
         System.out.print("\n");
+    }
+
+    /**
+     * Imprime mensaje en caso de entrada de movimiento difusa.
+     * Solo <strong>imprime</strong> por terminal.
+     */
+    public static void movimientoDifuso() {
+        System.out.print("\n");
+        System.out.printf("Has introducido un %smovimiento difuso%s.\n", AMARILLO, RESET);
+        System.out.println("Por favor especifica más.");
     }
 
     /**

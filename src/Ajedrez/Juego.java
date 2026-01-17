@@ -2,47 +2,39 @@ import java.util.Scanner;
 
 public class Juego {
 
+    public static final String AMARILLO = "\u001B[33m";
+    public static final String RESET = "\u001B[0m";
+
     public static void main(Pieza.Color turno, Partida partida, Scanner sc){
         boolean cometidoMovimientoLegal = true;
+        boolean movDifuso;
         int hashTableroInicial = partida.getHashTablero();
 
         Formato.reglasMovimientos();
-        turnoMovimiento(turno, partida, sc);
+        do {
+            movDifuso = turnoMovimiento(turno, partida, sc);
+
+            if (movDifuso) Formato.movimientoDifuso();
+        } while (movDifuso);
 
         if (hashTableroInicial == partida.getHashTablero()) {
+            System.out.print("\n");
             System.out.println("Se ha cometido un movimiento ilegal.");
             System.out.println("Por tanto no se ha cambiado el tablero.");
             cometidoMovimientoLegal = false;
         }
 
-        System.out.println("\n");
         System.out.println("Tablero final:");
         partida.imprTablero();
 
-        Formato.reglasMovimientos();
-        if (cometidoMovimientoLegal) {
-            if (partida.estaReyEnJaque(Pieza.Color.BLANCO) && partida.estaReyEnJaque(Pieza.Color.NEGRO)) {
-                System.out.println("Quedaron Tablas.");
-            } else if (partida.estaReyEnJaque(Pieza.Color.BLANCO)) {
-                System.out.println("Ganaron las Negras.");
-            } else if (partida.estaReyEnJaque(Pieza.Color.NEGRO)) {
-                System.out.println("Ganaron las Blancas.");
-            } else {
-                Pieza.Color ganador = ganadorSegunValoresEstrategicos(partida);
-                if (ganador == null) {
-                    System.out.println("Quedaron Tablas.");
-                } else {
-                    System.out.printf("Ganaron las %s", ganador);
-                }
-            }
-        } else {
-            System.out.print("\n");
-            System.out.printf("Han ganado las %s", colorContrario(turno).toString());
-        }
+        Formato.criteriosParaVictoria();
+
+        encontrarGanador(cometidoMovimientoLegal, partida, turno);
     }
 
-    private static void turnoMovimiento(Pieza.Color turno, Partida partida, Scanner sc) {
+    private static boolean turnoMovimiento(Pieza.Color turno, Partida partida, Scanner sc) {
         Pieza[] mov = Formato.validarFormatoSAN(sc, turno);
+        boolean difusion = false;
 
         if (mov.length == 2) {
             // Datos supuestos de la actual posición.
@@ -66,12 +58,17 @@ public class Juego {
             Posicion posDes = mov[0].getPos();
 
             // Validación del supuesto de posición.
-            if (posicionesEnLimites(posDes)) {
+            if (
+                    posicionesEnLimites(posDes)
+                    && partida.getCantPiezaMovil(color, pieza, posDes) == 1
+            ) {
                 partida.mover(color, pieza, posDes);
             }
+
+            difusion = partida.getCantPiezaMovil(color, pieza, posDes) >= 2;
         }
 
-        //TODO Estudiar el caso de polaridad de doble movimiento.
+        return difusion;
     }
 
     private static Pieza.Color colorContrario(Pieza.Color color){
@@ -127,5 +124,31 @@ public class Juego {
         }
 
         return cantPuntos;
+    }
+
+    private static void encontrarGanador(boolean cometidoMovimientoLegal, Partida partida, Pieza.Color turno){
+        if (cometidoMovimientoLegal) {
+            Pieza.Color ganadorPuntos = ganadorSegunValoresEstrategicos(partida);
+
+            if (partida.estaReyEnJaque(Pieza.Color.BLANCO) && partida.estaReyEnJaque(Pieza.Color.NEGRO)) {
+                System.out.printf("Quedaron %sTablas%s por %sDOBLE JAQUE%s.\n", AMARILLO, RESET, AMARILLO, RESET);
+            } else if (partida.estaReyEnJaque(Pieza.Color.BLANCO)) {
+                System.out.printf("Ha ganado el color %sNegras%s.\n", AMARILLO, RESET);
+            } else if (partida.estaReyEnJaque(Pieza.Color.NEGRO)) {
+                System.out.printf("Ha ganado el color %sBlancas%s.\n", AMARILLO, RESET);
+            } else if (ganadorPuntos == null){
+                System.out.printf("Quedaron %sTablas%s.\n", AMARILLO, RESET);
+            } else {
+                System.out.printf("Ha ganado el color %s%s%s\n", AMARILLO, ganadorPuntos, RESET);
+            }
+        } else {
+            System.out.print("\n");
+            System.out.printf("Ha ganado el color %s%s%s por %sMovimiento Ilegal%s.",
+                    AMARILLO,
+                    colorContrario(turno).toString(),
+                    RESET,
+                    AMARILLO,
+                    RESET);
+        }
     }
 }
