@@ -137,7 +137,10 @@ public class Juego {
             } else if (partida.estaReyEnJaque(Pieza.Color.NEGRO)) {
                 System.out.printf("Ha ganado el color %sBlancas%s.\n", AMARILLO, RESET);
             } else if (ganadorPuntos == null){
-                System.out.printf("Quedaron %sTablas%s.\n", AMARILLO, RESET);
+                System.out.printf("Quedaron %sTablas%s por misma %scantidad%s de %spuntos%s.\n",
+                        AMARILLO, RESET,
+                        AMARILLO, RESET,
+                        AMARILLO, RESET);
             } else {
                 System.out.printf("Ha ganado el color %s%s%s\n", AMARILLO, ganadorPuntos, RESET);
             }
