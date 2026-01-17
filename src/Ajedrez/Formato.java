@@ -43,6 +43,30 @@ public class Formato {
     }
 
     /**
+     * Imprime las reglas para mover las piezas.
+     * Solo <strong>imprime</strong> por terminal.
+     */
+    public static void reglasMovimientos() {
+        System.out.print("\n");
+        System.out.println("Para mover una pieza puedes: ");
+        System.out.println("\t· Si solo puede llegar a la casilla de destino una unica pieza puedes solo escribir la casilla de destino.");
+        System.out.println("\t\tEjemplo.: Rh2 → R para representar al Rey; h2 es donde quieres mover al rey.");
+        System.out.println("\t· Si existen varias piezas que pueden llegar al destino escribe posición de inicio y final.");
+        System.out.println("\t\tEjemplo.: Rh1h2 → R de Rey; h1 es la posición donde esta el rey; h2 a donde mueves al rey.");
+        System.out.print("\n");
+    }
+
+    public static void criteriosParaVictoria() {
+        System.out.print("\n");
+        System.out.println("Para decidir si se ha ganado una partida se tienen en cuenta tres cosas:");
+        System.out.println("\t· Si los dos reyes acaban en jaque → Tablas.");
+        System.out.println("\t· Si esta un rey en jaque → Gana el color contrario.");
+        System.out.println("\t· Se calculará un total de puntos según las piezas de cada color → El color con más puntos gana.");
+        System.out.println("Los puntos que recibe cada pieza están asociados a su valor estratégico.");
+        System.out.print("\n");
+    }
+
+    /**
      * Método para la lógica de añadir las piezas de una partida.
      * <strong>Válida</strong> y <strong>coloca</strong> las piezas en el tablero.
      */

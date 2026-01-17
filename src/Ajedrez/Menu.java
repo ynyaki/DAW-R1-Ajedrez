@@ -22,8 +22,8 @@ public abstract class Menu {
         Formato.bienvenida();
         Formato.importar(sc, partida);
 
+        System.out.println("La partida actual:");
         partida.imprTablero();
-
         System.out.print("\n");
 
         colorSalida = elegirTurno(sc);

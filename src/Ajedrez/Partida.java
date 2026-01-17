@@ -63,6 +63,22 @@ public class Partida {
         System.out.println();
     }
 
+    public Pieza[] getPiezasColor(Pieza.Color c) {
+        Pieza[] listaPiezas = new Pieza[t.getNumPiezas(c)];
+        int cont = 0;
+
+        for (Pieza[] fila : t.get()) {
+            for (Pieza p : fila) {
+                if (p != null && p.getColor() == c) {
+                    listaPiezas[cont] = p;
+                    cont++;
+                }
+            }
+        }
+
+        return listaPiezas;
+    }
+
     /** Inicializa un tablero vacío de 8x8 para la partida. */
     public Partida() {
         crearNuevoTablero();
