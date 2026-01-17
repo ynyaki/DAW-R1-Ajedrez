@@ -102,6 +102,7 @@ public class Tablero {
         setInTablero(null, p.getPos());
     }
 
+    // TODO Revisar
     /**
      * Devuelve el n.º de piezas que hay en el tablero del tipo especificado.
      * @param tipo Tipo de pieza a buscar.
@@ -111,11 +112,12 @@ public class Tablero {
         int nPiezas = 0;
         for(Pieza[] fila : t)
             for(Pieza pieza : fila)
-                if(pieza.getTipo() == tipo)
+                if((pieza != null) && (pieza.getTipo() == tipo))
                     nPiezas++;
         return nPiezas;
     }
 
+    // TODO Revisar
     /**
      * Devuelve el n.º de piezas que hay en el tablero del color especificado.
      * @param color Color de pieza a buscar.
@@ -125,12 +127,13 @@ public class Tablero {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : t)
             for (Pieza pieza : filaPiezas) {
-                if (pieza == null) continue;
-                if (pieza.getColor() == color) nPiezas++;
+                if((pieza != null) && pieza.getColor().equals(color))
+                    nPiezas++;
             }
         return nPiezas;
     }
 
+    // TODO Revisar
     /**
      * Devuelve el n.º de piezas que hay en el tablero del tipo y color
      * especificados.
@@ -142,8 +145,9 @@ public class Tablero {
         int nPiezas = 0;
         for (Pieza[] filaPiezas : t)
             for (Pieza pieza : filaPiezas) {
-                if (pieza == null) continue;
-                if ((pieza.getTipo() == tipo) && (pieza.getColor() == color)) nPiezas++;
+                if((pieza != null) && (pieza.getTipo() == tipo)
+                        && (pieza.getColor() == color))
+                    nPiezas++;
             }
         return nPiezas;
     }
@@ -180,6 +184,7 @@ public class Tablero {
             System.out.print("　" + letra + " ");
             letra = (char) (letra + 1);
         }
+        System.out.println();
     }
 
     /**

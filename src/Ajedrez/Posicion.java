@@ -55,6 +55,11 @@ public class Posicion {
         this.fila = fila;
     }
 
+    // TODO Documentar
+    public Posicion(Pieza p, int colAdd, int filaAdd) {
+        this(p.getCol() + colAdd, p.getFila() + filaAdd);
+    }
+
     // TODO Revisar
     /**
      * Crea un vector posición, en formato (columna, fila). Con formato letra, número.

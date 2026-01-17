@@ -63,6 +63,16 @@ public class Pieza {
     }
 
     // TODO Documentar
+    public boolean esBlanca() {
+        return color.equals(Color.BLANCO);
+    }
+
+    // TODO Documentar
+    public boolean esNegra() {
+        return color.equals(Color.NEGRO);
+    }
+
+    // TODO Documentar
     public Posicion getPos() {
         return pos;
     }
@@ -75,11 +85,6 @@ public class Pieza {
     // TODO Documentar
     public int getFila() {
         return pos.getFila();
-    }
-
-    // TODO Documentar
-    public void setPos(int col, int fila) {
-        this.pos = new Posicion(col, fila);
     }
 
     // TODO Documentar

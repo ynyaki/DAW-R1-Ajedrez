@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 // TODO Documentar
 public class Partida {
 
@@ -27,16 +29,13 @@ public class Partida {
         pruebaMover(p, 5, 7, 5, 5);
         pruebaMover(p, 7, 1, 6, 3);
         pruebaMover(p, 6, 7, 6, 6);
-    }
-
-    // DELETE Método de pruebas
-    private static void pruebaImprTablero(Partida p) {
-        System.out.println();
-        System.out.println();
-        p.imprTablero();
-        System.out.println();
-        System.out.println();
-        System.out.println();
+        pruebaMover(p, 6, 3, 5, 5);
+        pruebaMover(p, 6, 6, 5, 5);
+            pruebaMover(p, 1, 1, 1, 5);
+            pruebaMover(p, 1, 1, 6, 1);
+        pruebaMover(p, 1, 2, 1, 4);
+            pruebaMover(p, 1, 1, 1, 4);
+        pruebaMover(p, 1, 1, 1, 3);
     }
 
     // DELETE Método de pruebas
@@ -55,6 +54,15 @@ public class Partida {
         }
     }
 
+    // DELETE Método de pruebas
+    private static void pruebaImprTablero(Partida p) {
+        System.out.println();
+        System.out.println();
+        p.imprTablero();
+        System.out.println();
+        System.out.println();
+    }
+
     /** Inicializa un tablero vacío de 8x8 para la partida. */
     public Partida() {
         crearNuevoTablero();
@@ -65,25 +73,112 @@ public class Partida {
         t = new Tablero(8, 8);
     }
 
-    // TODO Documentar
-    public boolean mover(Pieza p, Posicion nPos) {
-        boolean hayMov = esMovLegal(p, nPos);
-        if(hayMov)
-            t.moverPieza(p, nPos);
-        return hayMov;
-    }
-
-    // TODO Documentar
-    public boolean mover(Posicion pos, Posicion nPos) {
-        return mover(t.getPieza(pos), nPos);
-    }
-
-    // TODO Revisar
     /**
-     * Coloca pieza en el tablero. Aparte de develver si es posible o no colocar la pieza, en caso de poder
-     * colocarla la coloca.
-     * @param p Objeto de tipo <code>Pieza</code>
-     * @return <code>True</code> cuando se puede colocar la pieza en el tablero, <code>False</code> en caso contrario.
+     * Mueve un peón sobre el tablero de ajedrez tras comprobar que
+     * el movimiento sea legal.<br>
+     * Ejemplos: <code>e5</code> <code>d4</code> <code>c3</code>
+     * @param color Color del peón a buscar.
+     * @param pos Posición a la que se desea mover el peón.
+     * @return Si el movimiento es legal y la pieza ha sido colocada.
+     */
+    public boolean mover(Pieza.Color color, Posicion pos) {
+        Pieza p = getPiezaMovil(color, PEON, pos);
+        if((p != null) && p.getColor().equals(color)
+                && p.getTipo().equals(PEON) && esMovLegal(p, pos))
+            return mover(p, pos);
+        else
+            return false;
+    }
+
+    /**
+     * Mueve una pieza sobre el tablero de ajedrez tras comprobar que
+     * el movimiento sea legal.<br>
+     * Ejemplos: <code>Dh5</code> <code>Ta2</code> <code>Cg5</code>
+     * @param color Color de la pieza a buscar.
+     * @param tipo Tipo de la pieza a buscar.
+     * @param pos Posición a la que se desea mover el peón.
+     * @return Si el movimiento es legal y la pieza ha sido colocada.
+     */
+    public boolean mover(Pieza.Color color, Pieza.Tipo tipo, Posicion pos) {
+        Pieza p = getPiezaMovil(color, tipo, pos);
+        if((p != null) && p.getColor().equals(color)
+                && p.getTipo().equals(tipo) && esMovLegal(p, pos))
+            return mover(p, pos);
+        else
+            return false;
+    }
+
+    /**
+     * Mueve un peón sobre el tablero de ajedrez tras comprobar que
+     * el movimiento sea legal.<br>
+     * Ejemplos: <code>e4e5</code> <code>d2d4</code> <code>b2c3</code>
+     * @param color Color del peón a buscar.
+     * @param posIni Posición donde se localice el peón a mover.
+     * @param posFin Posición a la que se desea mover el peón.
+     * @return Si el movimiento es legal y la pieza ha sido colocada.
+     */
+    public boolean mover(Pieza.Color color, Posicion posIni, Posicion posFin) {
+        Pieza p = t.getPieza(posIni);
+        if((p != null) && p.getColor().equals(color)
+                && p.getTipo().equals(PEON) && esMovLegal(p, posFin))
+            return mover(p, posFin);
+        else
+            return false;
+    }
+
+    /**
+     * Mueve una pieza sobre el tablero de ajedrez tras comprobar que
+     * el movimiento sea legal.<br>
+     * Ejemplos: <code>Ta1g1</code> <code>Cc3e4</code> <code>Ah4g5</code>
+     * @param color Color de la pieza a buscar.
+     * @param tipo Tipo de la pieza a buscar.
+     * @param posIni Posición donde se localice la pieza a mover.
+     * @param posFin Posición a la que se desea mover el peón.
+     * @return Si el movimiento es legal y la pieza ha sido colocada.
+     */
+    public boolean mover(Pieza.Color color, Pieza.Tipo tipo,
+            Posicion posIni, Posicion posFin) {
+        Pieza p = t.getPieza(posIni);
+        if((p != null) && p.getColor().equals(color)
+                && p.getTipo().equals(tipo) && esMovLegal(p, posFin))
+            return mover(p, posFin);
+        else
+            return false;
+    }
+
+    /**
+     * Promociona un peón al tipo de pieza indicado por parámetro.
+     * @param color Color del peón a buscar.
+     * @param pos Posición a la que se moverá el peón tras la promoción.
+     */
+    public boolean hayPromocion(Pieza.Color color, Posicion pos) {
+        return (getPiezaMovil(color, PEON, pos) != null);
+    }
+
+    /**
+     * Promociona un peón al tipo de pieza indicado por parámetro.
+     * @param color Color del peón a buscar.
+     * @param pos Posición a la que se moverá el peón tras la promoción.
+     * @param tipoNuevo Tipo de pieza al que se quiere cambiar
+     * (debe ser coherente con las reglas de promoción del ajedrez).
+     */
+    public void promocionar(
+            Pieza.Color color, Posicion pos, Pieza.Tipo tipoNuevo) {
+        Pieza p = getPiezaMovil(color, PEON, pos);
+        if((p != null) && !tipoNuevo.equals(PEON) && !tipoNuevo.equals(REY)
+                && ((p.esBlanca() && p.getPos().enFila(8))
+                || p.esNegra() && p.getPos().enFila(1))) {
+            t.setPieza(new Pieza(tipoNuevo, p.getColor(), pos));
+            t.borrarPieza(p);
+        }
+    }
+
+    /**
+     * Coloca una pieza sobre el tablero de ajedrez. La casilla del tablero
+     * donde se posicionará viene dada por la posición asociada a la pieza
+     * parámetro.
+     * @param p Pieza a colocar.
+     * @return Si la colocación ha sido exitosa o ha fallado.
      */
     public boolean colocar(Pieza p) {
         boolean esValida = esColocacionValida(p);
@@ -99,107 +194,117 @@ public class Partida {
     }
 
     /**
-     * Validación post Piezas colocadas. Existen validaciones que no se pueden comprobar mientras se colocan las piezas.
-     * @return <code>True</code> validación válida <code>False</code> validación inválida.
+     * Valida la colocación de las piezas en el tablero de ajedrez antes
+     * de comenzar la partida. Una partida de ajedrez no puede comenzar
+     * si no hay al menos un rey de cada color, ni si ambos están en jaque.
+     * @return Si la partida es válida para ser jugada o no.
      */
     public boolean validarPartida() {
         if(numReyesValido())
-            return (estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
+            return !(estaReyEnJaque(BLANCO) && estaReyEnJaque(NEGRO));
         else
             return false;
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba y devuelve si el rey de un determinado color está en jaque.
+     * @param colorRey Color del rey que se comprobará.
+     * @return Si el rey del color parámetro está en jaque.
+     */
     public boolean estaReyEnJaque(Pieza.Color colorRey) {
         boolean reyEnJaque = false;
-        Pieza rey;
+        Pieza rey = null;
 
         if(colorRey.equals(BLANCO))
             rey = rB;
         else if(colorRey.equals(NEGRO))
             rey = rN;
-        else
-            return false;
 
-        for(Pieza[] fila : t.get())
-            for(Pieza pieza : fila)
-                if(pieza != null && pieza.getColor() != rey.getColor()
-                        && esMovLegal(pieza, rey.getPos()))
-                    reyEnJaque = true;
+        if(rey != null)
+            for(Pieza[] fila : t.get())
+                for(Pieza pieza : fila)
+                    if(pieza != null && pieza.getColor() != rey.getColor()
+                            && esMovLegal(pieza, rey.getPos()))
+                        reyEnJaque = true;
 
         return reyEnJaque;
     }
 
-    // TODO Documentar
-    public boolean hayPromocion(Pieza p, Posicion nPos) {
-        Posicion pos = p.getPos();
-        Posicion posPB = new Posicion(pos.getCol(), 8);
-        Posicion posPN = new Posicion(pos.getCol(), 1);
-        return (t.estaVacia(nPos) && p.getTipo().equals(PEON)
-                && (p.getColor().equals(BLANCO) && nPos.esMismaPos(posPB))
-                || (p.getColor().equals(NEGRO) && nPos.esMismaPos(posPN)));
+    /**
+     * Devuelve el tipo de la pieza situada en una determinada posición
+     * del tablero.
+     * @param pos Posición de la pieza a comprobar.
+     * @return Tipo de la pieza (<code>null</code> si la casilla está vacía.
+     */
+    public Pieza.Tipo getTipoPieza(Posicion pos) {
+        if(t.estaOcupada(pos))
+            return t.getPieza(pos).getTipo();
+        else
+            return null;
     }
 
-    // TODO Documentar
-    public void promocionar(Pieza p, Posicion nPos, Pieza.Tipo tipoNuevo) {
-        t.setPieza(new Pieza(tipoNuevo, p.getColor(), nPos));
-        t.borrarPieza(p);
+    /**
+     * Devuelve el color de la pieza situada en una determinada posición
+     * del tablero.
+     * @param pos Posición de la pieza a comprobar.
+     * @return Color de la pieza (<code>null</code> si la casilla está vacía.
+     */
+    public Pieza.Color getColorPieza(Posicion pos) {
+        if(t.estaOcupada(pos))
+            return t.getPieza(pos).getColor();
+        else
+            return null;
     }
 
-    // TODO Documentar
+    /**
+     * Imprime el tablero de ajedrez con la disposición actual de las piezas
+     * en la partida, junto a una leyenda indicando qué símbolo representa
+     * cada pieza.
+     */
     public void imprTablero() {
         t.impr();
     }
 
-    // TODO Añadir restricciones
-    private boolean esEnPassant(Pieza p, Posicion nPos) {
-        Posicion posEnPI;
-        Posicion posEnPD;
-        Posicion pos = p.getPos();
-        int col = pos.getCol();
-        int fila = pos.getFila();
-        int desp1C;
-
-        if(p.getColor() == BLANCO)
-            desp1C = 1;
-        else if(p.getColor() == NEGRO)
-            desp1C = -1;
-        else
-            desp1C = 0;
-
-        posEnPI = new Posicion(col, fila + desp1C);
-        posEnPD = new Posicion(col, fila + desp1C);
-
-        return (nPos.esMismaPos(posEnPI) && t.estaVacia(posEnPI)
-                || nPos.esMismaPos(posEnPD) && t.estaVacia(posEnPD));
+    /**
+     * Obtiene el código <i>hash</i> del tablero, determinado según
+     * la información de las piezas distribuidas en él.
+     * @return El código <i>hash</i> del tablero de ajedrez.
+     */
+    public int getHashTablero() {
+        return Arrays.deepHashCode(t.get());
     }
 
-    // FIXME No borrar peón
-    private void moverEnPassant(Pieza p, Posicion nPos) {
-        Posicion posPComida;
-        int desp1C;
+    private Pieza getPiezaMovil(
+            Pieza.Color color, Pieza.Tipo tipo, Posicion nPos) {
+        for(Pieza[] fila : t.get())
+            for(Pieza p : fila)
+                if((p != null) && (p.getTipo() == tipo)
+                        && (p.getColor() == color) && esMovLegal(p, nPos))
+                    return p;
+        return null;
+    }
 
-        if(p.getColor() == BLANCO)
-            desp1C = 1;
-        else if(p.getColor() == NEGRO)
-            desp1C = -1;
+    private boolean mover(Pieza p, Posicion nPos) {
+        boolean hayMov = esMovLegal(p, nPos);
+        if(hayMov)
+            t.moverPieza(p, nPos);
+        return hayMov;
+    }
+
+    private boolean mover(Posicion iPos, Posicion nPos) {
+        if(t.getPieza(iPos) != null)
+            return mover(t.getPieza(iPos), nPos);
         else
-            desp1C = 0;
-
-        posPComida = new Posicion(nPos.getCol(), nPos.getFila() - desp1C);
-
-        t.moverPieza(p, nPos);
-        t.borrarPieza(t.getPieza(posPComida));
+            return false;
     }
 
     private boolean esMovLegal(Pieza p, Posicion nPos) {
         return (noSuperaMargenes(nPos)
                 && esDiferentePos(p, nPos)
-                && noEsPiezaPropia(p, nPos)
+                && esCasillaVaciaOEnemiga(p, nPos)
                 && esMovLegalDePieza(p, nPos));
     }
 
-    // TODO Añadir restricciones faltantes
     private boolean esColocacionValida(Pieza p) {
         Posicion nPos = p.getPos();
         return (noSuperaMargenes(nPos)
@@ -228,50 +333,10 @@ public class Partida {
         return (esMovLegalTorre(p, nPos) || esMovLegalAlfil(p, nPos));
     }
 
-    // TODO Revisar
     private boolean esMovLegalTorre(Pieza p, Posicion nPos) {
-        Posicion pos = p.getPos();
-        boolean esMovEnCruz = (pos.enMismaFila(nPos) || pos.enMismaCol(nPos));
-        boolean esMovConVision = false;
-        int pC = pos.getCol();
-        int pF = pos.getFila();
-        int nC = nPos.getCol();
-        int nF = nPos.getFila();
-
-        if(nF > pF) {
-            // Dir. Arriba
-            for(int i = 0; (pF + i <= 8)
-                    && t.estaVacia(new Posicion(pC, pF + i)); i++) {
-                if(nF <= i)
-                    esMovConVision = true;
-            }
-        } else if(nF < pF) {
-            // Dir. Abajo
-            for(int i = 0; (pF - i >= 1)
-                    && t.estaVacia(new Posicion(pC, pF - i)); i++) {
-                if(nF >= i)
-                    esMovConVision = true;
-            }
-        } else if(nC > pC) {
-            // Dir. Izquierda
-            for(int i = 0; (pC - i >= 1)
-                    && t.estaVacia(new Posicion(pC - i, pF)); i++) {
-                if(nC >= i)
-                    esMovConVision = true;
-            }
-        } else if(nC < pC) {
-            // Dir. Derecha
-            for(int i = 0; (pC + i <= 8)
-                    && t.estaVacia(new Posicion(pC + i, pF)); i++) {
-                if(pC <= i)
-                    esMovConVision = true;
-            }
-        }
-
-        return (esMovEnCruz && esMovConVision);
+        return (p.getPos().enMismaCol(nPos) || p.getPos().enMismaFila(nPos));
     }
 
-    // TODO Añadir restricciones faltantes
     private boolean esMovLegalAlfil(Pieza p, Posicion nPos) {
         return p.getPos().esMovDiagonal(nPos);
     }
@@ -281,42 +346,58 @@ public class Partida {
     }
 
     private boolean esMovLegalPeon(Pieza p, Posicion nPos) {
-        int dir = 0;
-        boolean enFilaMov2C = false;
-        int desp1C;
-        int desp2C;
-        Posicion posMov1C;
-        Posicion posMov2C;
-        Posicion posComI;
-        Posicion posComD;
-        Posicion pos = p.getPos();
-        int col = pos.getCol();
-        int fila = pos.getFila();
+        return (esMovPeon1Cas(p, nPos) || esMovPeon2Cas(p, nPos)
+                || esMovPeonComerIzq(p, nPos) || esMovPeonComerDer(p, nPos));
+    }
 
-        if(p.getColor() == BLANCO) {
-            dir = 1;
-            if(pos.getFila() == 2)
-                enFilaMov2C = true;
-        }
-        else if(p.getColor() == NEGRO) {
-            dir = -1;
-            if(pos.getFila() == 7)
-                enFilaMov2C = true;
-        }
+    private boolean esMovPeon1Cas(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
 
-        desp1C = dir;
-        desp2C = 2 * dir;
+        if(p.esBlanca())
+            posVal = new Posicion(p, 0, 1);
+        else if(p.esNegra())
+            posVal = new Posicion(p, 0 , -1);
 
-        posMov1C = new Posicion(col, fila + desp1C);
-        posMov2C = new Posicion(col, fila + desp2C);
-        posComI = new Posicion(col - 1, fila + desp1C);
-        posComD = new Posicion(col + 1, fila + desp1C);
+        return (posVal != null && nPos.esMismaPos(posVal));
+    }
 
-        return (nPos.esMismaPos(posMov1C) && t.estaVacia(posMov1C)
-                || (nPos.esMismaPos(posMov2C) && enFilaMov2C
-                && t.estaVacia(posMov1C) && t.estaVacia(posMov2C))
-                || nPos.esMismaPos(posComI) && t.estaOcupada(posComI)
-                || nPos.esMismaPos(posComD) && t.estaOcupada(posComD));
+    private boolean esMovPeon2Cas(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
+
+        if(p.esBlanca() && (p.getFila() == 2)
+                && t.estaVacia(new Posicion(p, 0, 1)))
+            posVal = new Posicion(p, 0, 2);
+        else if(p.esNegra() && (p.getFila() == 7)
+                && t.estaVacia(new Posicion(p, 0, -1)))
+            posVal = new Posicion(p, 0, -2);
+
+        return (posVal != null && nPos.esMismaPos(posVal));
+    }
+
+    private boolean esMovPeonComerIzq(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
+
+        if(p.getCol() >= 2)
+            if(p.esBlanca())
+                posVal = new Posicion(p, -1, 1);
+            else if(p.esNegra())
+                posVal = new Posicion(p, -1, -1);
+
+        return (posVal != null && posVal.esMismaPos(nPos) && t.estaOcupada(nPos)
+                && (p.getColor() != t.getPieza(nPos).getColor()));
+    }
+
+    private boolean esMovPeonComerDer(Pieza p, Posicion nPos) {
+        Posicion posVal = null;
+
+        if(p.getCol() <= 7)
+            if(p.esBlanca())
+                posVal = new Posicion(p, 1, 1);
+            else if(p.esNegra())
+                posVal = new Posicion(p, 1, -1);
+
+        return (posVal != null && posVal.esMismaPos(nPos) && t.estaOcupada(nPos)
+                && (p.getColor() != t.getPieza(nPos).getColor()));
     }
 
     private boolean noSuperaMargenes(Posicion pos) {
@@ -327,15 +408,11 @@ public class Partida {
         return !p.getPos().esMismaPos(nPos);
     }
 
-    private boolean noEsPiezaPropia(Pieza p, Posicion nPos) {
-        if(t.getPieza(nPos) == null)
+    private boolean esCasillaVaciaOEnemiga(Pieza p, Posicion nPos) {
+        if(t.estaVacia(nPos))
             return true;
         else
             return (p.getColor() != t.getPieza(nPos).getColor());
-    }
-
-    private boolean esPosVacia(Posicion pos) {
-        return t.estaVacia(pos);
     }
 
     private boolean noSuperaNumPiezas() {
@@ -371,6 +448,10 @@ public class Partida {
                 noHayPeonEnMargenes = false;
         }
         return noHayPeonEnMargenes;
+    }
+
+    private boolean esPosVacia(Posicion nPos) {
+        return t.estaVacia(nPos);
     }
 
     private boolean numReyesValido() {
