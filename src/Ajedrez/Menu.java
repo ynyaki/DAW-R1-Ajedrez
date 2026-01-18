@@ -1,6 +1,14 @@
 import java.util.Scanner;
 
-// TODO Documentar
+/**
+ * Programa de un juego de ajedrez, que permite configurar un tablero
+ * con una posición inicial, así como ejecutar un movimiento, válido o no según
+ * siga las reglas del ajedrez. El movimiento lo ejecutará el bando elegido, o
+ * aquel que comience en jaque. Un movimiento ilegal hará que se pierda
+ * la partida automáticamente.
+ * @version 1.0 (20/01/26)
+ * @author Juan, Iván, Manuel
+ */
 public abstract class Menu {
 
     private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
@@ -17,6 +25,10 @@ public abstract class Menu {
     private static Partida partida;
     private static Pieza.Color turno;
 
+    /**
+     * Ejecuta el programa de ajedrez, permitiendo al usuario elegir
+     * una configuración inicial, elegir turno y realizar un movimiento.
+     */
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
         partida = new Partida();
@@ -30,38 +42,29 @@ public abstract class Menu {
         // juego();
     }
 
-    /**
-     * Metodo para mostrar el mensaje de Bienvenida.
-     * Solo <strong>imprime</strong> por terminal.
-     */
-    public static void bienvenida() {
-        System.out.println("¡Bienvenido a nuestro programa de ajedrez!");
+
+    private static void bienvenida() {
+        System.out.println("PROGRAMA DE AJEDREZ");
+        System.out.println("-------------------");
+        System.out.println();
         System.out.println("Desarrollado por Iñaki, Iván, Juan y Manuel.");
-        System.out.print("\n");
-
-        System.out.println("Importa tu partida: ");
-        System.out.println("Se debe usar la notación algebraica.");
-        System.out.println("Consiste:");
-        System.out.println("\t· Inicial de la pieza más su posición.");
-        System.out.println("\t· Los peones no tienen inicial.");
-        System.out.println("\t· La inicial en mayuscula.");
-        System.out.println("\t· La posición en minuscula.");
-        System.out.println("\t· Primero se indica la pieza.");
-        System.out.println("\t· Segundo se indica la fila.");
-        System.out.println("\t· Tercero se indica la columna.");
-        System.out.println("\t· Sepera cada pieza con un espacio.");
-
-        System.out.print("\n");
-
-        System.out.println("Leyenda:");
-        System.out.println("R → Rey   | D → Dama    |   T   → Torre");
-        System.out.println("A → Alfil | C → Caballo | vacío → Peón");
-        System.out.println("* El peón puede no tener letra.");
-
-        System.out.print("\n");
-
-        System.out.println("Ejemplo.:");
+        System.out.println("Reto 1 de Programación (DAW) - IES Severo Ochoa");
+        System.out.println();
+        System.out.println("Importación de partida");
+        System.out.println("----------------------");
+        System.out.println();
+        System.out.println("Escribe los datos iniciales de la partida usando la notación algebraica:");
+        System.out.println("  - Inicial de la pieza + Posición");
+        System.out.println("  - Posición: Columna (letra) + Fila (número)");
+        System.out.println("  - Los peones no necesitan letra");
+        System.out.println("  - Las piezas se separan con espacios");
+        System.out.println();
+        System.out.println("Ejemplo de importación:");
         System.out.println("Rg1 Tf1 h2 g2 f2 d4 e4 Ce5 a4 b3 c2 Ab2 Ta1");
+        System.out.println();
+        System.out.println("Iniciales de piezas:");
+        System.out.println("R → Rey  | T → Torre | C → Caballo");
+        System.out.println("D → Dama | A → Alfil | ∅ → Peón");
     }
 
     /**
@@ -206,7 +209,7 @@ public abstract class Menu {
 
         // Crear BLANCAS.
         for (int i = 0; i < blancas.length; i++) {
-            tipoPieza = Pieza.obtenerTipoPieza(blancas[i]);
+            tipoPieza = Pieza.getTipoPieza(blancas[i]);
             col = (blancas[i].length() == 3) ? blancas[i].charAt(1) : blancas[i].charAt(0); // Recoge la columna especificada en la orden.
             fila = Integer.parseInt(        // Recoge la fila especificada en la orden.
                     String.valueOf(blancas[i].charAt(blancas[i].length() - 1))  // Si no se pasa a String trataría el char como su número de UNICODE.
@@ -217,7 +220,7 @@ public abstract class Menu {
 
         // Crear NEGRAS.
         for (int i = 0; i < negras.length; i++) {
-            tipoPieza = Pieza.obtenerTipoPieza(negras[i]);
+            tipoPieza = Pieza.getTipoPieza(negras[i]);
             col = (negras[i].length() == 3) ? negras[i].charAt(1) : negras[i].charAt(0);
             fila = Integer.parseInt(
                     String.valueOf(negras[i].charAt(negras[i].length() - 1))

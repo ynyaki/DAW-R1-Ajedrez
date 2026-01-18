@@ -1,7 +1,20 @@
 import java.util.InputMismatchException;
 
-// TODO Documentar
+/**
+ * Clase que permite crear y operar con posiciones bidimensionales para
+ * ser usadas en partidas de ajedrez y otros juegos basados en tableros
+ * de cuadrícula. Almacena un par ordenado de números naturales: columna
+ * y fila de la posición, respectivamente.
+ * @version 1.0 (20/01/26)
+ * @author Iñaki, Juan
+ */
 public class Posicion {
+
+    // FIXME En Formato
+    public Posicion(char col, int fila) {
+        this.col = col - 'a' - 1;
+        this.fila = fila;
+    }
 
     private final int col;
     private final int fila;
@@ -41,9 +54,10 @@ public class Posicion {
         System.out.println(p1.esMovEnL(p2));
     }
 
-    // TODO Revisar
     /**
-     * Crea un vector posición, en formato (columna, fila). Con formato número de columna, número de fila.
+     * Crea un vector posición, con formato <code>columna, fila</code>.
+     * Cada coordenada debe ser un número natural (en caso contrario,
+     * lanza <code>InputMismatchException</code>.
      * @param col Columna (posición horizontal) de la posición.
      * @param fila Fila (posición vertical) de la posición.
      */
@@ -55,92 +69,115 @@ public class Posicion {
         this.fila = fila;
     }
 
-    // TODO Documentar
-    public Posicion(Pieza p, int colAdd, int filaAdd) {
-        this(p.getCol() + colAdd, p.getFila() + filaAdd);
-    }
-
-    // TODO Revisar
     /**
-     * Crea un vector posición, en formato (columna, fila). Con formato letra, número.
-     * @param col Columna (posición horizontal) de la posición.
-     * @param fila Fila (posición vertical) de la posición.
+     * <p>
+     *     Crea un vector posición, con formato <code>columna, fila</code>.
+     *     Cada coordenada debe ser un número natural (en caso contrario,
+     *     lanza <code>InputMismatchException</code>.
+     * </p>
+     * <p>
+     *     Esta posición se forma sumando la posición parámetro con
+     *     los parámetros de entrada: <code>colAdd</code> para la nueva
+     *     columna y <code>filaAdd</code> para la nueva fila.
+     * </p>
+     * @param pos Pieza
      */
-    public Posicion(char col, int fila) {
-        int unicodeAnteriorPrimeraCol = 'a' - 1;
-        this.col = col - unicodeAnteriorPrimeraCol;
-        this.fila = fila;
+    public Posicion(Posicion pos, int colAdd, int filaAdd) {
+        this(pos.getCol() + colAdd, pos.getFila() + filaAdd);
     }
 
-    // TODO Revisar
     /**
-     * Devuelve la columna (posición horizontal) de la posición.
+     * Devuelve la columna (pos. en el eje x) de la posición.
      * @return Columna de la posición.
      */
     public int getCol() {
         return col;
     }
 
-    // TODO Revisar
     /**
-     * Devuelve la fila (posición vertical) de la posición.
+     * Devuelve la fila (pos. en el eje y) de la posición.
      * @return Fila de la posición.
      */
     public int getFila() {
         return fila;
     }
 
-    // TODO Revisar
     /**
-     * Comprueba si la posición pasada por parametros es la misma que la del objeto.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return <code>True</code> si contiene el mismo contenido, <code>False</code> en caso contrario.
+     * Comprueba si esta posición es igual a la especificada por parámetro.
+     * @param pos Posición a comparar.
+     * @return Si ambas posiciones son idénticas.
      */
     public boolean esMismaPos(Posicion pos) {
         return (this.col == pos.getCol() && this.fila == pos.getFila());
     }
 
-    // TODO Revisar
     /**
-     * Comprueba si la columna pasada por parametro es la misma que la que contiene el objeto.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return <code>True</code> si contiene el mismo contenido, <code>False</code> en caso contrario.
+     * Comprueba si la columna de esta posición es igual a la de la especificada
+     * por parámetro.
+     * @param pos Posición con la que comparar.
+     * @return Si las columnas de ambas posiciones son idénticas.
      */
     public boolean enMismaCol(Posicion pos) {
         return (this.col == pos.getCol());
     }
 
-    // TODO Revisar
     /**
-     * Comprueba si la columna pasada por parametro es la misma que la que contiene el objeto.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return <code>True</code> si contiene el mismo contenido, <code>False</code> en caso contrario.
+     * Comprueba si la fila de esta posición es igual a la de la especificada
+     * por parámetro.
+     * @param pos Posición con la que comparar.
+     * @return Si las filas de ambas posiciones son idénticas.
      */
     public boolean enMismaFila(Posicion pos) {
         return (this.fila == pos.getFila());
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la columna de esta posición es igual a la especificada
+     * por parámetro.
+     * @param col Columna con la que comparar.
+     * @return Si la columna de la posición y la columna parámetro son idénticas.
+     */
     public boolean enCol(int col) {
         return (this.col == col);
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la fila de esta posición es igual a la especificada
+     * por parámetro.
+     * @param fila Fila con la que comparar.
+     * @return Si la fila de la posición y la fila parámetro son idénticas.
+     */
     public boolean enFila(int fila) {
         return (this.fila == fila);
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la diferencia de la posición respecto a la posición
+     * parámetro es de una sola casilla.
+     * @param pos Posición con la que comparar.
+     * @return Si ambas posiciones están a una casilla de distancia
+     *         en cualquier dirección.
+     */
     public boolean esMov1Casilla(Posicion pos) {
         return (this.nColsDif(pos) <= 1 && this.nFilasDif(pos) <= 1);
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si la posición se encuentra en la misma diagonal que
+     * la posición parámetro.
+     * @param pos Posición con la que comparar.
+     * @return Si ambas posiciones están en la misma diagonal.
+     */
     public boolean esMovDiagonal(Posicion pos) {
         return (this.nColsDif(pos) == this.nFilasDif(pos));
     }
 
-    // TODO Documentar
+    /**
+     * Comprueba si una posición forma una L con respecto a otra
+     * (dos casillas en una dirección y una casilla en la otra).
+     * @param pos Posición con la que comparar.
+     * @return Si ambas posiciones forman una L.
+     */
     public boolean esMovEnL(Posicion pos) {
         return ((Math.abs(this.nColsDif(pos)) == 2
                 && this.nFilasDif(pos) == 1)
@@ -148,43 +185,23 @@ public class Posicion {
                 && this.nFilasDif(pos) == 2));
     }
 
-    // TODO Revisar
     /**
-     * Devuelve la diferencia entre las filas de dos objeto posición.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return Devuelve un <code>int</code> sobre la distancia entre las dos filas.
-     */
-    public int nFilasDif(Posicion pos) {
-        return Math.abs(pos.getFila() - this.fila);
-    }
-
-    // TODO Revisar
-    /**
-     * Devuelve la diferencia entre las columnas de dos objeto posición.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return Devuelve un <code>int</code> sobre la distancia entre las dos columnas.
+     * Devuelve la diferencia de columnas entre esta posición y la posición
+     * pasada por parámetro.
+     * @param pos Posición con la que comparar.
+     * @return Número de columnas de diferencia entre ambas posiciones.
      */
     public int nColsDif(Posicion pos) {
         return Math.abs(pos.getCol() - this.col);
     }
 
-    // TODO Revisar
     /**
-     * Devuelve la diferencia entre las filas de dos objeto posición.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return Devuelve un <code>int</code> sobre la distancia entre las dos filas.
+     * Devuelve la diferencia de filas entre esta posición y la posición
+     * pasada por parámetro.
+     * @param pos Posición con la que comparar.
+     * @return Número de filas de diferencia entre ambas posiciones.
      */
-    public int nFilasDifSigno(Posicion pos) {
-        return (pos.getFila() - this.fila);
-    }
-
-    // TODO Revisar
-    /**
-     * Devuelve la diferencia entre las columnas de dos objeto posición.
-     * @param pos Objeto de tipo <code>Posicion</code>.
-     * @return Devuelve un <code>int</code> sobre la distancia entre las dos columnas.
-     */
-    public int nColsDifSigno(Posicion pos) {
-        return (pos.getCol() - this.col);
+    public int nFilasDif(Posicion pos) {
+        return Math.abs(pos.getFila() - this.fila);
     }
 }
