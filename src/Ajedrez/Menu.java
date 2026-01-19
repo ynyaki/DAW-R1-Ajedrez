@@ -32,233 +32,83 @@ public abstract class Menu {
     public static void ejecutar(Scanner sc) {
         Menu.sc = sc;
         partida = new Partida();
-        bienvenida();
-        importar();
+        Pieza.Color colorSalida;
 
+        Formato.bienvenida();
+        Formato.importar(sc, partida);
+
+        System.out.println("La partida actual:");
         partida.imprTablero();
+        System.out.print("\n");
 
-        // TODO
-        // ordenJuego();
-        // juego();
+        colorSalida = elegirTurno(sc);
+
+        Juego.main(colorSalida, partida, sc);
     }
 
+    private static Pieza.Color elegirTurno(Scanner sc){
+        final String ROJO = "\u001B[31m";
+        final String RESET = "\u001B[0m";
 
-    private static void bienvenida() {
-        System.out.println("PROGRAMA DE AJEDREZ");
-        System.out.println("-------------------");
-        System.out.println();
-        System.out.println("Desarrollado por Iñaki, Iván, Juan y Manuel.");
-        System.out.println("Reto 1 de Programación (DAW) - IES Severo Ochoa");
-        System.out.println();
-        System.out.println("Importación de partida");
-        System.out.println("----------------------");
-        System.out.println();
-        System.out.println("Escribe los datos iniciales de la partida usando la notación algebraica:");
-        System.out.println("  - Inicial de la pieza + Posición");
-        System.out.println("  - Posición: Columna (letra) + Fila (número)");
-        System.out.println("  - Los peones no necesitan letra");
-        System.out.println("  - Las piezas se separan con espacios");
-        System.out.println();
-        System.out.println("Ejemplo de importación:");
-        System.out.println("Rg1 Tf1 h2 g2 f2 d4 e4 Ce5 a4 b3 c2 Ab2 Ta1");
-        System.out.println();
-        System.out.println("Iniciales de piezas:");
-        System.out.println("R → Rey  | T → Torre | C → Caballo");
-        System.out.println("D → Dama | A → Alfil | ∅ → Peón");
+        String color;
+        Pieza.Color colorEnJaque = turnoJaque();
+        Pieza.Color pColor = null;
+        boolean esTurnoValido = false;
+
+        if (colorEnJaque != null) {
+            esTurnoValido = true;
+            if (colorEnJaque == BLANCO) {
+                System.out.printf("%s¡MUEVEN LAS BLANCAS AL ESTAR EN AMENAZA DE JAQUE!\n%s", ROJO, RESET);
+                return BLANCO;
+            }
+
+            if (colorEnJaque == NEGRO) {
+                System.out.printf("%s¡MUEVEN LAS NEGRAS AL ESTAR EN AMENAZA DE JAQUE!\n%s", ROJO, RESET);
+                return NEGRO;
+            }
+        }
+
+        do{
+            System.out.print("Que color quieres que empiece primero (b/n): ");
+            color = sc.nextLine();
+
+            if(color.equalsIgnoreCase("b")){
+                pColor = Pieza.Color.BLANCO;
+                esTurnoValido=true;
+            } else if(color.equalsIgnoreCase("n")) {
+                pColor = Pieza.Color.NEGRO;
+                esTurnoValido=true;
+            } else {
+                System.out.println("Error, Introduce b para Blancas o n para negras");
+            }
+        } while(!esTurnoValido);
+
+        if(pColor == BLANCO){
+            System.out.println("Mueven las Blancas.");
+        }
+
+        if(pColor == NEGRO){
+            System.out.println("Mueven las Negras.");
+        }
+
+        return pColor;
     }
 
     /**
-     * Metodo para la lógica de añadir las piezas de una partida.
-     * <strong>Valida</strong> y <strong>coloca</strong> las piezas en el tablero.
+     * Comprueba si existe un jaque, y devuelve el color en jaque.
+     * @return <code>Pieza.Color</code>
      */
-    public static void importar() {
-        boolean importacionCorrecta;
-        String piezasBlancas;
-        String piezasNegras;
-        String[] listaPiezasBlancas;
-        String[] listaPiezasNegras;
-        Pieza[] listaPiezas;
+    private static Pieza.Color turnoJaque(){
+        if(partida.estaReyEnJaque(Pieza.Color.BLANCO) ){
+            return Pieza.Color.BLANCO;
+        }
 
-        do {
-            System.out.print("Piezas BLANCAS: ");
-            piezasBlancas = sc.nextLine();
+        if(partida.estaReyEnJaque(Pieza.Color.NEGRO)){
+            return Pieza.Color.NEGRO;
+        }
 
-            System.out.print("Piezas NEGRAS: ");
-            piezasNegras = sc.nextLine();
-
-            System.out.print("\n");
-
-            listaPiezasBlancas = listarPiezas(piezasBlancas);
-            listaPiezasNegras = listarPiezas(piezasNegras);
-            importacionCorrecta = true;
-
-            // Valida la sintaxis
-            if (!esValidarSintaxis(listaPiezasBlancas) || !esValidarSintaxis(listaPiezasNegras)) {
-                importacionCorrecta = false;
-                System.out.println("Se ha encontrado un problema en la importación.");
-            }
-
-            // Crea las piezas y se valida.
-            if (importacionCorrecta) {
-                listaPiezas = crearPiezas(listaPiezasBlancas, listaPiezasNegras);
-
-                partida.crearNuevoTablero();    // Porque en caso de haberse ejecutado, las piezas se mantienen en el tablero.
-
-                // Validación dínamica mientras se añaden las piezas.
-                for (Pieza pieza:listaPiezas) {
-                    if (!partida.colocar(pieza)) {
-                        importacionCorrecta = false;
-                        System.out.println("Se ha encontrado un problema en la importación.");
-                        break;
-                    }
-                }
-
-                // Validación posterior a colocar las piezas.
-                if (!partida.validarPartida() && importacionCorrecta) {
-                    importacionCorrecta = false;
-                    System.out.println("Se ha encontrado un problema en la importación.");
-                }
-            }
-        } while(!importacionCorrecta);
+        return null;
     }
-
-    /**
-     * Recorta las ordenes pasadas por parametro y las almacena en un array.
-     * @param conjuntoPiezas Un conjunto de piezas destro de un string en formato "Rg1 Ta2 a2"
-     * @return Una array con las posiciones pasadas separadas.
-     */
-    private static String[] listarPiezas(String conjuntoPiezas) {
-        conjuntoPiezas = conjuntoPiezas.trim();
-        StringBuilder piezasIterables = new StringBuilder(conjuntoPiezas);
-        String[] piezas;
-
-        // Sacar el número de ordenes en el string.
-        int cantidadEspacios = 1;
-        for (int i = 0; i < conjuntoPiezas.length(); i++) {
-            if (conjuntoPiezas.charAt(i) == ' ') cantidadEspacios++;
-        }
-
-        piezas = new String[cantidadEspacios];
-
-        // Añadir las ordenes al array.
-        for (int i = 0; i < piezas.length; i++) {
-            String pieza = (piezasIterables.indexOf(" ") == -1 ) ?
-                    piezasIterables.toString() :
-                    piezasIterables.substring(0, piezasIterables.indexOf(" ") + 1);
-
-            piezas[i] = pieza.trim();
-            piezasIterables.delete(0, piezasIterables.indexOf(" ") + 1);
-        }
-        return piezas;
-    }
-
-    /**
-     * Valida que la sistexis de la orden sea correcta.
-     * @param listaPiezas Array con las ordenes a validar.
-     * @return <code>True</code> si la sintaxis es correcta
-     * <code>False</code> si la sintaxis <strong>NO</strong> es correcta.
-     */
-    private static boolean esValidarSintaxis(String[] listaPiezas) {
-        char[] inicialesValidas = {'R', 'D', 'T', 'A', 'C'};
-
-        for (String pieza:listaPiezas){
-            if (pieza.length() > 3 || pieza.length() < 2) return false;
-
-            if (pieza.length() == 3) {
-                boolean esInicialValida = false;
-
-                if (!Character.isLetter(pieza.charAt(0))) return false;
-                if (!Character.isLetter(pieza.charAt(1))) return false;
-                if (!Character.isDigit(pieza.charAt(2))) return false;
-
-                if (Character.isLowerCase(pieza.charAt(0))) return false;
-                if (Character.isUpperCase(pieza.charAt(1))) return false;
-
-                for (char inicial:inicialesValidas) {
-                    if (pieza.charAt(0) == inicial) {
-                        esInicialValida = true;
-                        break;
-                    }
-                }
-
-                if (!esInicialValida) return false;
-            }
-
-            if (pieza.length() == 2) {
-                if (!Character.isLetter(pieza.charAt(0))) return false;
-                if (!Character.isDigit(pieza.charAt(1))) return false;
-
-                if (Character.isUpperCase(pieza.charAt(0))) return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Crea un array con las piezas que se ordenan en los arrays pasador por parametro.
-     * @param blancas Array con las ordenes de colocación de la piezas blancas.
-     * @param negras Array con las ordenes de colocación de las piezas negras.
-     * @return Array de tipo <code>Pieza</code> con las todas las piezas de las dos listas.
-     */
-    private static Pieza[] crearPiezas(String[] blancas, String[] negras) {
-        Pieza[] listaPiezas = new Pieza[blancas.length + negras.length]; // Crea un array con la longitud de los dos arrays.
-        Pieza.Tipo tipoPieza;
-        char col;
-        int fila;
-
-        // Crear BLANCAS.
-        for (int i = 0; i < blancas.length; i++) {
-            tipoPieza = Pieza.getTipoPieza(blancas[i]);
-            col = (blancas[i].length() == 3) ? blancas[i].charAt(1) : blancas[i].charAt(0); // Recoge la columna especificada en la orden.
-            fila = Integer.parseInt(        // Recoge la fila especificada en la orden.
-                    String.valueOf(blancas[i].charAt(blancas[i].length() - 1))  // Si no se pasa a String trataría el char como su número de UNICODE.
-            );
-
-            listaPiezas[i] = new Pieza(tipoPieza, Pieza.Color.BLANCO, new Posicion(col, fila)); // Crea y añade la pieza al Array.
-        }
-
-        // Crear NEGRAS.
-        for (int i = 0; i < negras.length; i++) {
-            tipoPieza = Pieza.getTipoPieza(negras[i]);
-            col = (negras[i].length() == 3) ? negras[i].charAt(1) : negras[i].charAt(0);
-            fila = Integer.parseInt(
-                    String.valueOf(negras[i].charAt(negras[i].length() - 1))
-            );
-
-            listaPiezas[blancas.length + i] = new Pieza(tipoPieza, Pieza.Color.NEGRO, new Posicion(col, fila));
-        }
-
-        return listaPiezas;
-    }
-
-    private static boolean validarMovimiento(String movimiento) {
-            // Si el usuario no ha escrito nada (null), es inválido ya de por si xD
-            if (movimiento == null) {
-                /* return false;*/
-                // TODO que no devuelva falso sino que simplemente vuelva a pedir movimiento
-            }
-
-            //quitamos espacios al principio y al final
-            // Ej: "  Ta4 Ta5  " → "Ta4 Ta5"
-            movimiento = movimiento.trim();
-
-        /*
-         Defino como se ha de poner
-         Ejemplos válidos:
-         - Ta4
-         - Ac3
-         - a2   (peón, sin letra)
-        */
-            String norma = "[TACDR]?[a-h][1-8]";
-
-            String movimientoValido = norma + "\\s+" + norma;
-        /*
-         comprueba si se cumple la regla que hemos hecho
-         */
-            return movimiento.matches(movimientoValido);
-        }
-
 
     private static Pieza.Tipo menuPromocionar() {
         // TODO Mensaje de pedir pieza (con instrucciones de comando para cada pieza)

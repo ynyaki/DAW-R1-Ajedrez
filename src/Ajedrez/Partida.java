@@ -79,6 +79,22 @@ public class Partida {
             pruebaMover(p, 5, 3, 5, 5);
     }
 
+    public Pieza[] getPiezasColor(Pieza.Color c) {
+        Pieza[] listaPiezas = new Pieza[t.getNumPiezas(c)];
+        int cont = 0;
+
+        for (Pieza[] fila : t.get()) {
+            for (Pieza p : fila) {
+                if (p != null && p.getColor() == c) {
+                    listaPiezas[cont] = p;
+                    cont++;
+                }
+            }
+        }
+
+        return listaPiezas;
+    }
+
     /** Inicializa un tablero vacío de 8x8 para la partida. */
     public Partida() {
         crearNuevoTablero();
@@ -314,6 +330,18 @@ public class Partida {
      */
     public int getHashTablero() {
         return Arrays.deepHashCode(t.get());
+    }
+
+    public int getCantPiezaMovil (
+            Pieza.Color color, Pieza.Tipo tipo, Posicion nPos) {
+        int contPiezasEncontradas = 0;
+
+        for(Pieza[] fila : t.get())
+            for(Pieza p : fila)
+                if((p != null) && (p.getTipo() == tipo)
+                        && (p.getColor() == color) && esMovLegal(p, nPos)) contPiezasEncontradas++;
+
+        return contPiezasEncontradas;
     }
 
     private Pieza getPiezaMovil(
