@@ -29,19 +29,7 @@ public class Partida {
         p.crearTableroClasico();
         pruebaImprTablero(p);
 
-        pruebaMover(p, 5, 2, 5, 4);
-            pruebaMover(p, 5, 7, 5, 7); // Misma pos
-            pruebaMover(p, 5, 7, 5, 4); // Mov de 3C + cas ocupada
-        pruebaMover(p, 5, 7, 5, 5);
-        pruebaMover(p, 7, 1, 6, 3);
-        pruebaMover(p, 6, 7, 6, 6);
-        pruebaMover(p, 6, 3, 5, 5);
-        pruebaMover(p, 6, 6, 5, 5);
             pruebaMover(p, 1, 1, 1, 5);
-            pruebaMover(p, 1, 1, 6, 1);
-        pruebaMover(p, 1, 2, 1, 4);
-            pruebaMover(p, 1, 1, 1, 4);
-        pruebaMover(p, 1, 1, 1, 3);
     }
 
     /** Inicializa un tablero vacío de 8x8 para la partida. */
@@ -341,11 +329,36 @@ public class Partida {
     }
 
     private boolean esMovLegalTorre(Pieza p, Posicion nPos) {
-        return (p.getPos().enMismaCol(nPos) || p.getPos().enMismaFila(nPos));
+        return ((p.getPos().enMismaCol(nPos) || p.getPos().enMismaFila(nPos))
+                && (esMovLegalConVision(p, nPos, 0, 1)
+                || esMovLegalConVision(p, nPos, 0, -1)
+                || esMovLegalConVision(p, nPos, -1, 0)
+                || esMovLegalConVision(p, nPos, 1, 0)));
     }
 
     private boolean esMovLegalAlfil(Pieza p, Posicion nPos) {
-        return p.getPos().esMovDiagonal(nPos);
+        return (p.getPos().esMovDiagonal(nPos)
+                && (esMovLegalConVision(p, nPos, -1, -1)
+                || esMovLegalConVision(p, nPos, 1, 1)
+                || esMovLegalConVision(p, nPos, -1, 1)
+                || esMovLegalConVision(p, nPos, 1, -1)));
+    }
+
+    private boolean esMovLegalConVision(Pieza p, Posicion nPos, int iC, int iF) {
+        Posicion iPos = null;
+        boolean esPosMax = enBordeDelTablero(p);
+        for(int i = 1; !esPosMax; i++) {
+            iPos = new Posicion(p.getPos(), (iC * i), (iF * i));
+            esPosMax = (enBordeDelTablero(p)
+                    || iPos.esMismaPos(nPos)
+                    || t.estaOcupada(iPos));
+        }
+        return ((iPos != null) && iPos.esMismaPos(nPos));
+    }
+
+    private boolean enBordeDelTablero(Pieza p) {
+        Posicion pos = p.getPos();
+        return (pos.enFila(1) || pos.enFila(8) || pos.enCol(1) || pos.enCol(8));
     }
 
     private boolean esMovLegalCaballo(Pieza p, Posicion nPos) {
@@ -393,8 +406,13 @@ public class Partida {
             else if(p.esNegra())
                 posVal = new Posicion(pos, -1, -1);
 
-        return (posVal != null && posVal.esMismaPos(nPos) && t.estaOcupada(nPos)
-                && (p.getColor() != t.getPieza(nPos).getColor()));
+        return ((posVal != null) && posVal.esMismaPos(nPos)
+                && hayPiezaEnemiga(p, nPos));
+    }
+
+    private boolean hayPiezaEnemiga(Pieza p, Posicion pos) {
+        return (t.estaOcupada(pos)
+                && t.getPieza(p.getPos()).esDifColor(t.getPieza(pos)));
     }
 
     private boolean esMovPeonComerDer(Pieza p, Posicion nPos) {
@@ -407,8 +425,8 @@ public class Partida {
             else if(p.esNegra())
                 posVal = new Posicion(pos, 1, -1);
 
-        return ((posVal != null) && posVal.esMismaPos(nPos) && t.estaOcupada(nPos)
-                && (p.getColor() != t.getPieza(nPos).getColor()));
+        return ((posVal != null) && posVal.esMismaPos(nPos)
+                && hayPiezaEnemiga(p, nPos));
     }
 
     private boolean noSuperaMargenes(Posicion pos) {

@@ -107,6 +107,24 @@ public class Pieza {
     }
 
     /**
+     * Devuelve si la pieza es del mismo color que otra pasada por parámetro.
+     * @param p Pieza con la que comparar.
+     * @return Si ambas piezas son del mismo color.
+     */
+    public boolean esMismoColor(Pieza p) {
+        return (color == p.getColor());
+    }
+
+    /**
+     * Devuelve si la pieza es de distinto color a otra pasada por parámetro.
+     * @param p Pieza con la que comparar.
+     * @return Si ambas piezas son de diferente color.
+     */
+    public boolean esDifColor(Pieza p) {
+        return (color != p.getColor());
+    }
+
+    /**
      * Devuelve la posición de la pieza en el tablero.
      * @return El objeto <code>Posición</code> de la pieza.
      */
