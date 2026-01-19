@@ -27,9 +27,56 @@ public class Partida {
     public static void main(String[] args) {
         Partida p = new Partida();
         p.crearTableroClasico();
-        pruebaImprTablero(p);
+        imprTablero(p);
 
+        // TORRE
             pruebaMover(p, 1, 1, 1, 5);
+        pruebaMover(p, 1, 2, 1, 4);
+        pruebaMover(p, 1, 1, 1, 3);
+            pruebaMover(p, 1, 3, 1, 5);
+        pruebaMover(p, 1, 3, 4, 3);
+            pruebaMover(p, 4, 3, 4, 8);
+        pruebaMover(p, 4, 3, 4, 7);
+            pruebaMover(p, 4, 7, 4, 2);
+
+        // ALFIL
+        pruebaMover(p, 5, 2, 5, 3);
+            pruebaMover(p, 6, 1, 8, 3);
+            pruebaMover(p, 6, 1, 7, 2);
+            pruebaMover(p, 6, 1, 3, 3);
+        pruebaMover(p, 6, 1, 4, 3);
+        pruebaMover(p, 4, 3, 8, 7);
+
+        // DAMA
+        pruebaMover(p, 4, 1, 6, 3);
+        pruebaMover(p, 6, 3, 6, 7);
+        pruebaMover(p, 6, 7, 4, 5);
+        pruebaMover(p, 4, 5, 5, 4);
+            pruebaMover(p, 5, 4, 3, 5);
+
+        // PEÓN
+        pruebaMover(p, 5, 7, 5, 5);
+            pruebaMover(p, 5, 5, 5, 4);
+            pruebaMover(p, 5, 5, 5, 3);
+            pruebaMover(p, 5, 5, 4, 4);
+            pruebaMover(p, 5, 5, 5, 6);
+        pruebaMover(p, 5, 4, 6, 4);
+        pruebaMover(p, 5, 5, 6, 4);
+            pruebaMover(p, 6, 4, 7, 3);
+        pruebaMover(p, 6, 4, 5, 3);
+
+        // CABALLO
+        pruebaMover(p, 7, 1, 6, 3);
+        pruebaMover(p, 6, 3, 7, 5);
+            pruebaMover(p, 7, 5, 8, 7);
+        pruebaMover(p, 7, 5, 6, 7);
+        pruebaMover(p, 6, 7, 8, 8);
+
+        // REY
+        pruebaMover(p, 5, 1, 5, 2);
+            pruebaMover(p, 5, 2, 4, 2);
+        pruebaMover(p, 5, 2, 5, 3);
+            pruebaMover(p, 5, 3, 5, 5);
     }
 
     /** Inicializa un tablero vacío de 8x8 para la partida. */
@@ -346,19 +393,19 @@ public class Partida {
 
     private boolean esMovLegalConVision(Pieza p, Posicion nPos, int iC, int iF) {
         Posicion iPos = null;
-        boolean esPosMax = enBordeDelTablero(p);
+        boolean esPosMax = estaEnBordeTablero(p.getPos(), iC, iF);
         for(int i = 1; !esPosMax; i++) {
             iPos = new Posicion(p.getPos(), (iC * i), (iF * i));
-            esPosMax = (enBordeDelTablero(p)
-                    || iPos.esMismaPos(nPos)
-                    || t.estaOcupada(iPos));
+            esPosMax = (estaEnBordeTablero(iPos, iC, iF)
+                || iPos.esMismaPos(nPos) || t.estaOcupada(iPos));
         }
         return ((iPos != null) && iPos.esMismaPos(nPos));
     }
 
-    private boolean enBordeDelTablero(Pieza p) {
-        Posicion pos = p.getPos();
-        return (pos.enFila(1) || pos.enFila(8) || pos.enCol(1) || pos.enCol(8));
+    private boolean estaEnBordeTablero(Posicion p, int iC, int iF) {
+        int nCol = p.getCol() + iC;
+        int nFila = p.getFila() + iF;
+        return (nCol < 1) || (nCol > 8) || (nFila < 1) || (nFila > 8);
     }
 
     private boolean esMovLegalCaballo(Pieza p, Posicion nPos) {
@@ -379,7 +426,8 @@ public class Partida {
         else if(p.esNegra())
             posVal = new Posicion(pos, 0 , -1);
 
-        return ((posVal != null) && nPos.esMismaPos(posVal));
+        return ((posVal != null) && t.estaVacia(posVal)
+                && nPos.esMismaPos(posVal));
     }
 
     private boolean esMovPeon2Cas(Pieza p, Posicion nPos) {
@@ -393,7 +441,8 @@ public class Partida {
                 && t.estaVacia(new Posicion(pos, 0, -1)))
             posVal = new Posicion(pos, 0, -2);
 
-        return ((posVal != null) && nPos.esMismaPos(posVal));
+        return ((posVal != null) && t.estaVacia(posVal)
+                && nPos.esMismaPos(posVal));
     }
 
     private boolean esMovPeonComerIzq(Pieza p, Posicion nPos) {
@@ -491,25 +540,21 @@ public class Partida {
     /** Método de pruebas para mover una pieza en el tablero. */
     private static void pruebaMover(
             Partida p, int cPI, int fPI, int cPF, int fPF) {
+        System.out.println();
         if(p.mover(new Posicion(cPI, fPI), new Posicion(cPF, fPF))) {
             System.out.println("Movimiento válido");
             System.out.println();
             p.imprTablero();
-            System.out.println();
-            System.out.println();
-            System.out.println();
         } else {
             System.out.println("Movimiento inválido");
             System.out.println();
         }
+        System.out.println("---");
     }
 
-    /** Método de pruebas para imprimir el estado actual del tablero. */
-    private static void pruebaImprTablero(Partida p) {
-        System.out.println();
+    private static void imprTablero(Partida p) {
         System.out.println();
         p.imprTablero();
-        System.out.println();
-        System.out.println();
+        System.out.println("---");
     }
 }
