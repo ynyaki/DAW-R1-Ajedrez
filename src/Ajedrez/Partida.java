@@ -124,13 +124,14 @@ public class Partida {
         for(Pieza[] fila : t.get())
             for(Pieza pieza : fila)
                 if(pieza != null && pieza.getColor() != rey.getColor()
-                        && esMovLegal(pieza, rey.getPos()))
+                         && esMovLegal(pieza, rey.getPos()))
                     reyEnJaque = true;
 
         return reyEnJaque;
     }
 
     // TODO Documentar
+
     public boolean hayPromocion(Pieza p, Posicion nPos) {
         Posicion pos = p.getPos();
         Posicion posPB = new Posicion(pos.getCol(), 8);
