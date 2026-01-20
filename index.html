@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <title>Ajedrez by While True</title>
+</head>
+<body>
+    <video autoplay loop muted playsinline src="img/fondo.mov"></video>
+    <header>
+        <h1>Reto 1: Composición de un problema de Ajedrez</h1>
+        <h2>Grupo: While True</h2>
+    </header>
+    <main>
+        <section>
+            <div class="orb">
+                <article class="orb-card">
+                    <div>
+                        <img src="img/class.svg" alt="Class Logo of IntelliJ">
+                        <h1>Main.java</h1>
+                    </div>
+                        <p>Llama a <code>Menu.java</code> y crea un objeto de tipo Scanner.</p>
+                </article>
+            </div>
+        </section>
+        <section>
+            <div class="orb">
+                <article class="orb-card">
+                    <div>
+                        <img src="img/classAbstract.svg" alt="Class Logo of IntelliJ">
+                        <h1>Menu.java</h1>
+                    </div>
+                        <p>Controla el flujo del programa.</p>
+                        <br>
+                        <p>Por comodidad para el trabajo se dividió en:</p>
+                        <br>
+                        <ul>
+                            <li><code>Formato.java</code>: Contiene textos y gran parte de la primera parte del trabajo.</li>
+                            <li><code>Juego.java</code>: Contiene la lógica y en control de la segunda parte del trabajo.</li>
+                        </ul>
+                </article>
+            </div>
+        </section>
+        <section>
+            <div class="orb">
+                <article class="orb-card">
+                    <div>
+                        <img src="img/class.svg" alt="Class Logo of IntelliJ">
+                        <h1>Partida.java</h1>
+                    </div>
+                        <p>Contiene la mayoría de la lógica de programa.</p>
+                        <br>
+                        <p>Contiene una serie de métodos para controlar y trabajar con <code>Pieza.java</code>, <code>Posicion.java</code>, <code>Tablero.java</code></p>
+                </article>
+            </div>
+        </section>
+        <section>
+            <div class="orb">
+                <article class="orb-card">
+                    <div>
+                        <img src="img/class.svg" alt="Class Logo of IntelliJ">
+                        <h1>Tablero.java</h1>
+                    </div>
+                        <p>Crea un tablero y te permite trabajar con el de forma cómoda.</p>
+                        <br>
+                        <p>Consiste en una matriz de clase <code>Pieza</code> con métodos para trabajar con el tablero.</p>
+                </article>
+            </div>
+        </section>
+        <section>
+            <div class="orb">
+                <article class="orb-card">
+                    <div>
+                        <img src="img/class.svg" alt="Class Logo of IntelliJ">
+                        <h1>Pieza.java</h1>
+                    </div>
+                        <p>Clase para representa una pieza.</p>
+                        <br>
+                        <p>Se controla su tipo y color mediante enums.</p>
+                </article>
+            </div>
+        </section>
+        <section>
+            <div class="orb">
+                <article class="orb-card">
+                    <div>
+                        <img src="img/class.svg" alt="Class Logo of IntelliJ">
+                        <h1>Posicion.java</h1>
+                    </div>
+                        <p>Puesto que a una matriz de le controla mediante números naturales que empiezan desde el 0, para trabajar con más comodidad existe esta clase. Que te permite crear posiciones que almacena una Pieza de forma más natura.</p>
+                        <br>
+                        <p>Al se una clase que se instancia no solo te permite trabajar con posiciones de forma cómoda, si no que, también añade operaciones para trabajar con posiciones.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
