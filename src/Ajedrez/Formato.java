@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 public class Formato {
+
     private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
     private static final Pieza.Tipo CABALLO = Pieza.Tipo.CABALLO;
     private static final Pieza.Tipo TORRE = Pieza.Tipo.TORRE;
@@ -17,7 +18,12 @@ public class Formato {
      * Solo <strong>imprime</strong> por terminal.
      */
     public static void bienvenida() {
-        System.out.printf("%s¡Bienvenido a nuestro programa de ajedrez!%s\n", MORADO, RESET);
+        System.out.println();
+        System.out.printf("%sPROGRAMA DE AJEDREZ%s\n", MORADO, RESET);
+        System.out.printf("%sReto 1 de Programación (DAW) - IES Severo Ochoa%s\n",
+                MORADO, RESET
+        );
+        System.out.println();
         System.out.printf("%sDesarrollado%s por %sIñaki%s, %sIván%s, %sJuan%s y %sManuel%s.\n",
                 MORADO, RESET,
                 MORADO, RESET,
@@ -25,33 +31,25 @@ public class Formato {
                 MORADO, RESET,
                 MORADO, RESET
         );
-        System.out.print("\n");
-
-        System.out.println("Importa tu partida: ");
-        System.out.printf("Se debe usar la %snotación algebraica%s.\n", AMARILLO, RESET);
-        System.out.println("Consiste:");
-        System.out.printf("\t· %sInicial%s de la pieza más su %sposición%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· Los %speones no%s tienen %sinicial%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· La %sinicial%s en %smayúsculas%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· La %sposición%s en %sminúsculas%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· %sPrimero%s se indica la %spieza%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· %sSegundo%s se indica la %sfila%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· %sTercero%s se indica la %scolumna%s.\n", AMARILLO, RESET, AMARILLO, RESET);
-        System.out.printf("\t· %sSepara%s cada %spieza%s con un %sespacio%s.\n", AMARILLO, RESET, AMARILLO, RESET, AMARILLO, RESET);
-
-        System.out.print("\n");
-
-        System.out.println("Leyenda:");
-        System.out.println("R → Rey   | D → Dama    |   T   → Torre");
-        System.out.println("A → Alfil | C → Caballo | vacío → Peón");
-        System.out.printf("* El %speón puede no tener letra%s.", AMARILLO, RESET);
-
-        System.out.print("\n");
-        System.out.print("\n");
-
-        System.out.println("Ejemplo.:");
+        System.out.println();
+        System.out.printf("Escribe los datos iniciales de la partida" +
+                " con %snotación algebraica%s:\n", AMARILLO, RESET);
+        System.out.printf("\t· %sInicial de la pieza%s + %sPosición%s.\n",
+                AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· Posición: %sColumna%s (letra) + %sFila%s (número).\n",
+                AMARILLO, RESET, AMARILLO, RESET);
+        System.out.printf("\t· Los peones %sno necesitan letra%s.\n",
+                AMARILLO, RESET);
+        System.out.printf("\t· Las piezas %sse separan con espacios%s.\n",
+                AMARILLO, RESET);
+        System.out.println();
+        System.out.println("Ejemplo de importación:");
         System.out.println("Rg1 Tf1 h2 g2 f2 d4 e4 Ce5 a4 b3 c2 Ab2 Ta1");
-        System.out.print("\n");
+        System.out.println();
+        System.out.println("Iniciales de piezas:");
+        System.out.println("R → Rey  | T → Torre | C → Caballo");
+        System.out.println("D → Dama | A → Alfil | ∅ → Peón");
+        System.out.println();
     }
 
     /**
@@ -139,33 +137,180 @@ public class Formato {
             importacionCorrecta = true;
 
             // Valida la sintaxis
-            if (!esValidaSintaxis(listaPiezasBlancas) || !esValidaSintaxis(listaPiezasNegras)) {
+            if(!esValidaSintaxis(listaPiezasBlancas) || !esValidaSintaxis(listaPiezasNegras)) {
                 importacionCorrecta = false;
-                System.out.println("Se ha encontrado un problema en la importación.");
+                System.out.println("Error de importación: Sintaxis inválida");
+                System.out.println();
             }
 
             // Crea las piezas y se valida.
-            if (importacionCorrecta) {
+            if(importacionCorrecta) {
                 listaPiezas = crearPiezas(listaPiezasBlancas, listaPiezasNegras);
 
                 partida.crearNuevoTablero();    // Porque en caso de haberse ejecutado, las piezas se mantienen en el tablero.
 
                 // Validación dinámica mientras se añaden las piezas.
-                for (Pieza pieza:listaPiezas) {
-                    if (!partida.colocar(pieza)) {
+                for(Pieza pieza:listaPiezas) {
+                    if(!partida.colocar(pieza)) {
                         importacionCorrecta = false;
-                        System.out.println("Se ha encontrado un problema en la importación.");
+                        System.out.println("Error de importación:" +
+                                " Las piezas no pudieron ser colocadas");
+                        System.out.println();
                         break;
                     }
                 }
 
                 // Validación posterior a colocar las piezas.
-                if (!partida.validarPartida() && importacionCorrecta) {
+                if(!partida.validarPartida() && importacionCorrecta) {
                     importacionCorrecta = false;
-                    System.out.println("Se ha encontrado un problema en la importación.");
+                    System.out.println("Error de importación:" +
+                            " La partida no pudo ser validada");
+                    System.out.println();
                 }
             }
         } while(!importacionCorrecta);
+    }
+
+    /**
+     * Válida que la sintaxis introducida por terminal tenga un determinado formato.
+     * Posteriormente, una vez localizada una sintaxis válida devuelve un array de
+     * tipo <code>Pieza</code> con la cantidad de elementos pasados.
+     * @param sc Objeto <code>Scanner</code>
+     * @param color Color del turno al que toca mover.<code></code>
+     * @return Array de tipo <code>Pieza</code> con una órden de movimiento.
+     */
+    public static Pieza[] validarFormatoSAN(Scanner sc, Pieza.Color color) {
+        Pieza[] movimiento = null;
+        String movUsu;
+        Pieza.Tipo tipoPieza;
+        boolean esSintaxisValida = false;
+        char[] inicialesValidas = {'R', 'D', 'T', 'A', 'C'};
+        int fila;
+
+        do {
+            System.out.print("Inserta un movimiento: ");
+            movUsu = sc.nextLine();
+
+            if (movUsu.isEmpty()) continue;
+
+            // g1g2 || Tg1g2 || g1 || Tg1
+            switch (movUsu.length()) {
+                case 2 -> {
+                    esSintaxisValida = Character.isLowerCase(movUsu.charAt(0))
+                            && Character.isDigit(movUsu.charAt(1));
+
+                    if (esSintaxisValida) {
+                        movimiento = new Pieza[1];
+                        fila = Integer.parseInt(Character.toString(movUsu.charAt(1)));
+                        movimiento[0] = new Pieza(PEON, color, new Posicion(movUsu.charAt(0), fila));
+                    }
+                }
+                case 3 -> {
+                    if (Character.isLowerCase(movUsu.charAt(1)) && Character.isDigit(movUsu.charAt(2))) {
+                        for (char inicial:inicialesValidas) {
+                            if (inicial == movUsu.charAt(0)) {
+                                esSintaxisValida = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (esSintaxisValida) {
+                        movimiento = new Pieza[1];
+
+                        tipoPieza = switch (movUsu.charAt(0)) {
+                            case 'C' -> CABALLO;
+                            case 'T' -> TORRE;
+                            case 'A' -> ALFIL;
+                            case 'D' -> DAMA;
+                            case 'R' -> REY;
+                            default -> null;
+                        };
+
+                        fila = Integer.parseInt(Character.toString(movUsu.charAt(2)));
+                        movimiento[0] = new Pieza(tipoPieza, color, new Posicion(movUsu.charAt(1), fila));
+                    }
+                }
+                case 4 -> {
+                    esSintaxisValida = Character.isLowerCase(movUsu.charAt(0))
+                            && Character.isDigit(movUsu.charAt(1))
+                            && Character.isLowerCase(movUsu.charAt(2))
+                            && Character.isDigit(movUsu.charAt(3));
+
+                    if (esSintaxisValida) {
+                        movimiento = new Pieza[2];
+
+                        fila = Integer.parseInt(Character.toString(movUsu.charAt(1)));
+                        movimiento[0] = new Pieza(PEON, color, new Posicion(movUsu.charAt(0), fila));
+                        fila = Integer.parseInt(Character.toString(movUsu.charAt(3)));
+                        movimiento[1] = new Pieza(PEON, color, new Posicion(movUsu.charAt(2), fila));
+                    }
+                }
+                case 5 -> {
+                    if (
+                            Character.isLowerCase(movUsu.charAt(1))
+                                    && Character.isDigit(movUsu.charAt(2))
+                                    && Character.isLowerCase(movUsu.charAt(3))
+                                    && Character.isDigit(movUsu.charAt(4))
+                    ){
+                        for (char inicial:inicialesValidas) {
+                            if (inicial == movUsu.charAt(0)) {
+                                esSintaxisValida = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (esSintaxisValida) {
+                        movimiento = new Pieza[2];
+
+                        tipoPieza = switch (movUsu.charAt(0)) {
+                            case 'C' -> CABALLO;
+                            case 'T' -> TORRE;
+                            case 'A' -> ALFIL;
+                            case 'D' -> DAMA;
+                            case 'R' -> REY;
+                            default -> null;
+                        };
+
+                        fila = Integer.parseInt(Character.toString(movUsu.charAt(2)));
+                        movimiento[0] = new Pieza(tipoPieza, color, new Posicion(movUsu.charAt(1), fila));
+                        fila = Integer.parseInt(Character.toString(movUsu.charAt(4)));
+                        movimiento[1] = new Pieza(tipoPieza, color, new Posicion(movUsu.charAt(3), fila));
+                    }
+                }
+                default -> esSintaxisValida = false;
+            }
+
+            if (!esSintaxisValida) System.out.println("Has cometido un error al insertar el movimiento.");
+        } while (!esSintaxisValida);
+
+        return movimiento;
+    }
+
+    /**
+     * Extrae el tipo de pieza a partir de la entrada del usuario.
+     * El formato del comando debe ser <code>Px0</code> ó <code>Px0y0</code>,
+     * siendo <code>P</code> el tipo de pieza. Si tiene otro formato,
+     * se interpretará que es un <b>peón</b>.
+     * @param com Comando del usuario en formato <code>String</code>.
+     * @return Valor del enum <code>Tipo</code> según el formato y valor
+     *         del comando.
+     */
+    public static Pieza.Tipo getTipoPieza(String com) {
+        Pieza.Tipo tipo;
+        if(com.length() == 3 || com.length() == 5)
+            tipo = switch(com.trim().toUpperCase().charAt(0)) {
+                case 'R' -> Pieza.Tipo.REY;
+                case 'D' -> Pieza.Tipo.DAMA;
+                case 'T' -> Pieza.Tipo.TORRE;
+                case 'A' -> Pieza.Tipo.ALFIL;
+                case 'C' -> Pieza.Tipo.CABALLO;
+                default -> null;
+            };
+        else
+            tipo = Pieza.Tipo.PEON;
+        return tipo;
     }
 
     /**
@@ -256,7 +401,7 @@ public class Formato {
 
         // Crear BLANCAS.
         for (int i = 0; i < blancas.length; i++) {
-            tipoPieza = Pieza.obtenerTipoPieza(blancas[i]);
+            tipoPieza = getTipoPieza(blancas[i]);
             col = (blancas[i].length() == 3) ? blancas[i].charAt(1) : blancas[i].charAt(0); // Recoge la columna especificada en la orden.
             fila = Integer.parseInt(        // Recoge la fila especificada en la orden.
                     String.valueOf(blancas[i].charAt(blancas[i].length() - 1))  // Si no se pasa a String trataría el char como su número de UNICODE.
@@ -267,7 +412,7 @@ public class Formato {
 
         // Crear NEGRAS.
         for (int i = 0; i < negras.length; i++) {
-            tipoPieza = Pieza.obtenerTipoPieza(negras[i]);
+            tipoPieza = getTipoPieza(negras[i]);
             col = (negras[i].length() == 3) ? negras[i].charAt(1) : negras[i].charAt(0);
             fila = Integer.parseInt(
                     String.valueOf(negras[i].charAt(negras[i].length() - 1))
@@ -277,122 +422,5 @@ public class Formato {
         }
 
         return listaPiezas;
-    }
-
-    /**
-     * Válida que la sintaxis introducida por terminal tenga un determinado formato.
-     * Posteriormente, una vez localizada una sintaxis válida devuelve un array de
-     * tipo <code>Pieza</code> con la cantidad de elementos pasados.
-     * @param sc Objeto <code>Scanner</code>
-     * @param color Color del turno al que toca mover.<code></code>
-     * @return Array de tipo <code>Pieza</code> con una órden de movimiento.
-     */
-    public static Pieza[] validarFormatoSAN(Scanner sc, Pieza.Color color) {
-        Pieza[] movimiento = null;
-        String movUsu;
-        Pieza.Tipo tipoPieza;
-        boolean esSintaxisValida = false;
-        char[] inicialesValidas = {'R', 'D', 'T', 'A', 'C'};
-        int fila;
-
-        do {
-            System.out.print("Inserta un movimiento: ");
-            movUsu = sc.nextLine();
-
-            if (movUsu.isEmpty()) continue;
-
-            // g1g2 || Tg1g2 || g1 || Tg1
-            switch (movUsu.length()) {
-                case 2 -> {
-                    esSintaxisValida = Character.isLowerCase(movUsu.charAt(0))
-                            && Character.isDigit(movUsu.charAt(1));
-
-                    if (esSintaxisValida) {
-                        movimiento = new Pieza[1];
-                        fila = Integer.parseInt(Character.toString(movUsu.charAt(1)));
-                        movimiento[0] = new Pieza(PEON, color, new Posicion(movUsu.charAt(0), fila));
-                    }
-                }
-                case 3 -> {
-                    if (Character.isLowerCase(movUsu.charAt(1)) && Character.isDigit(movUsu.charAt(2))) {
-                        for (char inicial:inicialesValidas) {
-                            if (inicial == movUsu.charAt(0)) {
-                                esSintaxisValida = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (esSintaxisValida) {
-                        movimiento = new Pieza[1];
-
-                        tipoPieza = switch (movUsu.charAt(0)) {
-                            case 'C' -> CABALLO;
-                            case 'T' -> TORRE;
-                            case 'A' -> ALFIL;
-                            case 'D' -> DAMA;
-                            case 'R' -> REY;
-                            default -> null;
-                        };
-
-                        fila = Integer.parseInt(Character.toString(movUsu.charAt(2)));
-                        movimiento[0] = new Pieza(tipoPieza, color, new Posicion(movUsu.charAt(1), fila));
-                    }
-                }
-                case 4 -> {
-                    esSintaxisValida = Character.isLowerCase(movUsu.charAt(0))
-                            && Character.isDigit(movUsu.charAt(1))
-                            && Character.isLowerCase(movUsu.charAt(2))
-                            && Character.isDigit(movUsu.charAt(3));
-
-                    if (esSintaxisValida) {
-                        movimiento = new Pieza[2];
-
-                        fila = Integer.parseInt(Character.toString(movUsu.charAt(1)));
-                        movimiento[0] = new Pieza(PEON, color, new Posicion(movUsu.charAt(0), fila));
-                        fila = Integer.parseInt(Character.toString(movUsu.charAt(3)));
-                        movimiento[1] = new Pieza(PEON, color, new Posicion(movUsu.charAt(2), fila));
-                    }
-                }
-                case 5 -> {
-                    if (
-                            Character.isLowerCase(movUsu.charAt(1))
-                            && Character.isDigit(movUsu.charAt(2))
-                            && Character.isLowerCase(movUsu.charAt(3))
-                            && Character.isDigit(movUsu.charAt(4))
-                    ){
-                        for (char inicial:inicialesValidas) {
-                            if (inicial == movUsu.charAt(0)) {
-                                esSintaxisValida = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (esSintaxisValida) {
-                        movimiento = new Pieza[2];
-
-                        tipoPieza = switch (movUsu.charAt(0)) {
-                            case 'C' -> CABALLO;
-                            case 'T' -> TORRE;
-                            case 'A' -> ALFIL;
-                            case 'D' -> DAMA;
-                            case 'R' -> REY;
-                            default -> null;
-                        };
-
-                        fila = Integer.parseInt(Character.toString(movUsu.charAt(2)));
-                        movimiento[0] = new Pieza(tipoPieza, color, new Posicion(movUsu.charAt(1), fila));
-                        fila = Integer.parseInt(Character.toString(movUsu.charAt(4)));
-                        movimiento[1] = new Pieza(tipoPieza, color, new Posicion(movUsu.charAt(3), fila));
-                    }
-                }
-                default -> esSintaxisValida = false;
-            }
-
-            if (!esSintaxisValida) System.out.println("Has cometido un error al insertar el movimiento.");
-        } while (!esSintaxisValida);
-
-        return movimiento;
     }
 }

@@ -205,30 +205,51 @@ public class Partida {
     }
 
     /**
-     * Promociona un peón al tipo de pieza indicado por parámetro.
-     * @param color Color del peón a buscar.
-     * @param pos Posición a la que se moverá el peón tras la promoción.
+     * Comprueba si un peón puede promocionarse.
+     * @return Si es posible o no promocionar.
      */
-    public boolean hayPromocion(Pieza.Color color, Posicion pos) {
-        return (getPiezaMovil(color, PEON, pos) != null);
+    public boolean hayPromocion() {
+        Pieza p;
+        Pieza pB = buscarPeonEnFila(8);
+        Pieza pN = buscarPeonEnFila(1);
+        if(pB != null)
+            p = pB;
+        else
+            p = pN;
+        return ((p != null) && ((p.esBlanca() && p.getPos().enFila(8))
+                || p.esNegra() && p.getPos().enFila(1)));
     }
 
     /**
      * Promociona un peón al tipo de pieza indicado por parámetro.
-     * @param color Color del peón a buscar.
-     * @param pos Posición a la que se moverá el peón tras la promoción.
+     * El peón será buscado en una de las últimas filas (1ª u 8ª).
      * @param tipoNuevo Tipo de pieza al que se quiere cambiar
      * (debe ser coherente con las reglas de promoción del ajedrez).
      */
-    public void promocionar(
-            Pieza.Color color, Posicion pos, Pieza.Tipo tipoNuevo) {
-        Pieza p = getPiezaMovil(color, PEON, pos);
-        if((p != null) && !tipoNuevo.equals(PEON) && !tipoNuevo.equals(REY)
-                && ((p.esBlanca() && p.getPos().enFila(8))
-                || p.esNegra() && p.getPos().enFila(1))) {
-            t.setPieza(new Pieza(tipoNuevo, p.getColor(), pos));
-            t.borrarPieza(p);
+    public void promocionar(Pieza.Tipo tipoNuevo) {
+        Pieza p;
+        Pieza pB = buscarPeonEnFila(8);
+        Pieza pN = buscarPeonEnFila(1);
+        if(pB != null)
+            p = pB;
+        else
+            p = pN;
+        if((p != null) && !tipoNuevo.equals(PEON) && !tipoNuevo.equals(REY))
+            t.setPieza(new Pieza(tipoNuevo, p.getColor(), p.getPos()));
+    }
+
+    private Pieza buscarPeonEnFila(int fila) {
+        boolean hayPeon = false;
+        Posicion pos = null;
+        for(int i = 1; (i <= t.getNFilas()) && !hayPeon; i++) {
+            pos = new Posicion(i, fila);
+            if(t.estaOcupada(pos))
+                hayPeon = t.getPieza(pos).esDeTipo(PEON);
         }
+        if(pos != null)
+            return t.getPieza(pos);
+        else
+            return null;
     }
 
     /**
@@ -376,9 +397,8 @@ public class Partida {
     }
 
     private boolean esColocacionValida(Pieza p) {
-        Posicion nPos = p.getPos();
-        return (noSuperaMargenes(nPos)
-                && esPosVacia(nPos)
+        return (noSuperaMargenes(p.getPos())
+                && esPosVacia(p.getPos())
                 && noSuperaNumPiezas()
                 && noSuperaNumCadaPieza()
                 && noHayPeonesEnMargenes());

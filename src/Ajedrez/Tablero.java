@@ -9,92 +9,9 @@ import java.util.InputMismatchException;
  */
 public class Tablero {
 
-    // FIXME Pertenece a Formato
-    /**
-     * A través de consola, hace una representación visual del tablero,
-     * así como de las piezas en su posición y con su tipo y color adecuado.
-     * También imprime una leyenda explicando qué pieza es cada una según
-     * su caracter Unicode.
-     */
-    public void imprTablero() {
-        char letra = 'A';
-        String simboloVacio = " 　 ";
-
-        // Representación del tablero y de la leyenda
-        for(int i = nFilas - 1; i >= 0; i--) {
-            System.out.print(i + 1 + "┃ ");
-            if (i % 2 == 0)
-                colorearFila(t, i, NEGRO, BLANCO, simboloVacio);
-            else
-                colorearFila(t, i, BLANCO, NEGRO, simboloVacio);
-            leyenda(i);
-            System.out.println();
-        }
-
-        // Línea separadora
-        System.out.print(" ┗━");
-        for (int i = 0; i < nCols; i++)
-            System.out.print("━－━");
-        System.out.println();
-
-        // Letras de las columnas
-        System.out.print("   ");
-        for(int i = 0; i < nCols; i++) {
-            System.out.print("　" + letra + " ");
-            letra = (char) (letra + 1);
-        }
-
-        System.out.println();
-        System.out.println();
-    }
-
-    // FIXME Pertenece a formato
-    /**
-     * Se encarga de colorear el fondo que representan las celdas según el número de fila. Aparte de añadir el
-     * contenido. También añade las letras y números.
-     * @param tablero El <code>array</code> del tablero.
-     * @param filaIterar Nº de fila. Tipo <code>int</code>.
-     * @param colorInicio Color de inicio. Tipo <code>String</code>.
-     * @param colorSiguiente Color a alternar. Tipo <code>String</code>.
-     * @param simboloVacio Símbolo a colocar en caso de non tener contenido. Tipo <code>String</code>.
-     */
-    private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
-        String simbolo;
-        Pieza p;
-        for (int i = 0; i < tablero[filaIterar].length; i++) {
-            if(getFromTablero(new Posicion(i + 1, filaIterar + 1)) == null)
-                simbolo = simboloVacio;
-            else {
-                p = getFromTablero(new Posicion(i + 1, filaIterar + 1));
-                simbolo = " " + p.toString() + " ";
-            }
-            if(i % 2 == 0)
-                System.out.print(colorInicio + simbolo + RESET);
-            else
-                System.out.print(colorSiguiente + simbolo + RESET);
-        }
-    }
-
-    // FIXME Pertenece a Formato
-    /**
-     * Imprime una línea relacionada con la leyenda según la fila pasada por parámetro.
-     * @param n Número de la fila donde se tiene que imprimir.
-     */
-    private void leyenda(int n) {
-        switch (n) {
-            case 7 -> System.out.print("\t\tLeyenda:");
-            case 6 -> System.out.print("\t\t♔ Rey Blanco     ┃ ♚ Rey Negro");
-            case 5 -> System.out.print("\t\t♕ Dama Blanca    ┃ ♛ Dama Negra");
-            case 4 -> System.out.print("\t\t♖ Torre Blanca   ┃ ♜ Torre Negra");
-            case 3 -> System.out.print("\t\t♗ Alfil Blanco   ┃ ♝ Alfil Negro");
-            case 2 -> System.out.print("\t\t♘ Caballo Blanco ┃ ♞ Caballo Negro");
-            case 1 -> System.out.print("\t\t♙ Peón Blanco    ┃ ♟ Peón Negro");
-        }
-    }
-
-    public static final String NEGRO = "\u001B[40m";
-    public static final String BLANCO = "\u001B[47m";
-    public static final String RESET = "\u001B[0m";
+    private static final String NEGRO = "\u001B[40m";
+    private static final String BLANCO = "\u001B[47m";
+    private static final String RESET = "\u001B[0m";
 
     private final Pieza[][] t;
     private final int nCols;
@@ -248,6 +165,44 @@ public class Tablero {
         return nPiezas;
     }
 
+    /**
+     * A través de consola, hace una representación visual del tablero,
+     * así como de las piezas en su posición y con su tipo y color adecuado.
+     * También imprime una leyenda explicando qué pieza es cada una según
+     * su caracter Unicode.
+     */
+    public void imprTablero() {
+        char letra = 'A';
+        String simboloVacio = " 　 ";
+
+        // Representación del tablero y de la leyenda
+        for(int i = nFilas - 1; i >= 0; i--) {
+            System.out.print(i + 1 + "┃ ");
+            if (i % 2 == 0)
+                colorearFila(t, i, NEGRO, BLANCO, simboloVacio);
+            else
+                colorearFila(t, i, BLANCO, NEGRO, simboloVacio);
+            leyenda(i);
+            System.out.println();
+        }
+
+        // Línea separadora
+        System.out.print(" ┗━");
+        for (int i = 0; i < nCols; i++)
+            System.out.print("━－━");
+        System.out.println();
+
+        // Letras de las columnas
+        System.out.print("   ");
+        for(int i = 0; i < nCols; i++) {
+            System.out.print("　" + letra + " ");
+            letra = (char) (letra + 1);
+        }
+
+        System.out.println();
+        System.out.println();
+    }
+
     private Pieza getFromTablero(Posicion pos) {
         pos = transPos(pos);
         return t[pos.getFila() - 1][pos.getCol() - 1];
@@ -262,5 +217,47 @@ public class Tablero {
         int col = pos.getCol();
         int fila = nFilas - pos.getFila() + 1;
         return new Posicion(col, fila);
+    }
+
+    /**
+     * Se encarga de colorear el fondo que representan las celdas según el número de fila. Aparte de añadir el
+     * contenido. También añade las letras y números.
+     * @param tablero El <code>array</code> del tablero.
+     * @param filaIterar Nº de fila. Tipo <code>int</code>.
+     * @param colorInicio Color de inicio. Tipo <code>String</code>.
+     * @param colorSiguiente Color a alternar. Tipo <code>String</code>.
+     * @param simboloVacio Símbolo a colocar en caso de non tener contenido. Tipo <code>String</code>.
+     */
+    private void colorearFila(Pieza[][] tablero, int filaIterar, String colorInicio, String colorSiguiente, String simboloVacio){
+        String simbolo;
+        Pieza p;
+        for (int i = 0; i < tablero[filaIterar].length; i++) {
+            if(getFromTablero(new Posicion(i + 1, filaIterar + 1)) == null)
+                simbolo = simboloVacio;
+            else {
+                p = getFromTablero(new Posicion(i + 1, filaIterar + 1));
+                simbolo = " " + p.toString() + " ";
+            }
+            if(i % 2 == 0)
+                System.out.print(colorInicio + simbolo + RESET);
+            else
+                System.out.print(colorSiguiente + simbolo + RESET);
+        }
+    }
+
+    /**
+     * Imprime una línea relacionada con la leyenda según la fila pasada por parámetro.
+     * @param n Número de la fila donde se tiene que imprimir.
+     */
+    private void leyenda(int n) {
+        switch (n) {
+            case 7 -> System.out.print("\t\tLeyenda:");
+            case 6 -> System.out.print("\t\t♔ Rey Blanco     ┃ ♚ Rey Negro");
+            case 5 -> System.out.print("\t\t♕ Dama Blanca    ┃ ♛ Dama Negra");
+            case 4 -> System.out.print("\t\t♖ Torre Blanca   ┃ ♜ Torre Negra");
+            case 3 -> System.out.print("\t\t♗ Alfil Blanco   ┃ ♝ Alfil Negro");
+            case 2 -> System.out.print("\t\t♘ Caballo Blanco ┃ ♞ Caballo Negro");
+            case 1 -> System.out.print("\t\t♙ Peón Blanco    ┃ ♟ Peón Negro");
+        }
     }
 }

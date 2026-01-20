@@ -5,7 +5,7 @@ public class Juego {
     public static final String AMARILLO = "\u001B[33m";
     public static final String RESET = "\u001B[0m";
 
-    public static void main(Pieza.Color turno, Partida partida, Scanner sc){
+    public static void ejecutar(Pieza.Color turno, Partida partida, Scanner sc){
         boolean cometidoMovimientoLegal = true;
         boolean movDifuso;
         int hashTableroInicial = partida.getHashTablero();
@@ -17,6 +17,11 @@ public class Juego {
             if (movDifuso) Formato.movimientoDifuso();
         } while (movDifuso);
 
+        if(partida.hayPromocion()) {
+            Pieza.Tipo tipoProm = Menu.mostrarMenuPromocion();
+            partida.promocionar(tipoProm);
+        }
+
         if (hashTableroInicial == partida.getHashTablero()) {
             System.out.print("\n");
             System.out.println("Se ha cometido un movimiento ilegal.");
@@ -25,6 +30,7 @@ public class Juego {
         }
 
         System.out.println("Tablero final:");
+        System.out.println();
         partida.imprTablero();
 
         Formato.criteriosParaVictoria();

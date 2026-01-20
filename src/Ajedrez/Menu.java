@@ -11,19 +11,11 @@ import java.util.Scanner;
  */
 public abstract class Menu {
 
-    private static final Pieza.Tipo PEON = Pieza.Tipo.PEON;
-    private static final Pieza.Tipo CABALLO = Pieza.Tipo.CABALLO;
-    private static final Pieza.Tipo TORRE = Pieza.Tipo.TORRE;
-    private static final Pieza.Tipo ALFIL = Pieza.Tipo.ALFIL;
-    private static final Pieza.Tipo DAMA = Pieza.Tipo.DAMA;
-    private static final Pieza.Tipo REY = Pieza.Tipo.REY;
-
     private static final Pieza.Color BLANCO = Pieza.Color.BLANCO;
     private static final Pieza.Color NEGRO = Pieza.Color.NEGRO;
 
     private static Scanner sc;
     private static Partida partida;
-    private static Pieza.Color turno;
 
     /**
      * Ejecuta el programa de ajedrez, permitiendo al usuario elegir
@@ -33,17 +25,45 @@ public abstract class Menu {
         Menu.sc = sc;
         partida = new Partida();
         Pieza.Color colorSalida;
-
         Formato.bienvenida();
         Formato.importar(sc, partida);
-
-        System.out.println("La partida actual:");
         partida.imprTablero();
-        System.out.print("\n");
-
         colorSalida = elegirTurno(sc);
+        Juego.ejecutar(colorSalida, partida, sc);
+    }
 
-        Juego.main(colorSalida, partida, sc);
+    public static Pieza.Tipo mostrarMenuPromocion() {
+        String opcion;
+        Pieza.Tipo tipo = null;
+
+        System.out.println();
+        System.out.println("PROMOCIÓN DE PEÓN");
+
+        while (tipo == null) {
+
+            System.out.println("Piezas disponibles a las que promocionar:");
+            System.out.println("D → Dama (♔)");
+            System.out.println("T → Torre (♖)");
+            System.out.println("A → Alfil (♗)");
+            System.out.println("C → Caballo (♘)");
+            System.out.println();
+
+            System.out.print("Promocionar a: ");
+            opcion = sc.nextLine().trim().toUpperCase();
+            tipo = switch (opcion) {
+                case "D" -> Pieza.Tipo.DAMA;
+                case "T" -> Pieza.Tipo.TORRE;
+                case "A" -> Pieza.Tipo.ALFIL;
+                case "C" -> Pieza.Tipo.CABALLO;
+                default -> null;
+            };
+
+            if(tipo == null) {
+                System.out.println("Error: Comando inválido");
+            }
+        }
+        System.out.println();
+        return tipo;
     }
 
     private static Pieza.Color elegirTurno(Scanner sc){
@@ -55,7 +75,7 @@ public abstract class Menu {
         Pieza.Color pColor = null;
         boolean esTurnoValido = false;
 
-        if (colorEnJaque != null) {
+        if(colorEnJaque != null) {
             esTurnoValido = true;
             if (colorEnJaque == BLANCO) {
                 System.out.printf("%s¡MUEVEN LAS BLANCAS AL ESTAR EN AMENAZA DE JAQUE!\n%s", ROJO, RESET);
@@ -68,8 +88,8 @@ public abstract class Menu {
             }
         }
 
-        do{
-            System.out.print("Que color quieres que empiece primero (b/n): ");
+        do {
+            System.out.print("Elige el color que moverá pieza (B/N): ");
             color = sc.nextLine();
 
             if(color.equalsIgnoreCase("b")){
@@ -83,13 +103,10 @@ public abstract class Menu {
             }
         } while(!esTurnoValido);
 
-        if(pColor == BLANCO){
+        if(pColor == BLANCO)
             System.out.println("Mueven las Blancas.");
-        }
-
-        if(pColor == NEGRO){
+        else if(pColor == NEGRO)
             System.out.println("Mueven las Negras.");
-        }
 
         return pColor;
     }
@@ -98,34 +115,12 @@ public abstract class Menu {
      * Comprueba si existe un jaque, y devuelve el color en jaque.
      * @return <code>Pieza.Color</code>
      */
-    private static Pieza.Color turnoJaque(){
-        if(partida.estaReyEnJaque(Pieza.Color.BLANCO) ){
-            return Pieza.Color.BLANCO;
-        }
-
-        if(partida.estaReyEnJaque(Pieza.Color.NEGRO)){
-            return Pieza.Color.NEGRO;
-        }
-
-        return null;
-    }
-
-    private static Pieza.Tipo menuPromocionar() {
-        // TODO Mensaje de pedir pieza (con instrucciones de comando para cada pieza)
-        /* Ejemplo:
-        *
-        * Elija a qué pieza desea promocionar:
-        *   - Dama: D
-        *   - Torre: T
-        *   - Alfil: A
-        *   - Caballo: C
-        *
-        * Promocionar a: "D"
-        */
-        // TODO Escáner para obtener input
-        //   (decidir si es mov. ilegal o repetir inf. hasta input válido).
-        // TODO Validación del tipo de pieza
-        // TODO Cambiar valor de retorno
-        return null;
+    private static Pieza.Color turnoJaque() {
+        if(partida.estaReyEnJaque(BLANCO) )
+            return BLANCO;
+        else if(partida.estaReyEnJaque(NEGRO))
+            return NEGRO;
+        else
+            return null;
     }
 }

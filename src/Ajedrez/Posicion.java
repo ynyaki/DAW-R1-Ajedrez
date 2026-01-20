@@ -10,49 +10,8 @@ import java.util.InputMismatchException;
  */
 public class Posicion {
 
-    // FIXME En Formato
-    public Posicion(char col, int fila) {
-        this.col = col - 'a' - 1;
-        this.fila = fila;
-    }
-
     private final int col;
     private final int fila;
-
-    // DELETE Método de pruebas de la clase
-    public static void main(String[] args) {
-        Posicion p1;
-        Posicion p2;
-
-        // Probar movimientos del caballo
-        p1 = new Posicion(5, 5);
-
-        // Posiciones válidas
-        p2 = new Posicion(7, 6);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(6, 7);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(4, 7);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(3, 6);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(3, 4);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(4, 3);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(6, 3);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(7, 4);
-        System.out.println(p1.esMovEnL(p2));
-
-        // Posiciones inválidas
-        p2 = new Posicion(6, 2);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(5, 5);
-        System.out.println(p1.esMovEnL(p2));
-        p2 = new Posicion(5, 7);
-        System.out.println(p1.esMovEnL(p2));
-    }
 
     /**
      * Crea un vector posición, con formato <code>columna, fila</code>.
@@ -84,6 +43,18 @@ public class Posicion {
      */
     public Posicion(Posicion pos, int colAdd, int filaAdd) {
         this(pos.getCol() + colAdd, pos.getFila() + filaAdd);
+    }
+
+    /**
+     * Crea una nueva posición con una letra para la columna y un número
+     * para la fila.
+     * @param col Columna (letra).
+     * @param fila Fila (número).
+     */
+    public Posicion(char col, int fila) {
+        int unicodeAnteriorPrimeraCol = 'a' - 1;
+        this.col = col - unicodeAnteriorPrimeraCol;
+        this.fila = fila;
     }
 
     /**

@@ -6,32 +6,6 @@
  */
 public class Pieza {
 
-    // FIXME Pertenece a Formato
-    /**
-     * Extrae el tipo de pieza a partir de la entrada del usuario.
-     * El formato del comando debe ser <code>Px0</code> ó <code>Px0y0</code>,
-     * siendo <code>P</code> el tipo de pieza. Si tiene otro formato,
-     * se interpretará que es un <b>peón</b>.
-     * @param com Comando del usuario en formato <code>String</code>.
-     * @return Valor del enum <code>Tipo</code> según el formato y valor
-     *         del comando.
-     */
-    public static Tipo getTipoPieza(String com) {
-        Tipo tipo;
-        if(com.length() == 3 || com.length() == 5)
-            tipo = switch(com.trim().toUpperCase().charAt(0)) {
-                case 'R' -> Tipo.REY;
-                case 'D' -> Tipo.DAMA;
-                case 'T' -> Tipo.TORRE;
-                case 'A' -> Tipo.ALFIL;
-                case 'C' -> Tipo.CABALLO;
-                default -> null;
-            };
-        else
-            tipo = Tipo.PEON;
-        return tipo;
-    }
-
     /** Tipo de pieza, con diferentes movimientos y reglas asociadas. */
     public enum Tipo {
         PEON,
@@ -86,6 +60,24 @@ public class Pieza {
      */
     public Color getColor() {
         return color;
+    }
+
+    /**
+     * Devuelve si la pieza es del mismo tipo que otra pasada por parámetro.
+     * @param p Pieza con la que comparar.
+     * @return Si ambas piezas son del mismo tipo.
+     */
+    public boolean esMismoTipo(Pieza p) {
+        return (tipo == p.getTipo());
+    }
+
+    /**
+     * Devuelve si la pieza es del tipo pasado por parámetro
+     * @param tipo Tipo con el que comparar.
+     * @return Si el tipo de la pieza es el mismo que el tipo parámetro.
+     */
+    public boolean esDeTipo(Pieza.Tipo tipo) {
+        return (this.tipo == tipo);
     }
 
     /**
